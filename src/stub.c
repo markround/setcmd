@@ -1,6 +1,9 @@
 #include <proto/dos.h>
 #include "utility.h"
 
+// Used by the version DOS command
+const char __ver[40] =  "$VER: SetCmd stub " SC_VERSION;
+
 int main (int argc, char const *argv[]) 
 {
   char *cmd = argv[0];

@@ -5,13 +5,11 @@
 #include <string.h>
 #include "utility.h"
 
-void init(char *arg1)
+void init(int opt)
 {
   struct PathNode *pathlist;
   struct PathNode *check_dup;
   struct CommandLineInterface *cli = (struct CommandLineInterface *)IDOS->Cli();
-  BOOL verbose  = (strcmp(arg1, "verbose") == 0) ? TRUE : FALSE;
-  BOOL quiet    = (strcmp(arg1, "quiet") == 0) ? TRUE : FALSE;
 
   pathlist = BADDR(cli->cli_PathList);
   if (DEBUG) {
@@ -22,7 +20,7 @@ void init(char *arg1)
   BPTR lock = IDOS->Lock(SETCMD_PATH, SHARED_LOCK);
   if (lock) {
     if (DEBUG) IDOS->Printf("Obtained lock on " SETCMD_PATH "\n");
-    struct Pathnode *check_dup = IDOS->RemoveCmdPathNode(pathlist, lock);
+    struct Pathnode *check_dup = (struct PathNode *)IDOS->RemoveCmdPathNode(pathlist, lock);
     if (check_dup) {
       if (DEBUG) {
         IDOS->Printf("Found and removed existing SetCmd paths\n");
@@ -37,7 +35,7 @@ void init(char *arg1)
     }
 
     if (IDOS->SetCurrentCmdPathList(new_path)) {
-      if (!quiet) IDOS->Printf("SetCmd " SC_VERSION " initialised\n");
+      if (opt != OPT_QUIET) IDOS->Printf("SetCmd " SC_VERSION " initialised\n");
     }
   } else {
     IDOS->Printf("ERROR: Failed to lock the " SETCMD_PATH " directory\n");
