@@ -1,0 +1,290 @@
+.KEY CMD,ARG1,ARG2,ARG3,ARG4
+.BRA {
+.KET }
+
+; vim: set syntax=amiga ts=4 expandtab:
+
+; $VER: SetCmd release 1.0.0
+
+set sc_release="1.0.0-dev"
+
+; Formatting
+alias t_white       echo "*E[32m"
+alias t_black       echo "*E[31m"
+alias t_blue        echo "*E[33m"
+alias b_blue        echo "*E[43m"
+alias b_default     echo "*E[40m"
+alias bold_on		echo "*E[1m"
+alias bold_off      echo "*E[22m"
+alias italic_on		echo "*E[3m"
+alias italic_off    echo "*E[23m"
+
+
+; Unset all our used variables
+unset sc_command
+unset sc_current
+unset sc_current_file
+unset sc_current_path
+unset sc_version
+unset sc_target
+
+;#
+;# Options parsing
+;#
+
+; LIST command and aliases
+if "{CMD}" eq "list"
+    skip list
+endif
+if "{CMD}" eq "show"
+    skip show
+endif
+if "{CMD}" eq "set"
+    skip set
+endif
+if "{CMD}" eq "add-cmd"
+    skip create
+endif
+if "{CMD}" eq "delete-cmd"
+    skip delete
+endif
+if "{CMD}" eq "add-version"
+    skip add
+endif
+if "{CMD}" eq "delete-version"
+    skip remove
+endif
+skip usage
+
+quit
+
+
+;#
+;# Labels for sub-tasks
+;#
+
+;
+; List all commands we manage
+;
+LAB list
+if "{arg1}" eq "full"
+	list SETCMD:path LFORMAT="%s `t_blue`%R`t_black`"
+else
+	list SETCMD:path LFORMAT="%s"
+endif
+quit
+
+
+;
+; Show details for specified command
+;
+LAB show
+set sc_command="{arg1}"
+if "${sc_command}" eq ""
+	echo "No command specified. Run setcmd without arguments for usage information."
+	quit
+endif
+if not exists SETCMD:path/$sc_command
+	echo "${sc_command} is not managed by setcmd"
+	quit
+endif
+set sc_current=`list SETCMD:path lformat="%R" pat="${sc_command}"`
+set sc_current_file=`pathpart FILE ${sc_current}`
+
+; Check for stub commands, e.g. just been added with no versions
+if "${sc_current_file}" eq "stub"
+	set sc_current_path="stub"
+endif
+if "`list SETCMD:cmds/${sc_command} LFORMAT="%s"`" eq ""
+	set sc_current_path="stub"
+else
+	set sc_current_path=`list setcmd:cmds/${sc_command} lformat="%R" pat="${sc_current_file}"`
+endif
+
+echo "Command            : ${sc_command}"
+echo "Current version    : `t_white``b_blue`${sc_current_file}`t_black``b_default` (`t_blue`${sc_current_path}`t_black`)"
+echo "Available Versions"
+echo "------------------"
+list setcmd:cmds/${sc_command} lformat="%s (`t_blue`%R`t_black`)"
+quit
+
+
+;
+; Set a version
+;
+LAB set
+set sc_command="{arg1}"
+set sc_version="{arg2}"
+if "${sc_command}" eq ""
+	echo "No command specified. Run setcmd without arguments for usage information."
+	quit
+endif
+if "${sc_version}" eq ""
+	echo "No version specified. Run setcmd without arguments for usage information."
+	quit
+endif
+if not exists SETCMD:path/${sc_command}
+	echo "${sc_command} is not managed by setcmd"
+	quit
+endif
+if not exists SETCMD:cmds/${sc_command}/${sc_version}
+	echo "command ${sc_command} : version ${sc_version} unknown"
+	quit
+endif
+delete SETCMD:path/${sc_command} > NIL:
+makelink SETCMD:path/${sc_command} SETCMD:cmds/${sc_command}/${sc_version}
+;echo "Set $sc_command to version $sc_version"
+quit
+
+
+;
+; Add a new command
+;
+LAB create
+set sc_command="{arg1}"
+if "${sc_command}" eq ""
+	echo "No command specified. Run setcmd without arguments for usage information."
+	quit
+endif
+if exists SETCMD:path/${sc_command}
+	echo "${sc_command} is already managed by setcmd"
+	quit
+endif
+makedir setcmd:cmds/${sc_command}
+makelink setcmd:path/${sc_command} setcmd:stub
+;echo "Added command ${sc_command}"
+quit
+
+
+;
+; Add a version to a command
+;
+LAB add
+set sc_command="{arg1}"
+set sc_version="{arg2}"
+set sc_target="{arg3}"
+if "${sc_command}" eq ""
+	echo "No command specified. Run setcmd without arguments for usage information."
+	quit
+endif
+if "${sc_version}" eq ""
+	echo "No version specified. Run setcmd without arguments for usage information."
+	quit
+endif
+if "${sc_target}" eq ""
+	echo "No target specified. Run setcmd without arguments for usage information."
+	quit
+endif
+if not exists SETCMD:path/${sc_command}
+	echo "${sc_command} is not managed by setcmd"
+	quit
+endif
+if exists "SETCMD:cmds/${sc_command}/${sc_version}"
+	echo "Version ${sc_version} already exists for ${sc_command}"
+	quit
+endif
+makelink SETCMD:cmds/${sc_command}/${sc_version} ${sc_target}
+;echo "Added version $sc_version (`t_blue`$sc_target`t_black`) to $sc_command"
+quit
+
+
+;
+; Remove a version
+;
+LAB remove
+set sc_command="{arg1}"
+set sc_version="{arg2}"
+if "${sc_command}" eq ""
+	echo "No command specified. Run setcmd without arguments for usage information."
+	quit
+endif
+if "${sc_version}" eq ""
+	echo "No version specified. Run setcmd without arguments for usage information."
+	quit
+endif
+if not exists SETCMD:path/${sc_command}
+	echo "${sc_command} is not managed by setcmd"
+	quit
+endif
+if not exists "SETCMD:cmds/${sc_command}/${sc_version}"
+	echo "Version ${sc_version} does not exist for ${sc_command}"
+	quit
+endif
+; Check to see if we're removing the current version
+set sc_current=`list SETCMD:path lformat="%R" pat="${sc_command}"`
+set sc_current_file=`pathpart FILE ${sc_current}`
+if "${sc_current_file}" eq "${sc_version}"
+	echo "Cannot remove current version (${sc_version}) of ${sc_command}"
+	quit
+endif
+delete SETCMD:cmds/${sc_command}/${sc_version}
+;echo "Removed version ${sc_version} from ${sc_command}"
+quit
+
+
+;
+; Delete a command
+;
+LAB delete
+set sc_command="{ARG1}"
+if "${sc_command}" eq ""
+	echo "No command specified. Run setcmd without arguments for usage information."
+	quit
+endif
+if not exists SETCMD:path/${sc_command}
+	echo "${sc_command} is not managed by setcmd"
+	quit
+endif
+if "${sc_command}" eq "setcmd"
+  echo "You cannot remove setcmd from setcmd control!"
+  quit
+endif
+echo "This will remove the command ${sc_command} from setcmd."
+ask "Do you wish to proceed ? (Y/N) > "
+if WARN
+	delete SETCMD:path/${sc_command} > NIL:
+	delete SETCMD:cmds/${sc_command} all > NIL:
+	echo "${sc_command} removed from setcmd"
+else
+	echo "${sc_command} not removed"
+	quit
+endif
+quit
+
+
+;
+; Display usage text
+;
+LAB usage
+echo "SetCmd ${sc_release}   (c) 2019 Mark Dastmalchi-Round   [http://markround.com/amiga]"
+echo "--------------------------------------------------------------------------------"
+echo ""
+echo "Usage:"
+echo ""
+echo "`bold_on`list`bold_off` `t_white`full`t_black`"
+echo "  List all commands managed by setcmd. The optional `t_white`full`t_black` argument shows additional detail."
+echo "  example: setcmd list"
+echo "`bold_on`show`bold_off` `t_blue`cmd`t_black`"
+echo "  Shows details for specified command `t_blue`cmd`t_black`"
+echo "  example: setcmd show uae"
+
+echo "`bold_on`set`bold_off` `t_blue`cmd version`t_black`"
+echo "  Sets `t_blue`cmd`t_black` to `t_blue`version`t_black`"
+echo "  example: setcmd set uae system"
+
+echo "`bold_on`add-cmd`bold_off` `t_blue`cmd`t_black`"
+echo "  Adds a new command `t_blue`cmd`t_black` and points it to a stub"
+echo "  example: setcmd create-cmd uae"
+
+echo "`bold_on`delete-cmd`bold_off` `t_blue`cmd`t_black`"
+echo "  Removes command `t_blue`cmd`t_black` from setcmd"
+echo "  example: setcmd delete-cmd uae"
+
+echo "`bold_on`add-version`bold_off` `t_blue`cmd version target`t_black`"
+echo "  Adds a new version for `t_blue`cmd`t_black`, named `t_blue`version`t_black` and pointing at the path `t_blue`target`t_black`."
+echo "  example: setcmd create-version uae system System:Emulation/E-UAE-amigfx/uae"
+
+echo "`bold_on`delete-version`bold_off` `t_blue`cmd version`t_black`"
+echo "  Removes version `t_blue`version`t_black` from `t_blue`cmd`t_black`"
+echo "  example: setcmd delete-version uae 1.0.0-beta"
+quit
