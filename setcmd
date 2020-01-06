@@ -15,9 +15,9 @@ set t_black     "*E[31m"
 set t_blue      "*E[33m"
 set b_blue      "*E[43m"
 set b_default   "*E[40m"
-set bold_on		  "*E[1m"
+set bold_on     "*E[1m"
 set bold_off    "*E[22m"
-set italic_on	  "*E[3m"
+set italic_on   "*E[3m"
 set italic_off  "*E[23m"
 
 
@@ -69,9 +69,9 @@ quit
 ;
 LAB list
 if "{arg1}" eq "full"
-	list SETCMD:path LFORMAT="%s ${t_blue}%R${t_black}"
+  list SETCMD:path LFORMAT="%s ${t_blue}%R${t_black}"
 else
-	list SETCMD:path LFORMAT="%s"
+  list SETCMD:path LFORMAT="%s"
 endif
 quit
 
@@ -82,24 +82,24 @@ quit
 LAB show
 set sc_command="{arg1}"
 if "${sc_command}" eq ""
-	echo "No command specified. Run setcmd without arguments for usage information."
-	quit
+  echo "No command specified. Run setcmd without arguments for usage information."
+  quit
 endif
 if not exists SETCMD:path/$sc_command
-	echo "${sc_command} is not managed by setcmd"
-	quit
+  echo "${sc_command} is not managed by setcmd"
+  quit
 endif
 set sc_current=`list SETCMD:path lformat="%R" pat="${sc_command}"`
 set sc_current_file=`pathpart FILE ${sc_current}`
 
 ; Check for stub commands, e.g. just been added with no versions
 if "${sc_current_file}" eq "stub"
-	set sc_current_path="stub"
+  set sc_current_path="stub"
 endif
 if "`list SETCMD:cmds/${sc_command} LFORMAT="%s"`" eq ""
-	set sc_current_path="stub"
+  set sc_current_path="stub"
 else
-	set sc_current_path=`list setcmd:cmds/${sc_command} lformat="%R" pat="${sc_current_file}"`
+  set sc_current_path=`list setcmd:cmds/${sc_command} lformat="%R" pat="${sc_current_file}"`
 endif
 
 echo "Command            : ${sc_command}"
@@ -117,20 +117,20 @@ LAB set
 set sc_command="{arg1}"
 set sc_version="{arg2}"
 if "${sc_command}" eq ""
-	echo "No command specified. Run setcmd without arguments for usage information."
-	quit
+  echo "No command specified. Run setcmd without arguments for usage information."
+  quit
 endif
 if "${sc_version}" eq ""
-	echo "No version specified. Run setcmd without arguments for usage information."
-	quit
+  echo "No version specified. Run setcmd without arguments for usage information."
+  quit
 endif
 if not exists SETCMD:path/${sc_command}
-	echo "${sc_command} is not managed by setcmd"
-	quit
+  echo "${sc_command} is not managed by setcmd"
+  quit
 endif
 if not exists SETCMD:cmds/${sc_command}/${sc_version}
-	echo "command ${sc_command} : version ${sc_version} unknown"
-	quit
+  echo "command ${sc_command} : version ${sc_version} unknown"
+  quit
 endif
 delete SETCMD:path/${sc_command} > NIL:
 makelink SETCMD:path/${sc_command} SETCMD:cmds/${sc_command}/${sc_version}
@@ -144,12 +144,12 @@ quit
 LAB create
 set sc_command="{arg1}"
 if "${sc_command}" eq ""
-	echo "No command specified. Run setcmd without arguments for usage information."
-	quit
+  echo "No command specified. Run setcmd without arguments for usage information."
+  quit
 endif
 if exists SETCMD:path/${sc_command}
-	echo "${sc_command} is already managed by setcmd"
-	quit
+  echo "${sc_command} is already managed by setcmd"
+  quit
 endif
 makedir setcmd:cmds/${sc_command}
 makelink setcmd:path/${sc_command} setcmd:stub
@@ -165,24 +165,24 @@ set sc_command="{arg1}"
 set sc_version="{arg2}"
 set sc_target="{arg3}"
 if "${sc_command}" eq ""
-	echo "No command specified. Run setcmd without arguments for usage information."
-	quit
+  echo "No command specified. Run setcmd without arguments for usage information."
+  quit
 endif
 if "${sc_version}" eq ""
-	echo "No version specified. Run setcmd without arguments for usage information."
-	quit
+  echo "No version specified. Run setcmd without arguments for usage information."
+  quit
 endif
 if "${sc_target}" eq ""
-	echo "No target specified. Run setcmd without arguments for usage information."
-	quit
+  echo "No target specified. Run setcmd without arguments for usage information."
+  quit
 endif
 if not exists SETCMD:path/${sc_command}
-	echo "${sc_command} is not managed by setcmd"
-	quit
+  echo "${sc_command} is not managed by setcmd"
+  quit
 endif
 if exists "SETCMD:cmds/${sc_command}/${sc_version}"
-	echo "Version ${sc_version} already exists for ${sc_command}"
-	quit
+  echo "Version ${sc_version} already exists for ${sc_command}"
+  quit
 endif
 makelink SETCMD:cmds/${sc_command}/${sc_version} ${sc_target}
 quit
@@ -195,27 +195,27 @@ LAB remove
 set sc_command="{arg1}"
 set sc_version="{arg2}"
 if "${sc_command}" eq ""
-	echo "No command specified. Run setcmd without arguments for usage information."
-	quit
+  echo "No command specified. Run setcmd without arguments for usage information."
+  quit
 endif
 if "${sc_version}" eq ""
-	echo "No version specified. Run setcmd without arguments for usage information."
-	quit
+  echo "No version specified. Run setcmd without arguments for usage information."
+  quit
 endif
 if not exists SETCMD:path/${sc_command}
-	echo "${sc_command} is not managed by setcmd"
-	quit
+  echo "${sc_command} is not managed by setcmd"
+  quit
 endif
 if not exists "SETCMD:cmds/${sc_command}/${sc_version}"
-	echo "Version ${sc_version} does not exist for ${sc_command}"
-	quit
+  echo "Version ${sc_version} does not exist for ${sc_command}"
+  quit
 endif
 ; Check to see if we're removing the current version
 set sc_current=`list SETCMD:path lformat="%R" pat="${sc_command}"`
 set sc_current_file=`pathpart FILE ${sc_current}`
 if "${sc_current_file}" eq "${sc_version}"
-	echo "Cannot remove current version (${sc_version}) of ${sc_command}"
-	quit
+  echo "Cannot remove current version (${sc_version}) of ${sc_command}"
+  quit
 endif
 delete SETCMD:cmds/${sc_command}/${sc_version}
 ;echo "Removed version ${sc_version} from ${sc_command}"
@@ -228,12 +228,12 @@ quit
 LAB delete
 set sc_command="{ARG1}"
 if "${sc_command}" eq ""
-	echo "No command specified. Run setcmd without arguments for usage information."
-	quit
+  echo "No command specified. Run setcmd without arguments for usage information."
+  quit
 endif
 if not exists SETCMD:path/${sc_command}
-	echo "${sc_command} is not managed by setcmd"
-	quit
+  echo "${sc_command} is not managed by setcmd"
+  quit
 endif
 if "${sc_command}" eq "setcmd"
   echo "You cannot remove setcmd from setcmd control!"
@@ -242,12 +242,12 @@ endif
 echo "This will remove the command ${sc_command} from setcmd."
 ask "Do you wish to proceed ? (Y/N) > "
 if WARN
-	delete SETCMD:path/${sc_command} > NIL:
-	delete SETCMD:cmds/${sc_command} all > NIL:
-	echo "${sc_command} removed from setcmd"
+  delete SETCMD:path/${sc_command} > NIL:
+  delete SETCMD:cmds/${sc_command} all > NIL:
+  echo "${sc_command} removed from setcmd"
 else
-	echo "${sc_command} not removed"
-	quit
+  echo "${sc_command} not removed"
+  quit
 endif
 quit
 
