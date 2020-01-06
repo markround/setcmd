@@ -1,4 +1,5 @@
 ; $VER: Installation script for SetCmd (1.0.0)
+; vim: set syntax=lisp ts=2 expandtab:
 
 (set @app-name "SetCMD (1.0.0)")
 
@@ -6,37 +7,38 @@
 ; There will be an update at some point that will support classic AmigaOS, but until then this
 ; check needs to stay. For versions, I used https://wiki.amigaos.net/wiki/AmigaOS_Versions .
 (if (< (/ (getversion) 65536) 52)
-   (
-	   (abort "SetCmd has only been tested on OS 4.x (v52+), so not installing on this OS!")
+  (
+    (abort "SetCmd has only been tested on OS 4.x (v52+), so not installing on this OS!")
    )
 )
 
-(message "Welcome to the SetCmdInstaller!\n"
-			"This will do some stuff.\n"
+(message 
+  "Welcome to the SetCmdInstaller!\n"
+  "this will do some stuff.\n"
 )
 
 (welcome)
 (procedure get_and_create_destination
-	(
-		(set #dname
-			(askdir
-				(prompt (cat "Choose destination directory.\n"
-						"A drawer called SetCmd will be created." ))
-				(help @askdir-help)
-				(default "Work:")
-			)
-		)
-		(set #dname (tackon #dname "SetCmd"))
+  (
+    (set #dname
+      (askdir
+        (prompt (cat "Choose destination directory.\n"
+          "A drawer called SetCmd will be created." ))
+        (help @askdir-help)
+        (default "Work:")
+      )
+    )
+    (set #dname (tackon #dname "SetCmd"))
 
-		(makedir #dname
-			(prompt ("Create drawer %s?" #dname))
-			(help @makedir-help)
-			(safe)
-		)
-	
-		(makeassign "SETCMD" #dname (safe))
-		(set #new_install 1)
-	)
+    (makedir #dname
+      (prompt ("Create drawer %s?" #dname))
+      (help @makedir-help)
+      (safe)
+    )
+  
+    (makeassign "SETCMD" #dname (safe))
+    (set #new_install 1)
+  )
 )
 
 
@@ -44,39 +46,39 @@
 (set #dname (getassign "SETCMD" "a"))
 
 (copyfiles
-	(source "setcmd")
-	(dest #dname)
-	(prompt ("Copy SetCmd program file?"))
-	(confirm "expert")
-	(all)
-	(help @copyfiles-help)
+  (source "setcmd")
+  (dest #dname)
+  (prompt ("Copy SetCmd program file?"))
+  (confirm "expert")
+  (all)
+  (help @copyfiles-help)
 )
 
 (copyfiles
-	(source "stub")
-	(dest #dname)
-	(prompt ("Copy SetCmd stub file?"))
-	(confirm "expert")
-	(all)
-	(help @copyfiles-help)
+  (source "stub")
+  (dest #dname)
+  (prompt ("Copy SetCmd stub file?"))
+  (confirm "expert")
+  (all)
+  (help @copyfiles-help)
 )
 
 (copyfiles
-	(source "")
-	(pattern "README.txt#?")
-	(dest #dname)
-	(prompt ("Copy SetCmd README.txt documentation?"))
-	(confirm "expert")
-	(help @copyfiles-help)
+  (source "")
+  (pattern "README.txt#?")
+  (dest #dname)
+  (prompt ("Copy SetCmd README.txt documentation?"))
+  (confirm "expert")
+  (help @copyfiles-help)
 )
 
 (copyfiles
-	(source "")
-	(pattern "SetCmd.guide#?")
-	(dest #dname)
-	(prompt ("Copy SetCmd AmigaGuide documentation?"))
-	(confirm "expert")
-	(help @copyfiles-help)
+  (source "")
+  (pattern "SetCmd.guide#?")
+  (dest #dname)
+  (prompt ("Copy SetCmd AmigaGuide documentation?"))
+  (confirm "expert")
+  (help @copyfiles-help)
 )
 
 ; Set up the directory structure

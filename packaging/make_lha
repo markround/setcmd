@@ -1,0 +1,41 @@
+.KEY ARG1,ARG2,ARG3,ARG4
+.BRA {
+.KET }
+
+; vim: set syntax=amiga ts=2 expandtab:
+
+set sc_tmpdir="TMP:SetCmd"
+set sc_dir="Work:Projects/setcmd"
+set sc_release="{ARG1}"
+set sc_builddir="${sc_tmpdir}/setcmd"
+
+echo "Building LHA archive for setcmd-${sc_release} from ${sc_dir}"
+echo "Build location: ${sc_tmpdir}"
+
+delete "${sc_tmpdir}" all
+makedir "${sc_tmpdir}/setcmd" all
+
+copy ${sc_dir}/Install_SetCMD#? ${sc_builddir}
+copy ${sc_dir}/ReadMe#? ${sc_builddir}
+copy ${sc_dir}/SetCmd.guide#? ${sc_builddir}
+copy ${sc_dir}/setcmd ${sc_builddir}
+copy ${sc_dir}/stub ${sc_builddir}
+
+cd ${sc_tmpdir}
+if "{ARG2}" eq "replace" 
+  delete "${sc_dir}/packaging/setcmd-${sc_release}-os4.lha"
+endif
+
+lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/Install_SetCMD#?
+lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/ReadMe#?
+lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/SetCmd.guide#?
+lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/setcmd
+lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/stub
+
+
+cd ${sc_dir}
+
+unset sc_release
+unset sc_dir
+unset sc_release
+unset sc_builddir
