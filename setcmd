@@ -2,22 +2,23 @@
 .BRA {
 .KET }
 
-; vim: set syntax=amiga ts=4 expandtab:
+; vim: set syntax=amiga ts=2 expandtab:
 
 ; $VER: SetCmd release 1.0.0
 
 set sc_release="1.0.0-dev"
 
+
 ; Formatting
-alias t_white       echo "*E[32m"
-alias t_black       echo "*E[31m"
-alias t_blue        echo "*E[33m"
-alias b_blue        echo "*E[43m"
-alias b_default     echo "*E[40m"
-alias bold_on		echo "*E[1m"
-alias bold_off      echo "*E[22m"
-alias italic_on		echo "*E[3m"
-alias italic_off    echo "*E[23m"
+set t_white     "*E[32m"
+set t_black     "*E[31m"
+set t_blue      "*E[33m"
+set b_blue      "*E[43m"
+set b_default   "*E[40m"
+set bold_on		  "*E[1m"
+set bold_off    "*E[22m"
+set italic_on	  "*E[3m"
+set italic_off  "*E[23m"
 
 
 ; Unset all our used variables
@@ -34,25 +35,25 @@ unset sc_target
 
 ; LIST command and aliases
 if "{CMD}" eq "list"
-    skip list
+  skip list
 endif
 if "{CMD}" eq "show"
-    skip show
+  skip show
 endif
 if "{CMD}" eq "set"
-    skip set
+  skip set
 endif
 if "{CMD}" eq "add-cmd"
-    skip create
+  skip create
 endif
 if "{CMD}" eq "delete-cmd"
-    skip delete
+  skip delete
 endif
 if "{CMD}" eq "add-version"
-    skip add
+  skip add
 endif
 if "{CMD}" eq "delete-version"
-    skip remove
+  skip remove
 endif
 skip usage
 
@@ -68,7 +69,7 @@ quit
 ;
 LAB list
 if "{arg1}" eq "full"
-	list SETCMD:path LFORMAT="%s `t_blue`%R`t_black`"
+	list SETCMD:path LFORMAT="%s ${t_blue}%R${t_black}"
 else
 	list SETCMD:path LFORMAT="%s"
 endif
@@ -102,10 +103,10 @@ else
 endif
 
 echo "Command            : ${sc_command}"
-echo "Current version    : `t_white``b_blue`${sc_current_file}`t_black``b_default` (`t_blue`${sc_current_path}`t_black`)"
+echo "Current version    : ${t_white}${b_blue}${sc_current_file}${t_black}${b_default} (${t_blue}${sc_current_path}${t_black})"
 echo "Available Versions"
 echo "------------------"
-list setcmd:cmds/${sc_command} lformat="%s (`t_blue`%R`t_black`)"
+list setcmd:cmds/${sc_command} lformat="%s (${t_blue}%R${t_black})"
 quit
 
 
@@ -184,7 +185,6 @@ if exists "SETCMD:cmds/${sc_command}/${sc_version}"
 	quit
 endif
 makelink SETCMD:cmds/${sc_command}/${sc_version} ${sc_target}
-;echo "Added version $sc_version (`t_blue`$sc_target`t_black`) to $sc_command"
 quit
 
 
@@ -256,35 +256,35 @@ quit
 ; Display usage text
 ;
 LAB usage
-echo "SetCmd ${sc_release}   (c) 2019 Mark Dastmalchi-Round   [http://markround.com/amiga]"
+echo "SetCmd ${sc_release}   (c) 2020 Mark Dastmalchi-Round   [http://markround.com/amiga]"
 echo "--------------------------------------------------------------------------------"
 echo ""
 echo "Usage:"
 echo ""
-echo "`bold_on`list`bold_off` `t_white`full`t_black`"
-echo "  List all commands managed by setcmd. The optional `t_white`full`t_black` argument shows additional detail."
+echo "${bold_on}list${bold_off} ${t_white}full${t_black}"
+echo "  List all commands managed by setcmd. The optional ${t_white}full${t_black} argument shows additional detail."
 echo "  example: setcmd list"
-echo "`bold_on`show`bold_off` `t_blue`cmd`t_black`"
-echo "  Shows details for specified command `t_blue`cmd`t_black`"
+echo "${bold_on}show${bold_off} ${t_blue}cmd${t_black}"
+echo "  Shows details for specified command ${t_blue}cmd${t_black}"
 echo "  example: setcmd show uae"
 
-echo "`bold_on`set`bold_off` `t_blue`cmd version`t_black`"
-echo "  Sets `t_blue`cmd`t_black` to `t_blue`version`t_black`"
+echo "${bold_on}set${bold_off} ${t_blue}cmd version${t_black}"
+echo "  Sets ${t_blue}cmd${t_black} to ${t_blue}version${t_black}"
 echo "  example: setcmd set uae system"
 
-echo "`bold_on`add-cmd`bold_off` `t_blue`cmd`t_black`"
-echo "  Adds a new command `t_blue`cmd`t_black` and points it to a stub"
+echo "${bold_on}add-cmd${bold_off} ${t_blue}cmd${t_black}"
+echo "  Adds a new command ${t_blue}cmd${t_black} and points it to a stub"
 echo "  example: setcmd create-cmd uae"
 
-echo "`bold_on`delete-cmd`bold_off` `t_blue`cmd`t_black`"
-echo "  Removes command `t_blue`cmd`t_black` from setcmd"
+echo "${bold_on}delete-cmd${bold_off} ${t_blue}cmd${t_black}"
+echo "  Removes command ${t_blue}cmd${t_black} from setcmd"
 echo "  example: setcmd delete-cmd uae"
 
-echo "`bold_on`add-version`bold_off` `t_blue`cmd version target`t_black`"
-echo "  Adds a new version for `t_blue`cmd`t_black`, named `t_blue`version`t_black` and pointing at the path `t_blue`target`t_black`."
+echo "${bold_on}add-version${bold_off} ${t_blue}cmd version target${t_black}"
+echo "  Adds a new version for ${t_blue}cmd${t_black}, named ${t_blue}version${t_black} and pointing at the path ${t_blue}target${t_black}."
 echo "  example: setcmd create-version uae system System:Emulation/E-UAE-amigfx/uae"
 
-echo "`bold_on`delete-version`bold_off` `t_blue`cmd version`t_black`"
-echo "  Removes version `t_blue`version`t_black` from `t_blue`cmd`t_black`"
+echo "${bold_on}delete-version${bold_off} ${t_blue}cmd version${t_black}"
+echo "  Removes version ${t_blue}version${t_black} from ${t_blue}cmd${t_black}"
 echo "  example: setcmd delete-version uae 1.0.0-beta"
 quit
