@@ -13,13 +13,14 @@ echo "Building LHA archive for setcmd-${sc_release} from ${sc_dir}"
 echo "Build location: ${sc_tmpdir}"
 
 delete "${sc_tmpdir}" all
-makedir "${sc_tmpdir}/setcmd" all
+makedir "${sc_tmpdir}/setcmd/support" all
 
 copy ${sc_dir}/Install_SetCMD#? ${sc_builddir}
 copy ${sc_dir}/ReadMe#? ${sc_builddir}
 copy ${sc_dir}/SetCmd.guide#? ${sc_builddir}
 copy ${sc_dir}/setcmd ${sc_builddir}
 copy ${sc_dir}/stub ${sc_builddir}
+copy ${sc_dir}/support/path.rx ${sc_builddir}/support/path.rx all
 
 cd ${sc_tmpdir}
 if "{ARG2}" eq "replace" 
@@ -31,6 +32,7 @@ lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/ReadMe#?
 lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/SetCmd.guide#?
 lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/setcmd
 lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/stub
+lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/support/path.rx
 
 
 cd ${sc_dir}

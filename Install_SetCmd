@@ -30,11 +30,13 @@
     )
     (set #dname (tackon #dname "SetCmd"))
 
-    (makedir #dname
+    (makedir ("%s" #dname)
       (prompt ("Create drawer %s?" #dname))
       (help @makedir-help)
       (safe)
     )
+
+    (run (cat "C:MakeDir " #dname "/support"))
   
     (makeassign "SETCMD" #dname (safe))
     (set #new_install 1)
@@ -44,6 +46,7 @@
 
 (get_and_create_destination)
 (set #dname (getassign "SETCMD" "a"))
+
 
 (copyfiles
   (source "setcmd")
@@ -64,6 +67,15 @@
 )
 
 (copyfiles
+  (source "support")
+  (all)
+  (dest ("%s/support" #dname))
+  (prompt ("Copy SetCmd support files?"))
+  (confirm "expert")
+  (help @copyfiles-help)
+)
+
+(copyfiles
   (source "")
   (pattern "README.txt#?")
   (dest #dname)
@@ -80,6 +92,8 @@
   (confirm "expert")
   (help @copyfiles-help)
 )
+
+
 
 ; Set up the directory structure
 (run (cat "C:MakeDir " #dname "/cmds"))

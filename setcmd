@@ -77,6 +77,10 @@ path > TMP:SetCmd/path.txt
 rx SETCMD:support/path.rx
 path reset quiet
 execute TMP:SetCMD/init.cmd
+if "{arg1}" not eq "quiet"
+  echo "SetCmd ${sc_release} installed"
+endif
+
 quit
 
 ;
