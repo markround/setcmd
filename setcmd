@@ -34,6 +34,9 @@ unset sc_target
 ;#
 
 ; LIST command and aliases
+if "{CMD}" eq "init"
+  skip init
+endif
 if "{CMD}" eq "list"
   skip list
 endif
@@ -63,6 +66,18 @@ quit
 ;#
 ;# Labels for sub-tasks
 ;#
+
+;
+; Set up the PATH with SetCmd at the start
+;
+LAB init
+delete TMP:SetCmd all quiet
+makedir TMP:SetCmd
+path > TMP:SetCmd/path.txt
+rx SETCMD:support/path.rx
+path reset quiet
+execute TMP:SetCMD/init.cmd
+quit
 
 ;
 ; List all commands we manage
