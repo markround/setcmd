@@ -80,6 +80,9 @@ execute TMP:SetCMD/init.cmd
 if "{arg1}" not eq "quiet"
   echo "SetCmd ${sc_release} installed"
 endif
+if "{arg1}" eq "verbose"
+  list SETCMD:path LFORMAT="%s ${t_blue}%R${t_black}"
+endif
 
 quit
 
@@ -280,9 +283,15 @@ echo "--------------------------------------------------------------------------
 echo ""
 echo "Usage:"
 echo ""
+
+echo "${bold_on}init${bold_off} ${t_white}quiet | verbose${t_black}"
+echo "  Sets up the SetCmd path for the current shell."
+echo "  example: setcmd init verbose"
+
 echo "${bold_on}list${bold_off} ${t_white}full${t_black}"
 echo "  List all commands managed by setcmd. The optional ${t_white}full${t_black} argument shows additional detail."
 echo "  example: setcmd list"
+
 echo "${bold_on}show${bold_off} ${t_blue}cmd${t_black}"
 echo "  Shows details for specified command ${t_blue}cmd${t_black}"
 echo "  example: setcmd show uae"
