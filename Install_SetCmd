@@ -30,14 +30,13 @@
     )
     (set #dname (tackon #dname "SetCmd"))
 
-    (makedir ("%s" #dname)
+    (makedir #dname
       (prompt ("Create drawer %s?" #dname))
       (help @makedir-help)
       (safe)
     )
-
-    (run (cat "C:MakeDir " #dname "/support"))
-  
+    (makedir (tackon #dname "support"))
+    
     (makeassign "SETCMD" #dname (safe))
     (set #new_install 1)
   )
@@ -93,11 +92,9 @@
   (help @copyfiles-help)
 )
 
-
-
 ; Set up the directory structure
-(run (cat "C:MakeDir " #dname "/cmds"))
-(run (cat "C:MakeDir " #dname "/cmds/setcmd"))
-(run (cat "C:MakeDir " #dname "/path"))
-(run (cat "C:MakeLink FROM " #dname "/cmds/setcmd/release TO SETCMD:setcmd SOFT"))
-(run (cat "C:MakeLink FROM " #dname "/path/setcmd TO SETCMD:cmds/setcmd/release SOFT"))
+(makedir (tackon #dname "path"))
+(makedir (tackon #dname "cmds"))
+(makedir (tackon (tackon #dname "cmds") "setcmd"))
+(run (cat "C:MakeLink FROM \"" (tackon #dname "cmds/setcmd/release") "\" TO SETCMD:setcmd SOFT"))
+(run (cat "C:MakeLink FROM \"" (tackon #dname "path/setcmd") "\" TO SETCMD:cmds/setcmd/release SOFT"))
