@@ -1,5 +1,36 @@
 @database SetCmd.guide
 @Width 72
+
 @Node Main "SetCmd Documentation"
-Hello, AmigaGuide World!
+
+Welcome to the @{b}SetCmd@{ub} AmigaGuide documentation!
+
+Please select one of the topics below for more information.
+
+@{"About" Link About}
+@{"Installation" Link Installation}
+@{"Usage" Link Usage}
+@{"Miscellaneous" Link Miscellaneous}
+@EndNode
+
+@Node About "About SetCMD"
+@EndNode
+
+@Node Installation "Installation guide"
+@{"Installation" Link Install_SetCmd}
+@{"Initialisation" Link Init}
+@EndNode
+
+@Node Install_SetCmd "Installing the SetCmd package"
+@TOC Installation
+@EndNode
+
+@Node Init "Initialising SetCmd"
+@TOC Installation
+@EndNode
+
+@Node Usage "Using SetCmd"
+@EndNode
+
+@Node Miscellaneous "Miscellaneous Topics"
 @EndNode
