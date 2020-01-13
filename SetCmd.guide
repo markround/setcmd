@@ -1,0 +1,5 @@
+@database SetCmd.guide
+@Width 72
+@Node Main "SetCmd Documentation"
+Hello, AmigaGuide World!
+@EndNode
