@@ -81,7 +81,7 @@ if "{arg1}" not eq "quiet"
   echo "SetCmd ${sc_release} installed"
 endif
 if "{arg1}" eq "verbose"
-  list SETCMD:path LFORMAT="%s ${t_blue}%R${t_black}"
+  skip list
 endif
 
 quit
@@ -90,11 +90,25 @@ quit
 ; List all commands we manage
 ;
 LAB list
-if "{arg1}" eq "full"
-  list SETCMD:path LFORMAT="%s ${t_blue}%R${t_black}"
-else
+if "{arg1}" not eq "verbose"
   list SETCMD:path LFORMAT="%s"
+else
+  foreach cmd in SETCMD:path/#?
+    echo "${cmd}"
+    foreach slink in "SETCMD:path/${cmd}"
+      set target "`list lformat="%R" pat ${slink}`"
+      set current="`pathpart file ${target}`"
+      foreach vers in "SETCMD:cmds/$cmd/#?"
+        if "${vers}" eq "${current}"
+          echo "  ${t_black}[${t_blue}$vers${t_black}]"
+        else
+          echo "  ${t_white}$vers${t_black}"
+        endif
+      end
+    end
+  end
 endif
+
 quit
 
 
@@ -288,8 +302,8 @@ echo "${bold_on}init${bold_off} ${t_white}quiet | verbose${t_black}"
 echo "  Sets up the SetCmd path for the current shell."
 echo "  example: setcmd init verbose"
 
-echo "${bold_on}list${bold_off} ${t_white}full${t_black}"
-echo "  List all commands managed by setcmd. The optional ${t_white}full${t_black} argument shows additional detail."
+echo "${bold_on}list${bold_off} ${t_white}verbose${t_black}"
+echo "  List all commands managed by setcmd. The optional ${t_white}verbose${t_black} argument shows additional detail."
 echo "  example: setcmd list"
 
 echo "${bold_on}show${bold_off} ${t_blue}cmd${t_black}"
