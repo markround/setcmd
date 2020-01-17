@@ -8,7 +8,6 @@
 
 set sc_release="1.0.0-dev"
 
-
 ; Formatting
 set t_white     "*E[32m"
 set t_black     "*E[31m"
@@ -19,7 +18,6 @@ set bold_on     "*E[1m"
 set bold_off    "*E[22m"
 set italic_on   "*E[3m"
 set italic_off  "*E[23m"
-
 
 ; Unset all our used variables
 unset sc_command
