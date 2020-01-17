@@ -1,10 +1,10 @@
 CC=gcc
 
 sdktest: sdktest.o utility.o
-	$(CC) -o sdktest main.o utility.o -Iinclude -lauto
+	$(CC) -o sdktest sdktest.o utility.o -Iinclude
 
 .c.o:
-	$(CC) -c -g $< -Iinclude -lauto
+	$(CC) -c -g $< -Iinclude
 
 clean:
-	rm *.o test
+	rm *.o sdktest
