@@ -4,7 +4,7 @@
 
 void usage()
 {
-  IDOS->Printf("SetCmd " SC_VERSION " (c) 2020 Mark Dastmalchi-Round [http://markround.com/amiga]\n");
+  IDOS->Printf("SetCmd " SC_VERSION " " SC_BANNER "\n");
   IDOS->Printf("\n");
   IDOS->Printf("Usage:\n");
   IDOS->Printf("\n");
