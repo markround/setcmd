@@ -2,13 +2,16 @@
 #include <proto/utility.h>
 #include <proto/exec.h>
 #include <dos/dosextens.h>
+#include <string.h>
 #include "utility.h"
 
-void init()
+void init(char *arg1)
 {
   struct PathNode *pathlist;
   struct PathNode *check_dup;
   struct CommandLineInterface *cli = (struct CommandLineInterface *)IDOS->Cli();
+  BOOL verbose  = (strcmp(arg1, "verbose") == 0) ? TRUE : FALSE;
+  BOOL quiet    = (strcmp(arg1, "quiet") == 0) ? TRUE : FALSE;
 
   pathlist = BADDR(cli->cli_PathList);
   if (DEBUG) {
@@ -34,7 +37,7 @@ void init()
     }
 
     if (IDOS->SetCurrentCmdPathList(new_path)) {
-      IDOS->Printf("SetCmd " SC_VERSION " initialised\n");
+      if (!quiet) IDOS->Printf("SetCmd " SC_VERSION " initialised\n");
     }
   } else {
     IDOS->Printf("ERROR: Failed to lock the " SETCMD_PATH " directory\n");
