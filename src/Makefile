@@ -1,7 +1,7 @@
 CC=gcc
 
-setcmd: main.o utility.o usage.o
-	$(CC) -o setcmd main.o utility.o usage.o -Iinclude -lauto
+setcmd: main.o utility.o usage.o init.o
+	$(CC) -o setcmd main.o utility.o usage.o init.o -Iinclude -lauto
 
 stub: stub.o utility.o
 	$(CC) -o stub stub.o utility.o -Iinclude

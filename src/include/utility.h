@@ -4,7 +4,7 @@
 #include <proto/exec.h>
 
 // SetCmd version string
-#define SC_VERSION  "1.0.0"
+#define SC_VERSION  "1.0.0c"
 #define SC_BANNER   "(c) 2020 Mark Dastmalchi-Round   [http://markround.com/amiga]"
 
 // Text formatting
@@ -19,8 +19,14 @@
 #define ITALIC_ON   "\x1b[3m"
 #define ITALIC_OFF  "\x1b[23m"
 
+// Constants
+#define DEBUG         FALSE         // Set to TRUE for Debug builds
+#define MAX_PATH_BUF  1024          // Max length of an AmigaDOS path
+#define SETCMD_PATH   "SETCMD:path" // Location of cmd symlinks
+
 
 // Helper functions
 STRPTR btos(BSTR bstr);
+void DumpPathNode(struct PathNode *node);
 
 #endif
