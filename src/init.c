@@ -14,7 +14,7 @@ int init(int opt)
   pathlist = BADDR(cli->cli_PathList);
   if (DEBUG) {
    IDOS->Printf("---> Before\n");
-   DumpPathNode(pathlist);
+   dump_path_node(pathlist);
   }
 
   BPTR lock = IDOS->Lock(SETCMD_PATH, SHARED_LOCK);
@@ -24,14 +24,14 @@ int init(int opt)
     if (check_dup) {
       if (DEBUG) {
         IDOS->Printf("Found and removed existing SetCmd paths\n");
-        DumpPathNode(check_dup);
+        dump_path_node(check_dup);
       }
       pathlist=check_dup;
     }
     struct PathNode *new_path = IDOS->AddCmdPathNode(pathlist, lock, ADDCMDPATHNODE_HEAD);
     if (DEBUG) {
       IDOS->Printf("---> After\n");
-      DumpPathNode(new_path);
+      dump_path_node(new_path);
     }
 
     if (IDOS->SetCurrentCmdPathList(new_path)) {

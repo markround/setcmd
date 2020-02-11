@@ -24,6 +24,8 @@
 #define MAX_PATH_BUF  1024          // Max length of an AmigaDOS path
 #define SETCMD_PATH   "SETCMD:path" // Location of cmd symlinks
 #define SETCMD_CMDS   "SETCMD:cmds" // Location of cmd versions
+#define SETCMD_ERROR  -1            // Internal return value of functions that fail
+#define SETCMD_OK     0             // Internal return value of functions that succeed
 
 // Used for option parsing flags
 #define OPT_NONE    0
@@ -32,6 +34,7 @@
 
 // Helper function definitions
 STRPTR btos(BSTR bstr);
-void DumpPathNode(struct PathNode *node);
+void dump_path_node(struct PathNode *node);
+int current_version(char *cmd, char *version);
 
 #endif

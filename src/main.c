@@ -40,14 +40,11 @@ int main (int argc, char const *argv[])
   int rc = RETURN_OK;
 
   // TODO : Check we are run from the CLI (count argc)
-
-
   rd = IDOS->ReadArgs(template, args, NULL);
   if (rd == NULL) {
     // No args could be passed, bomb out
-    // TODO: What should the return codes be here ?
     IDOS->PrintFault(IDOS->IoErr(), NULL);
-    return 1;
+    return RETURN_FAIL;
   }
   else {
     // Begin options parsing
@@ -85,6 +82,16 @@ int main (int argc, char const *argv[])
         }
         else {
           rc = list(OPT_NONE);
+        }
+      }
+
+      // show
+      if (strstr(cmd, "show")) {
+        if (arg1) {
+          rc = show(arg1);
+        }
+        else {
+          usage();
         }
       }
 
