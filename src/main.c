@@ -5,6 +5,7 @@
 #include "utility.h"
 #include "usage.h"
 #include "init.h"
+#include "list.h"
 
 // Used by the version DOS command
 const char __ver[40] =  "$VER: SetCmd " SC_VERSION;
@@ -36,6 +37,7 @@ int main (int argc, char const *argv[])
   const char *arg2;
   const char *arg3;
   const char *arg4;
+  int rc = RETURN_OK;
 
   // TODO : Check we are run from the CLI (count argc)
 
@@ -57,21 +59,34 @@ int main (int argc, char const *argv[])
       if (strstr(cmd, "init")) {
         if (arg1) {
           if (strstr(arg1, "verbose")) {
-            init(OPT_VERBOSE);
+            rc = init(OPT_VERBOSE);
           }
           else if (strstr(arg1, "quiet")) {
-            init(OPT_QUIET);
+            rc = init(OPT_QUIET);
           }
           else {
             usage();
           }
         }
         else {
-          init(OPT_NONE);
+          rc = init(OPT_NONE);
         }
       }
 
-      // Next cmd
+      // list
+      if (strstr(cmd, "list")) {
+        if (arg1) {
+          if (strstr(arg1, "verbose")) {
+            rc = list(OPT_VERBOSE);
+          }
+          else {
+            usage();
+          }
+        }
+        else {
+          rc = list(OPT_NONE);
+        }
+      }
 
     }
     else {
@@ -87,5 +102,5 @@ int main (int argc, char const *argv[])
 		IDOS->FreeArgs(rd);
 		rd = NULL;
 	}
-  return 0;
+  return RETURN_OK;
 }
