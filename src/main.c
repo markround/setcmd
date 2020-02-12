@@ -11,11 +11,11 @@
 const char __ver[40] =  "$VER: SetCmd " SC_VERSION;
 
 static const char template[] =
-	"CMD,"
-	"ARG1,"
-	"ARG2,"
-	"ARG3,"
-	"ARG4";
+  "CMD,"
+  "ARG1,"
+  "ARG2,"
+  "ARG3,"
+  "ARG4";
 
 enum {
   ARG_CMD,
@@ -28,10 +28,8 @@ enum {
 
 int main (int argc, char const *argv[]) 
 {
-
   struct RDArgs *rd = NULL;
   LONG args[NUM_ARGS];
-  memset(args, 0, sizeof(args));
   const char *cmd;
   const char *arg1;
   const char *arg2;
@@ -39,75 +37,73 @@ int main (int argc, char const *argv[])
   const char *arg4;
   int rc = RETURN_OK;
 
+  memset(args, 0, sizeof(args));
+
   // TODO : Check we are run from the CLI (count argc)
   rd = IDOS->ReadArgs(template, args, NULL);
   if (rd == NULL) {
     // No args could be passed, bomb out
     IDOS->PrintFault(IDOS->IoErr(), NULL);
     return RETURN_FAIL;
-  }
-  else {
+  } else {
     // Begin options parsing
     cmd   = (const char *)args[ARG_CMD];
     arg1  = (const char *)args[ARG_1];
     if (cmd) {
 
-      // init
+      /*
+       * init
+       */
       if (strstr(cmd, "init")) {
         if (arg1) {
           if (strstr(arg1, "verbose")) {
             rc = init(OPT_VERBOSE);
-          }
-          else if (strstr(arg1, "quiet")) {
+          } else if (strstr(arg1, "quiet")) {
             rc = init(OPT_QUIET);
-          }
-          else {
+          } else {
             usage();
           }
-        }
-        else {
+        } else {
           rc = init(OPT_NONE);
         }
       }
 
-      // list
+      /*
+       * list
+       */
       if (strstr(cmd, "list")) {
         if (arg1) {
           if (strstr(arg1, "verbose")) {
             rc = list(OPT_VERBOSE);
-          }
-          else {
+          } else {
             usage();
           }
-        }
-        else {
+        } else {
           rc = list(OPT_NONE);
         }
       }
 
-      // show
+      /*
+       * show
+       */
       if (strstr(cmd, "show")) {
         if (arg1) {
           rc = show(arg1);
-        }
-        else {
+        } else {
           usage();
         }
       }
 
-    }
-    else {
+    } else {
       // No command passed, so display usage screen
       usage();
     }
   }
 
-
   // Clean up and exit
-  if (rd != NULL)
-	{
-		IDOS->FreeArgs(rd);
-		rd = NULL;
-	}
+  if (rd != NULL) {
+    IDOS->FreeArgs(rd);
+    rd = NULL;
+  }
   return RETURN_OK;
 }
