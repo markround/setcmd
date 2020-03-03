@@ -20,7 +20,10 @@
 #define ITALIC_OFF  "\x1b[23m"
 
 // Constants
+#ifndef DEBUG
 #define DEBUG         FALSE         // Set to TRUE for Debug builds
+#endif
+
 #define MAX_PATH_BUF  1024          // Max length of an AmigaDOS path
 #define SETCMD_PATH   "SETCMD:path" // Location of cmd symlinks
 #define SETCMD_CMDS   "SETCMD:cmds" // Location of cmd versions
