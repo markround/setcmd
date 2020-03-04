@@ -50,7 +50,7 @@ int list(int opt)
           IDOS->Printf("For more information see the SetCmd manual.\n");
           return RETURN_FAIL;
         }
-        // Now, get a directory listing o fthe available versions underneath this cmd directory
+        // Now, get a directory listing of the available versions underneath this cmd directory
         cmd_context = IDOS->ObtainDirContextTags(EX_LockInput, cmd_lock, TAG_END);
         while (cmd_data = IDOS->ExamineDir(cmd_context)) {
           strcpy(version, cmd_data->Name);
