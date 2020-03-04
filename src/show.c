@@ -28,7 +28,7 @@ int show(char *cmd)
   }
 
   IDOS->Printf("Command:         %s\n", cmd);
-  IDOS->Printf("Current version: " BOLD_ON FG_BLUE "%s" BOLD_OFF FG_BLACK " (%s)\n", version, target);
+  IDOS->Printf("Current version: " SELECTED "%s" NORMAL " (%s)\n", version, target);
 
   strcpy(cmd_dir, SETCMD_CMDS);
   IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);

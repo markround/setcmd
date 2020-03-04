@@ -35,7 +35,7 @@ int list(int opt)
     strcpy (current_version, IDOS->FilePart(link));
     // If the file is not a link, we just ignore it as it's not a valid command
     if (strlen(link) > 0) {
-      IDOS->Printf("%s [" FG_BLUE "%s" FG_BLACK "]\n", cmd, current_version);
+      IDOS->Printf("%s [" SELECTED "%s" NORMAL "]\n", cmd, current_version);
       if (opt == OPT_VERBOSE) {
         /* Verbose mode - for every link, get a list of the versions under the
          * relevant "cmd" directory, and highlight it if it's also the currently
@@ -54,7 +54,7 @@ int list(int opt)
         cmd_context = IDOS->ObtainDirContextTags(EX_LockInput, cmd_lock, TAG_END);
         while (cmd_data = IDOS->ExamineDir(cmd_context)) {
           strcpy(version, cmd_data->Name);
-          IDOS->Printf("  " FG_WHITE "%s" FG_BLACK "\n", version);
+          IDOS->Printf("  " FG_BLUE "%s" NORMAL "\n", version);
         }
         IDOS->ReleaseDirContext(cmd_context);
 

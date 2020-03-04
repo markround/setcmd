@@ -18,6 +18,8 @@
 #define BOLD_OFF    "\x1b[22m"
 #define ITALIC_ON   "\x1b[3m"
 #define ITALIC_OFF  "\x1b[23m"
+#define SELECTED    BG_BLUE FG_WHITE
+#define NORMAL      BG_DEFAULT FG_BLACK 
 
 // Constants
 #ifndef DEBUG
