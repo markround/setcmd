@@ -41,5 +41,6 @@
 STRPTR btos(BSTR bstr);
 void dump_path_node(struct PathNode *node);
 int current_version(char *cmd, char *version);
+int get_target(char *cmd, char *version, char *target);
 
 #endif

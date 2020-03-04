@@ -12,6 +12,7 @@ int list(int opt)
   char version[MAX_PATH_BUF];
   char current_version[MAX_PATH_BUF];
   char cmd_dir[MAX_PATH_BUF];
+  char target[MAX_PATH_BUF];
   struct ExamineData *path_data, *cmd_data;
   APTR path_context, cmd_context;
   BPTR path_lock, cmd_lock;
@@ -53,7 +54,12 @@ int list(int opt)
         cmd_context = IDOS->ObtainDirContextTags(EX_LockInput, cmd_lock, TAG_END);
         while (cmd_data = IDOS->ExamineDir(cmd_context)) {
           strcpy(version, cmd_data->Name);
-          IDOS->Printf("  " FG_BLUE "%s" NORMAL "\n", version);
+          rc = get_target(cmd, version, target);
+          if (rc == SETCMD_ERROR) {
+            IDOS->Printf("Error: Could not read link for %s/%s.\n", cmd, version);
+            return RETURN_FAIL;
+          }
+          IDOS->Printf("  " FG_BLUE "%s" NORMAL " (%s)\n", version, target);
         }
         IDOS->ReleaseDirContext(cmd_context);
 
