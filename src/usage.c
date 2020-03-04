@@ -27,7 +27,7 @@ void usage()
 
   IDOS->Printf(BOLD_ON "add-cmd " BOLD_OFF FG_BLUE "cmd" FG_BLACK "\n");
   IDOS->Printf("  Adds a new command " FG_BLUE "cmd " FG_BLACK "and points it to a stub\n");
-  IDOS->Printf("  example: setcmd create-cmd uae\n");
+  IDOS->Printf("  example: setcmd add-cmd uae\n");
 
   IDOS->Printf(BOLD_ON "delete-cmd " BOLD_OFF FG_BLUE "cmd" FG_BLACK "\n");
   IDOS->Printf("  Removes command " FG_BLUE "cmd " FG_BLACK "from setcmd\n");
@@ -35,7 +35,7 @@ void usage()
 
   IDOS->Printf(BOLD_ON "add-version " BOLD_OFF FG_BLUE "cmd version target" FG_BLACK "\n");
   IDOS->Printf("  Adds a new version for " FG_BLUE "cmd" FG_BLACK ", named " FG_BLUE "version " FG_BLACK "and pointing at the path " FG_BLUE "target" FG_BLACK ".\n");
-  IDOS->Printf("  example: setcmd create-version uae system System:Emulation/E-UAE-amigfx/uae\n");
+  IDOS->Printf("  example: setcmd add-version uae system System:Emulation/E-UAE-amigfx/uae\n");
 
   IDOS->Printf(BOLD_ON "delete-version " BOLD_OFF FG_BLUE "cmd version" FG_BLACK "\n");
   IDOS->Printf("  Removes version " FG_BLUE "version " FG_BLACK "from " FG_BLUE "cmd" FG_BLACK "\n");
