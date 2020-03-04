@@ -39,7 +39,9 @@ int get_target(char *cmd, char *version, char *target)
     IDOS->Printf("For more information see the SetCmd manual.\n");
     return SETCMD_ERROR;
   }
-  if (cmd_lock) IDOS->UnLock(cmd_lock);
+  if (cmd_lock) { 
+    IDOS->UnLock(cmd_lock); 
+  }
 
   // Now get a lock on the specified version
   strcpy(cmd_version, cmd_dir);
@@ -57,7 +59,8 @@ int get_target(char *cmd, char *version, char *target)
     int32 io_error =  IDOS->IoErr();
     IDOS->Printf("ERROR: Failed to read the link from %s\n", cmd_version);
     if (DEBUG) {
-      IDOS->Printf("DOS Error Code: %d\n", io_error);
+      // %m and %n magic modifiers only available in kickstart 51.59
+      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
       IDOS->Printf("Name from lock: %s\n", target);
       IDOS->PrintFault(io_error, NULL);
     }
@@ -67,7 +70,10 @@ int get_target(char *cmd, char *version, char *target)
     return SETCMD_ERROR;
   }
 
-  if (version_lock) IDOS->UnLock(version_lock);
+  if (version_lock) {
+    IDOS->UnLock(version_lock);
+  }
+  
   return SETCMD_OK;
 }
 
@@ -101,10 +107,15 @@ int current_version(char *cmd, char *version)
     }
   }
 
-  if (lock) IDOS->UnLock(lock);
+  if (lock) {
+    IDOS->UnLock(lock);
+  }
+
   IDOS->ReleaseDirContext(context);
 
-  if (!found) return SETCMD_ERROR;   
+  if (!found) {
+    return SETCMD_ERROR;  
+  } 
 
   strcpy(version, current_version);
   return SETCMD_OK;

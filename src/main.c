@@ -31,10 +31,7 @@ int main (int argc, char const *argv[])
   struct RDArgs *rd = NULL;
   LONG args[NUM_ARGS];
   const char *cmd;
-  const char *arg1;
-  const char *arg2;
-  const char *arg3;
-  const char *arg4;
+  const char *arg1,*arg2,*arg3,*arg4;
   int rc = RETURN_OK;
 
   memset(args, 0, sizeof(args));

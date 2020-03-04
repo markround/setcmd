@@ -59,8 +59,10 @@ int show(char *cmd)
   }
 
   IDOS->ReleaseDirContext(cmd_context);
-  if (cmd_lock) { IDOS->UnLock(cmd_lock); }
-
+  
+  if (cmd_lock) { 
+    IDOS->UnLock(cmd_lock); 
+  }
 
   return RETURN_OK;
 }

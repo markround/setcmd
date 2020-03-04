@@ -12,8 +12,7 @@ int list(int opt)
   char version[MAX_PATH_BUF];
   char current_version[MAX_PATH_BUF];
   char cmd_dir[MAX_PATH_BUF];
-  struct ExamineData *path_data;
-  struct ExamineData *cmd_data;
+  struct ExamineData *path_data, *cmd_data;
   APTR path_context, cmd_context;
   BPTR path_lock, cmd_lock;
   int32 rc = 0;
@@ -58,12 +57,17 @@ int list(int opt)
         }
         IDOS->ReleaseDirContext(cmd_context);
 
-        if (cmd_lock) IDOS->UnLock(cmd_lock);
+        if (cmd_lock) {
+          IDOS->UnLock(cmd_lock);
+        }
       }
     }
   }
 
-  if (path_lock) IDOS->UnLock(path_lock);
+  if (path_lock) {
+    IDOS->UnLock(path_lock);
+  }
+  
   IDOS->ReleaseDirContext(path_context);
 
   return RETURN_OK;

@@ -8,10 +8,9 @@
 
 int init(int opt)
 {
-  struct PathNode *pathlist;
-  struct PathNode *check_dup;
-  struct PathNode *new_path;
+  struct PathNode *pathlist, *check_dup, *new_path;
   struct CommandLineInterface *cli = (struct CommandLineInterface *)IDOS->Cli();
+  BPTR lock;
 
   pathlist = BADDR(cli->cli_PathList);
   if (DEBUG) {
@@ -19,7 +18,7 @@ int init(int opt)
    dump_path_node(pathlist);
   }
 
-  BPTR lock = IDOS->Lock(SETCMD_PATH, SHARED_LOCK);
+  lock = IDOS->Lock(SETCMD_PATH, SHARED_LOCK);
   if (!lock) {
     IDOS->Printf("ERROR: Failed to lock the " SETCMD_PATH " directory\n");
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
@@ -47,11 +46,21 @@ int init(int opt)
   }
 
   if (IDOS->SetCurrentCmdPathList(new_path)) {
+    // Yay, we're all setup, now just display some info.
     if (opt != OPT_QUIET) IDOS->Printf("SetCmd " SC_VERSION " initialised\n");
     if (opt == OPT_VERBOSE) {
       list(OPT_NONE);
     }
     return RETURN_OK;
+  } else {
+    // This shouldn't fail!
+    IDOS->Printf("ERROR: Failed to set the new command path!\n");
+    IDOS->Printf("This should never happen :(\n");
+    if (DEBUG) {
+      // %m and %n magic modifiers only available in kickstart 51.59
+      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
+    }
+    return RETURN_FAIL;
   }
   
 }
