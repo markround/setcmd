@@ -1,11 +1,12 @@
 CC=gcc
 CFLAGS=
+OBJS=main.o utility.o usage.o init.o list.o show.o add_cmd.o
 
 
 all: setcmd stub
 
-setcmd: main.o utility.o usage.o init.o list.o show.o
-	$(CC) $(CFLAGS) -o setcmd main.o utility.o usage.o init.o list.o show.o -Iinclude -lauto
+setcmd: $(OBJS)
+	$(CC) $(CFLAGS) -o setcmd $(OBJS) -Iinclude -lauto
 
 stub: stub.o utility.o
 	$(CC) $(CFLAGS) -o stub stub.o utility.o -Iinclude

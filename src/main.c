@@ -2,6 +2,7 @@
 #include <dos/dos.h>
 #include <stdio.h>
 #include <string.h>
+#include "add_cmd.h"
 #include "utility.h"
 #include "usage.h"
 #include "init.h"
@@ -94,6 +95,17 @@ int main (int argc, char const *argv[])
       if (strstr(cmd, "show")) {
         if (arg1) {
           rc = show(arg1);
+        } else {
+          usage();
+        }
+      }
+
+      /*
+       * add-cmd
+       */
+      if (strstr(cmd, "add-cmd")) {
+        if (arg1) {
+          rc = add_cmd(arg1);
         } else {
           usage();
         }
