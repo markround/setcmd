@@ -21,6 +21,14 @@ int show(char *cmd)
     return RETURN_FAIL;
   }
 
+  // If we're just pointing at the stub, stop here.
+  if (strstr(version, "stub") == 0) {
+    IDOS->Printf("Command:         %s\n", cmd);
+    IDOS->Printf("Current version: " SELECTED "%s" NORMAL " (%s)\n", version, SETCMD_STUB);
+    return RETURN_OK;  
+  }
+
+  // It's pointing at a proper command, so continue...
   rc = get_target(cmd, version, target);
   if (rc == SETCMD_ERROR) {
     IDOS->Printf("ERROR: Could not read link for %s/%s.\n", cmd, version);

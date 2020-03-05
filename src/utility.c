@@ -26,54 +26,52 @@ int get_target(char *cmd, char *version, char *target)
 {
   char cmd_dir[MAX_PATH_BUF];
   char cmd_version[MAX_PATH_BUF];
-  BPTR version_lock, cmd_lock;
+  char path[MAX_PATH_BUF];
+  BPTR lock;
   int32 rc;
  
-
   // Check the command directory exists
   strcpy(cmd_dir, SETCMD_CMDS);
   IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);
-  cmd_lock = IDOS->Lock(cmd_dir, ACCESS_READ);
-  if (!cmd_lock) {
+  lock = IDOS->Lock(cmd_dir, ACCESS_READ);
+  if (!lock) {
     IDOS->Printf("ERROR: Failed to lock the %s directory\n", cmd_dir);
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     return SETCMD_ERROR;
   }
-  if (cmd_lock) { 
-    IDOS->UnLock(cmd_lock); 
+  if (lock) { 
+    IDOS->UnLock(lock); 
   }
-
-  // check if we are just pointing at the stub, if so then return "stub"
-
 
   // Now get a lock on the specified version
   strcpy(cmd_version, cmd_dir);
   IDOS->AddPart(cmd_version, version, MAX_PATH_BUF);
-  version_lock = IDOS->Lock(cmd_version, ACCESS_READ);
-  if (!version_lock) {
+  lock = IDOS->Lock(cmd_version, ACCESS_READ);
+  if (!lock) {
     IDOS->Printf("ERROR: Failed to lock the %s version\n", cmd_version);
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     return SETCMD_ERROR;
   }
 
-  rc = IDOS->NameFromLock(version_lock, target, MAX_PATH_BUF);
+  rc = IDOS->NameFromLock(lock, target, MAX_PATH_BUF);
   if (!rc) {
     IDOS->Printf("ERROR: Failed to read the link from %s\n", cmd_version);
     if (DEBUG) {
       // %m and %n magic modifiers only available in kickstart 51.59
       IDOS->Printf("DOS error message = %m, error code = %n\n",0);
-      IDOS->Printf("Name from lock: %s\n", target);
     }
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
-    if (version_lock) IDOS->UnLock(version_lock);
+    if (lock) {
+      IDOS->UnLock(lock);
+    }
     return SETCMD_ERROR;
   }
 
-  if (version_lock) {
-    IDOS->UnLock(version_lock);
+  if (lock) {
+    IDOS->UnLock(lock);
   }
   
   return SETCMD_OK;
@@ -83,13 +81,54 @@ int current_version(char *cmd, char *version)
 {
   char link[MAX_PATH_BUF];
   char current_version[MAX_PATH_BUF];
+  char path[MAX_PATH_BUF];
+  char target[MAX_PATH_BUF];
   struct ExamineData *data;
   APTR context;
   BPTR lock;
   BOOL found = FALSE;
 
-  lock = IDOS->Lock(SETCMD_PATH, ACCESS_READ);
+  // check if we are just pointing at the stub, if so then return "stub"
+  strcpy(path, SETCMD_PATH);
+  IDOS->AddPart(path, cmd);
+  lock = IDOS->Lock(path, ACCESS_READ);
+  if (!lock) {
+    IDOS->Printf("ERROR: Failed to lock the %s path\n", path);
+    IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+    IDOS->Printf("For more information see the SetCmd manual.\n");
+    if (DEBUG) {
+      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
+    }
+    return SETCMD_ERROR;
+  }
 
+  rc = IDOS->NameFromLock(lock, target, MAX_PATH_BUF);
+  if (!rc) {
+    IDOS->Printf("ERROR: Failed to read the link from %s\n", path);
+    if (DEBUG) {
+      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
+    }
+    IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+    IDOS->Printf("For more information see the SetCmd manual.\n");
+    if (lock) {
+      IDOS->UnLock(lock);
+    }
+    return SETCMD_ERROR;
+  }
+
+  // Set version to "stub" and return
+  if (strstr(IDOS->FilePart(target), "stub")) {
+    strcpy(version, "stub");
+    if (lock) {
+      IDOS->UnLock(lock);
+    }
+    return SETCMD_OK;
+  }
+  
+  // OK, so we're not pointing at the stub. Let's move on.
+  IDOS->UnLock(lock);
+
+  lock = IDOS->Lock(SETCMD_PATH, ACCESS_READ);
   if (!lock) {
     IDOS->Printf("ERROR: Failed to lock the " SETCMD_PATH " directory\n");
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
