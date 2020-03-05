@@ -26,7 +26,7 @@ int delete_cmd(const char *cmd)
   // Now try and lock the requested cmd directory to see if it already exists
   strcpy(cmd_dir, SETCMD_CMDS);
   IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);
-  lock = IDOS->Lock(cmd_dir);
+  lock = IDOS->Lock(cmd_dir, ACCESS_READ);
   if (!lock) {
     IDOS->Printf("Error: The command %s does not exist.\n", cmd);
     return RETURN_FAIL;
