@@ -44,6 +44,9 @@ int get_target(char *cmd, char *version, char *target)
     IDOS->UnLock(cmd_lock); 
   }
 
+  // check if we are just pointing at the stub, if so then return "stub"
+
+
   // Now get a lock on the specified version
   strcpy(cmd_version, cmd_dir);
   IDOS->AddPart(cmd_version, version, MAX_PATH_BUF);

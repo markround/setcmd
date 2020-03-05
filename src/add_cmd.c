@@ -21,13 +21,13 @@ int add_cmd(char *cmd)
     return SETCMD_ERROR;
   }
   if (lock) { 
-    IDOS->UnLock(cmd_lock); 
+    IDOS->UnLock(lock); 
   }
 
   // Now try and lock the requested directory to see if it already exists
   strcpy(cmd_dir, SETCMD_CMDS);
   IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);
-  lock = IDOS->Lock(SETCMD_CMDS, ACCESS_READ);
+  lock = IDOS->Lock(cmd_dir, ACCESS_READ);
   if (lock) {
     IDOS->Printf("Error: The command %s has already been added.\n", cmd);
     IDOS->UnLock(lock); 
@@ -35,7 +35,7 @@ int add_cmd(char *cmd)
   } 
 
   // OK, we couldn't lock it, make sure it's just because it doesn't exist.
-  if (IoErr() != ERROR_OBJECT_NOT_FOUND) {
+  if (IDOS->IoErr() != ERROR_OBJECT_NOT_FOUND) {
     IDOS->Printf("Error: Unexpected error when locking %s.\n", cmd_dir);
     if (DEBUG) {
       IDOS->Printf("DOS error message = %m, error code = %n\n",0);

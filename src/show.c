@@ -17,13 +17,13 @@ int show(char *cmd)
 
   rc = current_version(cmd, version); 
   if (rc == SETCMD_ERROR) {
-    IDOS->Printf("Error: Command %s does not have a version set or does not exist.\n", cmd);
+    IDOS->Printf("ERROR: Command %s does not have a version set or does not exist.\n", cmd);
     return RETURN_FAIL;
   }
 
   rc = get_target(cmd, version, target);
   if (rc == SETCMD_ERROR) {
-    IDOS->Printf("Error: Could not read link for %s/%s.\n", cmd, version);
+    IDOS->Printf("ERROR: Could not read link for %s/%s.\n", cmd, version);
     return RETURN_FAIL;
   }
 
@@ -51,7 +51,7 @@ int show(char *cmd)
     strcpy(version, cmd_data->Name);
     rc = get_target(cmd, version, target);
     if (rc == SETCMD_ERROR) {
-      IDOS->Printf("Error: Could not read link for %s/%s.\n", cmd, version);
+      IDOS->Printf("ERROR: Could not read link for %s/%s.\n", cmd, version);
       return RETURN_FAIL;
     }
 
