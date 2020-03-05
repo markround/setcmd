@@ -8,6 +8,7 @@
 #include "init.h"
 #include "list.h"
 #include "show.h"
+#include "delete_cmd.h"
 
 // Used by the version DOS command
 const char __ver[40] =  "$VER: SetCmd " SETCMD_VERSION;
@@ -50,17 +51,13 @@ int main (int argc, char const *argv[])
     arg1  = (const char *)args[ARG_1];
     if (cmd) {
 
-      /*
-       * version
-       */
+      // version
       if (strstr(cmd, "version")) {
         IDOS->Printf("%s\n", SETCMD_VERSION);
         rc = RETURN_OK;
       }
 
-      /*
-       * init
-       */
+      // init
       if (strstr(cmd, "init")) {
         if (arg1) {
           if (strstr(arg1, "verbose")) {
@@ -75,9 +72,7 @@ int main (int argc, char const *argv[])
         }
       }
 
-      /*
-       * list
-       */
+      // list
       if (strstr(cmd, "list")) {
         if (arg1) {
           if (strstr(arg1, "verbose")) {
@@ -90,9 +85,7 @@ int main (int argc, char const *argv[])
         }
       }
 
-      /*
-       * show
-       */
+      // show
       if (strstr(cmd, "show")) {
         if (arg1) {
           rc = show(arg1);
@@ -101,12 +94,19 @@ int main (int argc, char const *argv[])
         }
       }
 
-      /*
-       * add-cmd
-       */
+      // add-cmd
       if (strstr(cmd, "add-cmd")) {
         if (arg1) {
           rc = add_cmd(arg1);
+        } else {
+          usage();
+        }
+      }
+
+      // delete-cmd
+      if (strstr(cmd, "delete-cmd")) {
+        if (arg1) {
+          rc = delete_cmd(arg1);
         } else {
           usage();
         }
