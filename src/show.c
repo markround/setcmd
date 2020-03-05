@@ -22,7 +22,7 @@ int show(char *cmd)
   }
 
   // If we're just pointing at the stub, stop here.
-  if (strstr(version, "stub") == 0) {
+  if (strcmp(version, "stub") == 0) {
     IDOS->Printf("Command:         %s\n", cmd);
     IDOS->Printf("Current version: " SELECTED "%s" NORMAL " (%s)\n", version, SETCMD_STUB);
     return RETURN_OK;  

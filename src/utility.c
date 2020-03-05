@@ -87,10 +87,11 @@ int current_version(char *cmd, char *version)
   APTR context;
   BPTR lock;
   BOOL found = FALSE;
+  int32 rc;
 
   // check if we are just pointing at the stub, if so then return "stub"
   strcpy(path, SETCMD_PATH);
-  IDOS->AddPart(path, cmd);
+  IDOS->AddPart(path, cmd, MAX_PATH_BUF);
   lock = IDOS->Lock(path, ACCESS_READ);
   if (!lock) {
     IDOS->Printf("ERROR: Failed to lock the %s path\n", path);
@@ -117,7 +118,7 @@ int current_version(char *cmd, char *version)
   }
 
   // Set version to "stub" and return
-  if (strstr(IDOS->FilePart(target), "stub")) {
+  if (strcmp(IDOS->FilePart(target), "stub") == 0) {
     strcpy(version, "stub");
     if (lock) {
       IDOS->UnLock(lock);
