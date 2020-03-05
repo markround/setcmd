@@ -29,6 +29,7 @@
 #define MAX_PATH_BUF  1024          // Max length of an AmigaDOS path
 #define SETCMD_PATH   "SETCMD:path" // Location of cmd symlinks
 #define SETCMD_CMDS   "SETCMD:cmds" // Location of cmd versions
+#define SETCMD_STUB   "SETCMD:stub" // Location of stub binary
 #define SETCMD_ERROR  -1            // Internal return value of functions that fail
 #define SETCMD_OK     0             // Internal return value of functions that succeed
 

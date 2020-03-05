@@ -57,13 +57,11 @@ int get_target(char *cmd, char *version, char *target)
 
   rc = IDOS->NameFromLock(version_lock, target, MAX_PATH_BUF);
   if (!rc) {
-    int32 io_error =  IDOS->IoErr();
     IDOS->Printf("ERROR: Failed to read the link from %s\n", cmd_version);
     if (DEBUG) {
       // %m and %n magic modifiers only available in kickstart 51.59
       IDOS->Printf("DOS error message = %m, error code = %n\n",0);
       IDOS->Printf("Name from lock: %s\n", target);
-      IDOS->PrintFault(io_error, NULL);
     }
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
