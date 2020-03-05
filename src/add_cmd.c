@@ -5,7 +5,7 @@
 #include <string.h>
 #include "utility.h"
 
-int add_cmd(char *cmd) 
+int add_cmd(const char *cmd) 
 {
   BPTR lock;
   int32 rc;

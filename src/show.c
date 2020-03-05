@@ -5,7 +5,7 @@
 #include <string.h>
 #include "utility.h"
 
-int show(char *cmd) 
+int show(const char *cmd) 
 {
   char version[MAX_PATH_BUF];
   char target[MAX_PATH_BUF];

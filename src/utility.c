@@ -22,7 +22,7 @@ void dump_path_node(struct PathNode *node)
   }
 }
 
-int get_target(char *cmd, char *version, char *target)
+int get_target(const char *cmd, const char *version, char *target)
 {
   char cmd_dir[MAX_PATH_BUF];
   char cmd_version[MAX_PATH_BUF];
@@ -77,7 +77,7 @@ int get_target(char *cmd, char *version, char *target)
   return SETCMD_OK;
 }
 
-int current_version(char *cmd, char *version)
+int current_version(const char *cmd, char *version)
 {
   char link[MAX_PATH_BUF];
   char current_version[MAX_PATH_BUF];
