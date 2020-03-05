@@ -8,7 +8,7 @@
 #include "list.h"
 
 // Used by the version DOS command
-const char __ver[40] =  "$VER: SetCmd " SC_VERSION;
+const char __ver[40] =  "$VER: SetCmd " SETCMD_VERSION;
 
 static const char template[] =
   "CMD,"
@@ -47,6 +47,14 @@ int main (int argc, char const *argv[])
     cmd   = (const char *)args[ARG_CMD];
     arg1  = (const char *)args[ARG_1];
     if (cmd) {
+
+      /*
+       * version
+       */
+      if (strstr(cmd, "version")) {
+        IDOS->Printf("%s\n", SETCMD_VERSION);
+        rc = RETURN_OK;
+      }
 
       /*
        * init

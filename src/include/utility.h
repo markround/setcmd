@@ -4,8 +4,8 @@
 #include <proto/exec.h>
 
 // SetCmd version string
-#define SC_VERSION  "1.0.0c"
-#define SC_BANNER   "(c) 2020 Mark Dastmalchi-Round   [http://markround.com/amiga]"
+#define SETCMD_VERSION  "1.0.0c"
+#define SETCMD_BANNER   "(c) 2020 Mark Dastmalchi-Round   [http://markround.com/amiga]"
 
 // Text formatting
 #define FG_BLACK    "\x1b[31m"

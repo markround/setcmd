@@ -2,6 +2,7 @@
 #include <proto/utility.h>
 #include <proto/exec.h>
 #include <proto/dos.h>
+#include <string.h>
 #include "utility.h"
 
 STRPTR btos(BSTR bstr)

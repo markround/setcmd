@@ -47,7 +47,7 @@ int init(int opt)
 
   if (IDOS->SetCurrentCmdPathList(new_path)) {
     // Yay, we're all setup, now just display some info.
-    if (opt != OPT_QUIET) IDOS->Printf("SetCmd " SC_VERSION " initialised\n");
+    if (opt != OPT_QUIET) IDOS->Printf("SetCmd " SETCMD_VERSION " initialised\n");
     if (opt == OPT_VERBOSE) {
       list(OPT_NONE);
     }

@@ -4,7 +4,7 @@
 
 void usage()
 {
-  IDOS->Printf("SetCmd " SC_VERSION " " SC_BANNER "\n");
+  IDOS->Printf("SetCmd " SETCMD_VERSION " " SETCMD_BANNER "\n");
   IDOS->Printf("\n");
   IDOS->Printf("Usage:\n");
   IDOS->Printf("\n");
