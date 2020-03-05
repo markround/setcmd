@@ -112,6 +112,15 @@ int main (int argc, char const *argv[])
         }
       }
 
+      // add-version
+      if (strstr(cmd, "add-version")) {
+        if (arg3) {
+          rc = add_version(arg1, arg2, arg3);
+        } else {
+          usage();
+        }
+      }
+
     } else {
       // No command passed, so display usage screen
       usage();
