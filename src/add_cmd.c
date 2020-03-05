@@ -13,24 +13,18 @@ int add_cmd(const char *cmd)
   char path[MAX_PATH_BUF];
 
   // Sanity check, make sure we can access the SETCMD:cmds directory
-  lock = IDOS->Lock(SETCMD_CMDS, ACCESS_READ);
-  if (!lock) {
+  if (!can_lock(SETCMDS_PATH)) {
     IDOS->Printf("ERROR: Failed to lock the %s directory\n", cmd_dir);
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     return SETCMD_ERROR;
   }
-  if (lock) { 
-    IDOS->UnLock(lock); 
-  }
-
+  
   // Now try and lock the requested directory to see if it already exists
   strcpy(cmd_dir, SETCMD_CMDS);
   IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);
-  lock = IDOS->Lock(cmd_dir, ACCESS_READ);
-  if (lock) {
+  if (can_lock(cmd_dir)) {
     IDOS->Printf("Error: The command %s has already been added.\n", cmd);
-    IDOS->UnLock(lock); 
     return RETURN_FAIL;
   } 
 
@@ -58,10 +52,8 @@ int add_cmd(const char *cmd)
   // Now create the soft link under SETCMD:path, checking first to see if it already exists
   strcpy(path, SETCMD_PATH);
   IDOS->AddPart(path, cmd, MAX_PATH_BUF);
-  lock = IDOS->Lock(path, ACCESS_READ);
-  if (lock) {
+  if (can_lock(path)) {}
     IDOS->Printf("Error: The command %s has already been added to the path %s.\n", cmd, path);
-    IDOS->UnLock(lock); 
     return RETURN_FAIL;
   } 
 

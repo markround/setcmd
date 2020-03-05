@@ -162,3 +162,16 @@ int current_version(const char *cmd, char *version)
   strcpy(version, current_version);
   return SETCMD_OK;
 }
+
+BOOL can_lock(const char *path); 
+{
+  BPTR lock;
+  lock = IDOS->Lock(path, ACCESS_READ);
+  if (lock) {
+    IDOS->UnLock(lock);
+        return TRUE;
+  } else {
+    return FALSE;
+  }
+
+}
