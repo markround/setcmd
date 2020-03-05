@@ -11,5 +11,5 @@ int main (int argc, char const *argv[])
   IDOS->Printf("\n");
   IDOS->Printf("This command " FG_BLUE "%s " FG_BLACK "has been installed as a setcmd stub.\n", argv[0]);
   IDOS->Printf("You now need to add a version and set it. See the setcmd documentation or\n");
-  IDOS->Printf("built-in help for more details (run setcmd with no arguments).\n");
+  IDOS->Printf("built-in help for more details (run " FG_BLUE "setcmd" FG_BLACK " with no arguments).\n");
 }
