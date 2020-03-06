@@ -12,17 +12,27 @@ int init(int opt)
   struct CommandLineInterface *cli = (struct CommandLineInterface *)IDOS->Cli();
   char check_path[MAX_PATH_BUF];
   char our_lock_path[MAX_PATH_BUF];
+  char assign_path[MAX_PATH_BUF];
   BPTR lock;
   int32 rc = 0;
 
   // Sanity check
-  if (!can_lock(SETCMD_ASSIGN))
+  lock = IDOS->Lock(SETCMD_ASSIGN, SHARED_LOCK);
+  if (!lock)
   {
     IDOS->Printf("ERROR: Failed to lock the " SETCMD_ASSIGN " directory\n");
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     return RETURN_FAIL;
   }
+  // Plus it's also useful to get the resolved path to display in verbose mode
+  rc = IDOS->NameFromLock(lock, assign_path, MAX_PATH_BUF);
+  if (!rc) {
+    dos_debug();
+    IDOS->UnLock(lock);
+    return RETURN_FAIL;
+  }
+  IDOS->UnLock(lock);
 
   pathlist = BADDR(cli->cli_PathList);
   if (DEBUG) {
@@ -78,8 +88,11 @@ int init(int opt)
 
   if (IDOS->SetCurrentCmdPathList(new_path)) {
     // Yay, we're all setup, now just display some info.
-    if (opt != OPT_QUIET) IDOS->Printf("SetCmd " SETCMD_VERSION " initialised\n");
+    if (opt == OPT_NONE) {
+      IDOS->Printf("SetCmd " SETCMD_VERSION " initialised\n");
+    }
     if (opt == OPT_VERBOSE) {
+      IDOS->Printf("SetCmd " SETCMD_VERSION " initialised [%s]\n", assign_path);
       list(OPT_NONE);
     }
     return RETURN_OK;
