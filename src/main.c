@@ -125,6 +125,15 @@ int main (int argc, char const *argv[])
         }
       }
 
+      // delete-version
+      if (strcmp(cmd, "delete-version") == 0) {
+        if (arg3) {
+          rc = add_version(arg1, arg2, arg3);
+        } else {
+          usage();
+        }
+      }
+
     } else {
       // No command passed, so display usage screen
       usage();
