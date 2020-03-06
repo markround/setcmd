@@ -25,18 +25,17 @@ int show(const char *cmd)
   if (strcmp(version, "stub") == 0) {
     IDOS->Printf("Command:         %s\n", cmd);
     IDOS->Printf("Current version: " SELECTED "%s" NORMAL " (%s)\n", version, SETCMD_STUB);
-    return RETURN_OK;  
-  }
+  } else {
+    // It's pointing at a proper command, so get the current version
+    rc = get_target(cmd, version, target);
+    if (rc == SETCMD_ERROR) {
+      IDOS->Printf("ERROR: Could not read link for %s/%s.\n", cmd, version);
+      return RETURN_FAIL;
+    }
 
-  // It's pointing at a proper command, so continue...
-  rc = get_target(cmd, version, target);
-  if (rc == SETCMD_ERROR) {
-    IDOS->Printf("ERROR: Could not read link for %s/%s.\n", cmd, version);
-    return RETURN_FAIL;
+    IDOS->Printf("Command:         %s\n", cmd);
+    IDOS->Printf("Current version: " SELECTED "%s" NORMAL " (%s)\n", version, target);
   }
-
-  IDOS->Printf("Command:         %s\n", cmd);
-  IDOS->Printf("Current version: " SELECTED "%s" NORMAL " (%s)\n", version, target);
 
   strcpy(cmd_dir, SETCMD_CMDS);
   IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);

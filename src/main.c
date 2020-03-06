@@ -2,13 +2,14 @@
 #include <dos/dos.h>
 #include <stdio.h>
 #include <string.h>
-#include "add_cmd.h"
 #include "utility.h"
 #include "usage.h"
 #include "init.h"
 #include "list.h"
 #include "show.h"
+#include "add_cmd.h"
 #include "delete_cmd.h"
+#include "add_version.h"
 
 // Used by the version DOS command
 const char __ver[40] =  "$VER: SetCmd " SETCMD_VERSION;
@@ -49,16 +50,19 @@ int main (int argc, char const *argv[])
     // Begin options parsing
     cmd   = (const char *)args[ARG_CMD];
     arg1  = (const char *)args[ARG_1];
+    arg2  = (const char *)args[ARG_2];
+    arg3  = (const char *)args[ARG_3];
+    arg4  = (const char *)args[ARG_4];
     if (cmd) {
 
       // version
-      if (strstr(cmd, "version")) {
+      if (strcmp(cmd, "version") == 0) {
         IDOS->Printf("%s\n", SETCMD_VERSION);
         rc = RETURN_OK;
       }
 
       // init
-      if (strstr(cmd, "init")) {
+      if (strcmp(cmd, "init") == 0) {
         if (arg1) {
           if (strstr(arg1, "verbose")) {
             rc = init(OPT_VERBOSE);
@@ -73,7 +77,7 @@ int main (int argc, char const *argv[])
       }
 
       // list
-      if (strstr(cmd, "list")) {
+      if (strcmp(cmd, "list") == 0) {
         if (arg1) {
           if (strstr(arg1, "verbose")) {
             rc = list(OPT_VERBOSE);
@@ -86,7 +90,7 @@ int main (int argc, char const *argv[])
       }
 
       // show
-      if (strstr(cmd, "show")) {
+      if (strcmp(cmd, "show") == 0) {
         if (arg1) {
           rc = show(arg1);
         } else {
@@ -95,7 +99,7 @@ int main (int argc, char const *argv[])
       }
 
       // add-cmd
-      if (strstr(cmd, "add-cmd")) {
+      if (strcmp(cmd, "add-cmd") == 0) {
         if (arg1) {
           rc = add_cmd(arg1);
         } else {
@@ -104,7 +108,7 @@ int main (int argc, char const *argv[])
       }
 
       // delete-cmd
-      if (strstr(cmd, "delete-cmd")) {
+      if (strcmp(cmd, "delete-cmd") == 0) {
         if (arg1) {
           rc = delete_cmd(arg1);
         } else {
@@ -113,7 +117,7 @@ int main (int argc, char const *argv[])
       }
 
       // add-version
-      if (strstr(cmd, "add-version")) {
+      if (strcmp(cmd, "add-version") == 0) {
         if (arg3) {
           rc = add_version(arg1, arg2, arg3);
         } else {
