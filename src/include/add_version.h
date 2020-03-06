@@ -4,3 +4,4 @@
 int add_version(const char *cmd, const char *version, const char *target);
 
 #endif
+

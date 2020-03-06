@@ -2,6 +2,8 @@
 #include <proto/utility.h>
 #include <proto/exec.h>
 #include <dos/dosextens.h>
+#include <dos/dosextens.h>
+#include <dos/dos.h>
 #include <string.h>
 #include "utility.h"
 
@@ -30,7 +32,7 @@ int add_version(const char *cmd, const char *version, const char *target)
   }
 
   // Create the link
-  rc = IDOS->MakeLink(path, target, LINK_SOFT);
+  rc = IDOS->MakeLink((char *)path, (char *)target, LINK_SOFT);
   if (!rc) {
     IDOS->Printf("ERROR: unexpected error creating link %s => %s.\n", path, target);  
     dos_debug();
