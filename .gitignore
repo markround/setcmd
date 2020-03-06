@@ -3,3 +3,4 @@ path
 stub
 test
 .vscode
+packaging/*.lha

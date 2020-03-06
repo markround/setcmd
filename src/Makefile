@@ -15,7 +15,7 @@ stub: stub.o utility.o
 	$(CC) $(CFLAGS) -c -g $< -Iinclude
 
 clean:
-	-rm *.o sdktest setcmd stub
+	-rm *.o setcmd stub
 
 debug: CFLAGS=-DDEBUG
 debug: setcmd
