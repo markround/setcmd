@@ -37,7 +37,7 @@ int delete_cmd(const char *cmd)
   while (path_data = IDOS->ExamineDir(path_context)) {
     if (!IDOS->Delete(path_data->Name)) {
       IDOS->Printf("Error: Unexpected error when deleting %s.\n", path_data->Name);
-      if (DEBUG) { IDOS->Printf("DOS error message = %m, error code = %n\n",0); }
+      dos_debug();
       IDOS->ReleaseDirContext(path_context);
       IDOS->UnLock(lock);
       return RETURN_FAIL;
@@ -50,7 +50,7 @@ int delete_cmd(const char *cmd)
   // Now delete the cmd directory itself
   if (!IDOS->Delete(cmd_dir)) {
     IDOS->Printf("Error: Unexpected error when deleting %s.\n", cmd_dir);
-    if (DEBUG) { IDOS->Printf("DOS error message = %m, error code = %n\n",0); }
+    dos_debug();
     return RETURN_FAIL;
   }
 
@@ -59,7 +59,7 @@ int delete_cmd(const char *cmd)
   IDOS->AddPart(path_dir, cmd, MAX_PATH_BUF);
   if (!IDOS->Delete(path_dir)) {
     IDOS->Printf("Error: Unexpected error when deleting %s.\n", cmd_dir);
-    if (DEBUG) { IDOS->Printf("DOS error message = %m, error code = %n\n",0); }
+    dos_debug();
     return RETURN_FAIL;
   }
 

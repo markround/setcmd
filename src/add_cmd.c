@@ -31,9 +31,7 @@ int add_cmd(const char *cmd)
   // OK, we couldn't lock it, make sure it's just because it doesn't exist.
   if (IDOS->IoErr() != ERROR_OBJECT_NOT_FOUND) {
     IDOS->Printf("Error: Unexpected error when locking %s.\n", cmd_dir);
-    if (DEBUG) {
-      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
-    }
+    dos_debug();
     return RETURN_FAIL;
   } 
 
@@ -41,9 +39,7 @@ int add_cmd(const char *cmd)
   lock = IDOS->CreateDir(cmd_dir);
   if (!lock) {
     IDOS->Printf("Error: Unexpected error when creating directory  %s.\n", cmd_dir);
-    if (DEBUG) {
-      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
-    }
+    dos_debug();
     return RETURN_FAIL;
   }
 
@@ -60,9 +56,7 @@ int add_cmd(const char *cmd)
   rc = IDOS->MakeLink(path, SETCMD_STUB, LINK_SOFT);
   if (!rc) {
     IDOS->Printf("Error: Unexpected error when creating soft link  %s => %s.\n", path, SETCMD_STUB);
-    if (DEBUG) {
-      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
-    }  
+    dos_debug();  
     return RETURN_FAIL;
   }
 

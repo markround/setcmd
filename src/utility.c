@@ -5,11 +5,13 @@
 #include <string.h>
 #include "utility.h"
 
-STRPTR btos(BSTR bstr)
+void dos_debug()
 {
-  return IUtility->ASPrintf("%b", bstr);
+  if (DEBUG) {
+      // %m and %n magic modifiers only available in kickstart 51.59+
+      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
+    }  
 }
-
 
 void dump_path_node(struct PathNode *node)
 {
@@ -58,10 +60,7 @@ int get_target(const char *cmd, const char *version, char *target)
   rc = IDOS->NameFromLock(lock, target, MAX_PATH_BUF);
   if (!rc) {
     IDOS->Printf("ERROR: Failed to read the link from %s\n", cmd_version);
-    if (DEBUG) {
-      // %m and %n magic modifiers only available in kickstart 51.59
-      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
-    }
+    dos_debug();
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     if (lock) {
@@ -97,18 +96,14 @@ int current_version(const char *cmd, char *version)
     IDOS->Printf("ERROR: Failed to lock the %s path\n", path);
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
-    if (DEBUG) {
-      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
-    }
+    dos_debug();
     return SETCMD_ERROR;
   }
 
   rc = IDOS->NameFromLock(lock, target, MAX_PATH_BUF);
   if (!rc) {
     IDOS->Printf("ERROR: Failed to read the link from %s\n", path);
-    if (DEBUG) {
-      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
-    }
+    dos_debug();
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     if (lock) {
@@ -176,9 +171,3 @@ BOOL can_lock(const char *path)
 
 }
 
-void dos_debug()
-{
-  if (DEBUG) {
-      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
-    }  
-}
