@@ -7,9 +7,11 @@ all: setcmd stub
 
 setcmd: $(OBJS)
 	$(CC) $(CFLAGS) -o setcmd $(OBJS) -Iinclude -lauto
+	copy setcmd /
 
 stub: stub.o utility.o
 	$(CC) $(CFLAGS) -o stub stub.o utility.o -Iinclude
+	copy setcmd /
 
 .c.o:
 	$(CC) $(CFLAGS) -c -g $< -Iinclude
