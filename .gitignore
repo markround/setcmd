@@ -1,6 +1,7 @@
 cmds
 path
 stub
+setcmd
 test
 .vscode
 packaging/*.lha
