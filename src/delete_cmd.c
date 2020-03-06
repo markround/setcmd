@@ -35,8 +35,11 @@ int delete_cmd(const char *cmd)
   // Iterate over all the installed versions and delete them
   path_context = IDOS->ObtainDirContextTags(EX_LockInput, lock, TAG_END);
   while (path_data = IDOS->ExamineDir(path_context)) {
-    if (!IDOS->Delete(path_data->Name)) {
-      IDOS->Printf("Error: Unexpected error when deleting %s.\n", path_data->Name);
+    strcpy(path, SETCMD_CMDS);
+    IDOS->AddPart(path, cmd, MAX_PATH_BUF);
+    IDOS->AddPart(path, path_data->Name, MAX_PATH_BUF);
+    if (!IDOS->Delete(path)) {
+      IDOS->Printf("Error: Unexpected error when deleting %s.\n", path);
       dos_debug();
       IDOS->ReleaseDirContext(path_context);
       IDOS->UnLock(lock);
