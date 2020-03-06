@@ -34,7 +34,7 @@ int delete_version(const char *cmd, const char *version)
   // Delete the link
   rc = IDOS->Delete((char *)path);
   if (!rc) {
-    IDOS->Printf("ERROR: unexpected error deleting %s => %s.\n", path);  
+    IDOS->Printf("ERROR: unexpected error deleting %s.\n", path);  
     dos_debug();
   }
 

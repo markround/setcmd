@@ -21,9 +21,9 @@ void usage()
   IDOS->Printf("  Shows details for specified command " FG_BLUE "cmd" FG_BLACK "\n");
   IDOS->Printf("  example: setcmd show uae\n");
 
-  IDOS->Printf(BOLD_ON "set " BOLD_OFF FG_BLUE "cmd version" FG_BLACK "\n");
+  IDOS->Printf(BOLD_ON "set-version " BOLD_OFF FG_BLUE "cmd version" FG_BLACK "\n");
   IDOS->Printf("  Sets " FG_BLUE "cmd " FG_BLACK "to " FG_BLUE "version" FG_BLACK "\n");
-  IDOS->Printf("  example: setcmd set uae system\n");
+  IDOS->Printf("  example: setcmd set-version uae system\n");
 
   IDOS->Printf(BOLD_ON "add-cmd " BOLD_OFF FG_BLUE "cmd" FG_BLACK "\n");
   IDOS->Printf("  Adds a new command " FG_BLUE "cmd " FG_BLACK "and points it to a stub\n");
