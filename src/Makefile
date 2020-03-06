@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=
-OBJS=main.o utility.o usage.o init.o list.o show.o add_cmd.o delete_cmd.o add_version.o
+OBJS=main.o utility.o usage.o init.o list.o show.o add_cmd.o delete_cmd.o add_version.o delete_version.o
 
 
 all: setcmd stub
