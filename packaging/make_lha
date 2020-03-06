@@ -1,7 +1,3 @@
-.KEY ARG1
-.BRA {
-.KET }
-
 ; vim: set syntax=amiga ts=2 expandtab:
 
 set sc_tmpdir="TMP:SetCmd"
@@ -16,15 +12,13 @@ delete "${sc_tmpdir}" all
 makedir "${sc_tmpdir}/setcmd/support" all
 
 copy ${sc_dir}/Install_SetCMD#? ${sc_builddir}
-copy ${sc_dir}/ReadMe#? ${sc_builddir}
+copy ${sc_dir}/ReadMe.txt#? ${sc_builddir}
 copy ${sc_dir}/SetCmd.guide#? ${sc_builddir}
 copy ${sc_dir}/src/setcmd ${sc_builddir}
 copy ${sc_dir}/src/stub ${sc_builddir}
 
 cd ${sc_tmpdir}
-if "{ARG1}" eq "replace" 
-  delete "${sc_dir}/packaging/setcmd-${sc_release}-os4.lha"
-endif
+delete "${sc_dir}/packaging/setcmd-${sc_release}-os4.lha"
 
 lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/Install_SetCMD#?
 lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/ReadMe#?

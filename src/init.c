@@ -10,7 +10,19 @@ int init(int opt)
 {
   struct PathNode *pathlist, *check_dup, *new_path;
   struct CommandLineInterface *cli = (struct CommandLineInterface *)IDOS->Cli();
+  char check_path[MAX_PATH_BUF];
+  char our_lock_path[MAX_PATH_BUF];
   BPTR lock;
+  int32 rc = 0;
+
+  // Sanity check
+  if (!can_lock(SETCMD_ASSIGN))
+  {
+    IDOS->Printf("ERROR: Failed to lock the " SETCMD_ASSIGN " directory\n");
+    IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+    IDOS->Printf("For more information see the SetCmd manual.\n");
+    return RETURN_FAIL;
+  }
 
   pathlist = BADDR(cli->cli_PathList);
   if (DEBUG) {
@@ -24,24 +36,36 @@ int init(int opt)
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     return RETURN_FAIL;
-  } 
+  }
 
   if (DEBUG) {
     IDOS->Printf("Obtained lock on " SETCMD_PATH "\n");
   }
 
-  /* If SetCMD has already been initialised, then doing this again in a new CLI process
-   * will result in a DSI when the new CLI exits. I'm pretty sure this has to do with the
-   * pathlist not being freed; I still have to work out the best way to deal with this, for now
-   * we simply do not allow "setcmd init" to be run twice. 
-   */
-  check_dup = (struct PathNode *)IDOS->RemoveCmdPathNode(pathlist, lock);
-  if (check_dup) {
-    IDOS->Printf("ERROR: SetCmd already initialised.\n");
+  // Get the first Node in the Path, which should be our own path directory if we've 
+  // already been initialised with the same SETCMD: assign...
+  rc = IDOS->NameFromLock(lock, our_lock_path, MAX_PATH_BUF);
+  if (!rc) {
+    dos_debug();
     IDOS->UnLock(lock);
+    return RETURN_FAIL;
+  }
+  rc = IDOS->NameFromLock(pathlist->pn_Lock, check_path, MAX_PATH_BUF);
+  if (!rc) {
+    dos_debug();
+    IDOS->UnLock(lock);
+    return RETURN_FAIL;
+  }
+
+  // Are we being re-initialised with the same assign ?
+  // If so, skip it as we will clutter up the path list with duplicates.
+  if (strcmp(check_path, our_lock_path) == 0) {
+    IDOS->Printf("ERROR: SetCmd has already been initialised at %s.\n", our_lock_path);
     if (DEBUG) {
-      dump_path_node(check_dup);
+      IDOS->Printf("Path from lock is : %s\n", check_path);
+      IDOS->Printf("Path from our CLI process lock is : %s\n", our_lock_path);
     }
+    IDOS->UnLock(lock);
     return RETURN_FAIL;
   }
 
@@ -63,7 +87,7 @@ int init(int opt)
     // This shouldn't fail!
     IDOS->Printf("ERROR: Failed to set the new command path!\n");
     IDOS->Printf("This should never happen :(\n");
-    debug_dos();
+    dos_debug();
     return RETURN_FAIL;
   }
   

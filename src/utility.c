@@ -18,7 +18,7 @@ void dump_path_node(struct PathNode *node)
   while (node->pn_Next) {
     char path[MAX_PATH_BUF];
     if(IDOS->NameFromLock(node->pn_Lock, path, MAX_PATH_BUF)) {
-      IDOS->Printf("%s\n", path);
+      IDOS->Printf("  %s\n", path);
     }
     node = BADDR(node->pn_Next);
   }
