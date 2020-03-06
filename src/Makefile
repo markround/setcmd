@@ -11,7 +11,7 @@ setcmd: $(OBJS)
 
 stub: stub.o utility.o
 	$(CC) $(CFLAGS) -o stub stub.o utility.o -Iinclude
-	copy setcmd /
+	copy stub /
 
 .c.o:
 	$(CC) $(CFLAGS) -c -g $< -Iinclude
