@@ -44,5 +44,6 @@ void dump_path_node(struct PathNode *node);
 int current_version(const char *cmd, char *version);
 int get_target(const char *cmd, const char *version, char *target);
 BOOL can_lock(const char *path); 
+void dos_debug();
 
 #endif

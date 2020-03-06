@@ -175,3 +175,10 @@ BOOL can_lock(const char *path)
   }
 
 }
+
+void dos_debug()
+{
+  if (DEBUG) {
+      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
+    }  
+}

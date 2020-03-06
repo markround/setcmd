@@ -17,7 +17,7 @@ int add_cmd(const char *cmd)
     IDOS->Printf("ERROR: Failed to lock the %s directory\n", cmd_dir);
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
-    return SETCMD_ERROR;
+    return RETRUN_FAIL;
   }
   
   // Now try and lock the requested directory to see if it already exists
