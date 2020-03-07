@@ -1,6 +1,12 @@
 # SetCmd
 
-This file was created on an Amiga and pushed using sgit!
+SetCmd is a utility for AmigaOS 4.x that lets you quickly and easily switch between different versions of installed software.
 
-And here is some more text.
+![SetCmd usage screen](misc/images/usage.png)
+
+# Background
+
+# Usage
+
+
 
