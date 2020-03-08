@@ -13,8 +13,10 @@
 )
 
 (message 
-  "Welcome to the SetCmdInstaller!\n"
-  "this will do some stuff.\n"
+  "Welcome to the SetCmd Installer!\n"
+  "This will install the SetCmd utility and documentation on your system.\n\n"
+  "NOTE: It will not automatically initialise SetCmd for you, for information on how to do this\n"
+  "please make sure you read the included documentation.\n"
 )
 
 (welcome)
@@ -29,6 +31,8 @@
       )
     )
     (set #dname (tackon #dname "SetCmd"))
+    ; This is the built-in variable that gets displayed to the user at the end of the installation
+    (set @default-dest #dname)
 
     (makedir #dname
       (prompt ("Create drawer %s?" #dname))
@@ -83,7 +87,7 @@
   (help @copyfiles-help)
 )
 
-; Set up the directory structure
+; Set up the link database directory structure
 (makedir (tackon #dname "path"))
 (makedir (tackon #dname "cmds"))
 (makedir (tackon (tackon #dname "cmds") "setcmd"))
