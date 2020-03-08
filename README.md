@@ -6,7 +6,7 @@ SetCmd is a utility for the AmigaOS 4.x shell that lets you quickly and easily s
 
 # Background
 
-I developed SetCmd primarily to solve a problem I had - switching between different versions of the UAE Emulator on my [X5000](https://www.markround.com/blog/2018/10/10/new-amiga-x5000/) while using [classic Amiga software](http://www.markround.com/blog/2018/10/30/classic-amiga-emulation-on-the-x5000/). It was also written to accompany my series of [blog posts](http://www.markround.com/blog/categories/amiga/) exploring the next-gen AmigaOS, written from the perspective of an old ex-Amigan returning to the scene. I used it as an experiment to learn how to develop, package and distribute software for AmigaOS, as well as picking up the C language along the way. This tool is my first C program ever, and my first release for the Amiga in a very long time! 
+I developed SetCmd primarily to solve a problem I had - switching between different versions of the UAE Emulator on my [X5000](https://www.markround.com/blog/2018/10/10/new-amiga-x5000/) while using [classic Amiga software](http://www.markround.com/blog/2018/10/30/classic-amiga-emulation-on-the-x5000/). It was also written to accompany my series of [blog posts](http://www.markround.com/blog/categories/amiga/) exploring the next-gen AmigaOS, written from the perspective of an old ex-Amigan returning to the scene. I used it as an experiment to learn how to develop, package and distribute software for AmigaOS, as well as picking up the C language along the way. Excluding variations on "Hello, World!" I studied years ago at University, this tool is my first full C program ever, and my first release for the Amiga in a very long time! 
 
 I wanted to make the tool as Amiga-native as possible. This meant things like:
 
@@ -66,6 +66,8 @@ Alternatively, if you'd like it to be available system-wide and not just when yo
 
 # Documentation and Links
 Running `setcmd` with no arguments displays the the usage screen shown at the top of this document, this provides quick examples for each function.
+
+There is also a full [manual](SetCmd.guide) provided in AmigaGuide format that is installed along with the tool.
 
 
 # Requirements

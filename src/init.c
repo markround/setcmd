@@ -70,38 +70,40 @@ int init(int opt)
   // Are we being re-initialised with the same assign ?
   // If so, skip it as we will clutter up the path list with duplicates.
   if (strcmp(check_path, our_lock_path) == 0) {
-    IDOS->Printf("ERROR: SetCmd has already been initialised at %s.\n", our_lock_path);
     if (DEBUG) {
+      IDOS->Printf("SetCmd has already been initialised at %s.\n", our_lock_path);
       IDOS->Printf("Path from lock is : %s\n", check_path);
       IDOS->Printf("Path from our CLI process lock is : %s\n", our_lock_path);
     }
-    IDOS->UnLock(lock);
-    return RETURN_FAIL;
-  }
-
-  // Set up the new pathlist with us at the start
-  new_path = IDOS->AddCmdPathNode(pathlist, lock, ADDCMDPATHNODE_HEAD);
-  if (DEBUG) {
-    IDOS->Printf("---> After\n");
-    dump_path_node(new_path);
-  }
-
-  if (IDOS->SetCurrentCmdPathList(new_path)) {
-    // Yay, we're all setup, now just display some info.
-    if (opt == OPT_NONE) {
-      IDOS->Printf("SetCmd " SETCMD_VERSION " initialised\n");
-    }
-    if (opt == OPT_VERBOSE) {
-      IDOS->Printf("SetCmd " SETCMD_VERSION " initialised [%s]\n", assign_path);
-      list(OPT_NONE);
-    }
-    return RETURN_OK;
   } else {
-    // This shouldn't fail!
-    IDOS->Printf("ERROR: Failed to set the new command path!\n");
-    IDOS->Printf("This should never happen :(\n");
-    dos_debug();
-    return RETURN_FAIL;
+    // Set up the new pathlist with us at the start
+    new_path = IDOS->AddCmdPathNode(pathlist, lock, ADDCMDPATHNODE_HEAD);
+    if (DEBUG) {
+      IDOS->Printf("---> After\n");
+      dump_path_node(new_path);
+    }
+
+    if (!IDOS->SetCurrentCmdPathList(new_path)) {
+      // This shouldn't fail!
+      IDOS->Printf("ERROR: Failed to set the new command path!\n");
+      IDOS->Printf("This should never happen :(\n");
+      IDOS->UnLock(lock);
+      dos_debug();
+      return RETURN_FAIL;  
+    } 
   }
+    
+  IDOS->UnLock(lock);
+
+  // Yay, we're all setup, now just display some info.
+  if (opt == OPT_NONE) {
+    IDOS->Printf("SetCmd " SETCMD_VERSION " initialised\n");
+  }
+  if (opt == OPT_VERBOSE) {
+    IDOS->Printf("SetCmd " SETCMD_VERSION " initialised [%s]\n", assign_path);
+    list(OPT_NONE);
+  }
+  
+  return RETURN_OK;
   
 }
