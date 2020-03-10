@@ -26,6 +26,11 @@ lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/SetCmd.guide#?
 lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/setcmd
 lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/stub
 
+
+; This simply named "setcmd.lha" package is used for OS4depot etc. uploads
+delete "${sc_dir}/packaging/setcmd.lha"
+copy "${sc_dir}/packaging/setcmd-${sc_release}-os4.lha" "${sc_dir}/packaging/setcmd.lha"
+
 cd ${sc_dir}
 
 unset sc_release
