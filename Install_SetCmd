@@ -2,6 +2,8 @@
 ; vim: set syntax=lisp ts=2 expandtab:
 
 (set @app-name "SetCMD (1.0.0)")
+(set #setcmd-version "1.0.0-rc1")
+(set #setcmd-binary (cat "setcmd-" #setcmd-version))
 
 ; I have only currently tested this on a few OS 4 systems.
 ; There will be an update at some point that will support classic AmigaOS, but until then this
