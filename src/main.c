@@ -64,7 +64,7 @@ int main (int argc, char const *argv[])
       }
 
       // init
-      if (strcmp(cmd, "init") == 0) {
+      else if (strcmp(cmd, "init") == 0) {
         if (arg1) {
           if (strstr(arg1, "verbose")) {
             rc = init(OPT_VERBOSE);
@@ -79,7 +79,7 @@ int main (int argc, char const *argv[])
       }
 
       // list
-      if (strcmp(cmd, "list") == 0) {
+      else if (strcmp(cmd, "list") == 0) {
         if (arg1) {
           if (strstr(arg1, "verbose")) {
             rc = list(OPT_VERBOSE);
@@ -92,7 +92,7 @@ int main (int argc, char const *argv[])
       }
 
       // show
-      if (strcmp(cmd, "show") == 0) {
+      else if (strcmp(cmd, "show") == 0) {
         if (arg1) {
           rc = show(arg1);
         } else {
@@ -101,7 +101,7 @@ int main (int argc, char const *argv[])
       }
 
       // add-cmd
-      if (strcmp(cmd, "add-cmd") == 0) {
+      else if (strcmp(cmd, "add-cmd") == 0) {
         if (arg1) {
           rc = add_cmd(arg1);
         } else {
@@ -110,7 +110,7 @@ int main (int argc, char const *argv[])
       }
 
       // delete-cmd
-      if (strcmp(cmd, "delete-cmd") == 0) {
+      else if (strcmp(cmd, "delete-cmd") == 0) {
         if (arg1) {
           rc = delete_cmd(arg1);
         } else {
@@ -119,7 +119,7 @@ int main (int argc, char const *argv[])
       }
 
       // add-version
-      if (strcmp(cmd, "add-version") == 0) {
+      else if (strcmp(cmd, "add-version") == 0) {
         if (arg3) {
           rc = add_version(arg1, arg2, arg3);
         } else {
@@ -128,7 +128,7 @@ int main (int argc, char const *argv[])
       }
 
       // delete-version
-      if (strcmp(cmd, "delete-version") == 0) {
+      else if (strcmp(cmd, "delete-version") == 0) {
         if (arg2) {
           rc = delete_version(arg1, arg2);
         } else {
@@ -137,12 +137,15 @@ int main (int argc, char const *argv[])
       }
 
       // set
-      if (strcmp(cmd, "set-version") == 0) {
+      else if (strcmp(cmd, "set-version") == 0) {
         if (arg2) {
           rc = set_version(arg1, arg2);
         } else {
           usage();
         }
+      }
+      else {
+        usage();
       }
 
     } else {
