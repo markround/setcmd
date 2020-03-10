@@ -4,7 +4,7 @@
 #include <proto/exec.h>
 
 // SetCmd version string
-#define SETCMD_VERSION  "1.0.0-beta5"
+#define SETCMD_VERSION  "1.0.0-beta6"
 #define SETCMD_BANNER   "(c) 2020 Mark Dastmalchi-Round [http://markround.com/amiga]"
 
 // Text formatting

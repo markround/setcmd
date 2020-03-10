@@ -17,7 +17,7 @@ int show(const char *cmd)
 
   rc = current_version(cmd, version); 
   if (rc == SETCMD_ERROR) {
-    IDOS->Printf("ERROR: Command %s does not have a version set or does not exist.\n", cmd);
+    IDOS->Printf(FG_RED "ERROR" NORMAL ": Command %s does not have a version set or does not exist.\n", cmd);
     return RETURN_FAIL;
   }
 
@@ -29,7 +29,7 @@ int show(const char *cmd)
     // It's pointing at a proper command, so get the current version
     rc = get_target(cmd, version, target);
     if (rc == SETCMD_ERROR) {
-      IDOS->Printf("ERROR: Could not read link for %s/%s.\n", cmd, version);
+      IDOS->Printf(FG_RED "ERROR" NORMAL ": Could not read link for %s/%s.\n", cmd, version);
       return RETURN_FAIL;
     }
 
@@ -42,7 +42,7 @@ int show(const char *cmd)
   
   cmd_lock = IDOS->Lock(cmd_dir, ACCESS_READ);
   if (!cmd_lock) {
-    IDOS->Printf("ERROR: Failed to lock the %s directory\n", cmd_dir);
+    IDOS->Printf(FG_RED "ERROR" NORMAL ": Failed to lock the %s directory\n", cmd_dir);
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     return RETURN_FAIL;
@@ -58,7 +58,7 @@ int show(const char *cmd)
     strcpy(version, cmd_data->Name);
     rc = get_target(cmd, version, target);
     if (rc == SETCMD_ERROR) {
-      IDOS->Printf("ERROR: Could not read link for %s/%s.\n", cmd, version);
+      IDOS->Printf(FG_RED "ERROR" NORMAL ": Could not read link for %s/%s.\n", cmd, version);
       return RETURN_FAIL;
     }
 
