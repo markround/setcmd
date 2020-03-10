@@ -4,7 +4,7 @@
 #include <proto/exec.h>
 
 // SetCmd version string
-#define SETCMD_VERSION  "1.0.0-beta3"
+#define SETCMD_VERSION  "1.0.0-beta4"
 #define SETCMD_BANNER   "(c) 2020 Mark Dastmalchi-Round [http://markround.com/amiga]"
 
 // Text formatting
@@ -31,8 +31,8 @@
 #define SETCMD_PATH   "SETCMD:path" // Location of cmd symlinks
 #define SETCMD_CMDS   "SETCMD:cmds" // Location of cmd versions
 #define SETCMD_STUB   "SETCMD:stub" // Location of stub binary
-#define SETCMD_ERROR  -1            // Internal return value of functions that fail
-#define SETCMD_OK     0             // Internal return value of functions that succeed
+#define SETCMD_ERROR  0             // Internal return value of functions that fail
+#define SETCMD_OK     1             // Internal return value of functions that succeed
 
 // Used for option parsing flags
 #define OPT_NONE    0
