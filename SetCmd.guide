@@ -117,10 +117,7 @@ If I run "uae" from the shell now, I'll get the bundled UAE. However, for some g
 
 > setcmd set-version uae dev
 
-And then when I run "uae" from the shell, I'l get the experimental build from my Downloads 
-
-
-
+And then when I run "uae" from the shell, I'l get the experimental build from my Downloads. 
 @EndNode
 
 
