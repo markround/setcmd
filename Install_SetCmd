@@ -1,9 +1,8 @@
 ; $VER: Installation script for SetCmd (1.0.0)
 ; vim: set syntax=lisp ts=2 expandtab:
 
-(set @app-name "SetCMD (1.0.0)")
-(set #setcmd-version "1.0.0-rc1")
-(set #setcmd-binary (cat "setcmd-" #setcmd-version))
+(set @app-name "SetCmd")
+(set #setcmd-version "1.0.0-rc3")
 
 ; I have only currently tested this on a few OS 4 systems.
 ; There will be an update at some point that will support classic AmigaOS, but until then this
@@ -11,13 +10,13 @@
 (if (< (/ (getversion) 65536) 52)
   (
     (abort "SetCmd has only been tested on OS 4.x (v52+), so not installing on this OS!")
-   )
+  )
 )
 
 (message 
-  "Welcome to the SetCmd Installer!\n"
+  "Welcome to the SetCmd " #setcmd-version " Installer!\n"
   "This will install the SetCmd utility and documentation on your system.\n\n"
-  "NOTE: It will not automatically initialise SetCmd for you, for information on how to do this\n"
+  "NOTE: It will not automatically initialise SetCmd for you, for information on how to do this, "
   "please make sure you read the included documentation.\n"
 )
 
@@ -52,10 +51,21 @@
 (get_and_create_destination)
 (set #dname (getassign "SETCMD" "a"))
 
+; Set these variables as they're useful later and avoid excessive nested tackons!
+(set #path-dir (tackon #dname "path"))
+(set #cmd-dir (tackon #dname "cmds"))
+(set #setcmd-cmd-dir (tackon #cmd-dir "setcmd"))
+(set #setcmd-full-path (tackon #setcmd-cmd-dir #setcmd-version))
+
+; Set up the link database directory structure
+(makedir #path-dir)
+(makedir #cmd-dir)
+(makedir #setcmd-cmd-dir)
 
 (copyfiles
   (source "setcmd")
-  (dest #dname)
+  (dest #setcmd-cmd-dir)
+  (newname #setcmd-version)
   (prompt ("Copy SetCmd program file?"))
   (confirm "expert")
   (all)
@@ -89,9 +99,18 @@
   (help @copyfiles-help)
 )
 
-; Set up the link database directory structure
-(makedir (tackon #dname "path"))
-(makedir (tackon #dname "cmds"))
-(makedir (tackon (tackon #dname "cmds") "setcmd"))
-(run (cat "C:MakeLink FROM \"" (tackon #dname "cmds/setcmd/release") "\" TO SETCMD:setcmd SOFT"))
-(run (cat "C:MakeLink FROM \"" (tackon #dname "path/setcmd") "\" TO SETCMD:cmds/setcmd/release SOFT"))
+; delete the old version links if they exist
+(if (exists (tackon #path-dir "setcmd") (noreq))
+  (
+    (delete (tackon #path-dir "setcmd"))
+  )
+)
+(if (exists (tackon #dname "setcmd") (noreq))
+  (
+    (delete (tackon #dname "setcmd"))
+  )
+)
+
+; Set up the links pointing setcmd to our installed version
+(run (cat "C:MakeLink FROM \"" (tackon #path-dir "setcmd") "\" TO \"" #setcmd-full-path "\" SOFT"))
+(run (cat "C:MakeLink FROM \"" (tackon #dname "setcmd") "\" TO \"" (tackon #path-dir "setcmd") "\" SOFT"))
