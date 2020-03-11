@@ -88,7 +88,6 @@ int current_version(const char *cmd, char *version)
   BOOL found = FALSE;
   int32 rc;
 
-  // check if we are just pointing at the stub, if so then return "stub"
   strcpy(path, SETCMD_PATH);
   IDOS->AddPart(path, cmd, MAX_PATH_BUF);
   lock = IDOS->Lock(path, ACCESS_READ);
@@ -116,7 +115,7 @@ int current_version(const char *cmd, char *version)
     return SETCMD_ERROR;
   }
 
-  // Set version to "stub" and return
+  // check if we are just pointing at the stub, if so then return "stub"
   if (strcmp(IDOS->FilePart(target), "stub") == 0) {
     strcpy(version, "stub");
     if (lock) {

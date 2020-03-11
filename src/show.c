@@ -21,7 +21,7 @@ int show(const char *cmd)
     return RETURN_FAIL;
   }
 
-  // If we're just pointing at the stub, stop here.
+  // If we're just pointing at the stub, don't bother retrieving a link target
   if (strcmp(version, "stub") == 0) {
     IDOS->Printf("Command:         %s\n", cmd);
     IDOS->Printf("Current version: " SELECTED "%s" NORMAL " (%s)\n", version, SETCMD_STUB);
