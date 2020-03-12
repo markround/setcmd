@@ -1,8 +1,8 @@
-; $VER: Installation script for SetCmd (1.0.0)
+; $VER: Installation script for SetCmd
 ; vim: set syntax=lisp ts=2 expandtab:
 
 (set @app-name "SetCmd")
-(set #setcmd-version "1.0.0-rc3")
+(set #setcmd-version "1.0.0")
 
 ; I have only currently tested this on a few OS 4 systems.
 ; There will be an update at some point that will support classic AmigaOS, but until then this
