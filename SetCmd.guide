@@ -11,6 +11,7 @@ Please select one of the topics below for more information.
 @{"About" Link About}
 @{"Installation" Link Installation}
 @{"Usage" Link Usage}
+@{"Developers" Link Developers}
 @{"Miscellaneous" Link Misc}
 @EndNode
 
@@ -121,14 +122,40 @@ And then when I run "uae" from the shell, I'l get the experimental build from my
 @EndNode
 
 
+@Node Developers "Developers Information"
+
+If you'd like to check the source out, it's held in a git repository at https://github.com/markround/setcmd. 
+
+All the C code lives under the src directory. There is a Makefile provided; as long as you have the most recent version of the SDK installed, just running "make all" in this directory on an Amiga running OS4 should provide you with the setcmd and stub binaries. You can also try running "make debug" to build debug versions with a lot more verbose output enabled.
+
+Each sub-command (e.g. init, add-command, set-version etc.) is defined in it's own source file; for example the initialisation code is defined in src/init.c. There is also a utility.c which contains common shared functions, and it's header (src/include/utility.h) also contains commonly used #defines, constants, retun codes and so on.
+
+Again, bear in mind this is my first C project!
+
+But, as a bonus - As I hadn't learned enough C or figured out how to develop on the Amiga when I started this project, my first iteration of this tool was a proof-of-concept written as an AmigaDOS script. It may prove a useful reference to others, so I included it in the git repository at misc/dos_reference/setcmd/. It also used a ARexx script to generate the necessary PATH statements as I couldn't find a way to do this with basic AmigaDOS commands; this is at misc/dos_reference/support/path.rx.
+@EndNode
+
+
 @Node Misc "Miscellaneous Topics"
 
 @{b}@{u}Blog@{uu}@{ub}
 
+I have an Amiga blog at http://markround.com/amiga where I cover all my projects on my Amiga X5000 and original A1200. One article in particular that I'm quite proud of is http://www.markround.com/blog/2019/12/30/back-to-the-floppy which talks a lot about my early days in the Amiga scene. I hope it brings back some good memories for others!
+
+
 @{b}@{u}Music@{uu}@{ub}
+
+Shameless plug time - I write and record my own tracks. Just another hobby project, but I did also cover an Amiga demo tune you can listen to at https://youtu.be/Z6AA_9pRFTg. Pex ("Mahoney") Tufvesson also included the video in his talk at a demo conference: https://youtu.be/AGN9Hv2xQAc?t=1311. I always wanted to have my work shown at a demo party, I just never imagined it would be like this :)
+
+I also have a SoundCloud account at https://soundcloud.com/mdrukmusic featuring some of my other work. 
 
 @{b}@{u}Feedback@{uu}@{ub}
 
+I'd love to hear any feedback about this tool, or my Amiga projects in general. You can email me at amiga@markround.com, or if you'd like to open a feature request/file a bug report through GitHub you can use the issues tracker at https://github.com/markround/setcmd/issues.
+
 @{b}@{u}Thanks@{uu}@{ub}
 
+Thanks to every Amigan world-wide (past and present) who made this little computer such an enduring and fun platform. Here's to the next 35 years!
+
+And of course, endless thanks, love and appreciation to my amazing wife and mother of our baby girl. I love you both more than I can ever say and appreciate every moment with you. Even when I'm hacking away on some geeky project or other!
 @EndNode
