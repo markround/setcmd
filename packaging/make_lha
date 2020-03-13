@@ -16,10 +16,12 @@ copy ${sc_dir}/ReadMe.txt#? ${sc_builddir}
 copy ${sc_dir}/SetCmd.guide#? ${sc_builddir}
 copy ${sc_dir}/src/setcmd ${sc_builddir}
 copy ${sc_dir}/src/stub ${sc_builddir}
+copy ${sc_dir}.info ${sc_tmpdir}/setcmd.info
 
 cd ${sc_tmpdir}
 delete "${sc_dir}/packaging/setcmd-${sc_release}-os4.lha"
 
+lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd.info
 lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/Install_SetCMD#?
 lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/ReadMe#?
 lha -ax r ${sc_dir}/packaging/setcmd-${sc_release}-os4.lha setcmd/SetCmd.guide#?
