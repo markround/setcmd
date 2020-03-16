@@ -1,0 +1,55 @@
+Short:        Easily switch between versions of software
+Uploader:     amiga@markround.com (Mark Dastmalchi-Round)
+Author:       amiga@markround.com (Mark Dastmalchi-Round)
+Type:         util/shell
+Version:      1.0.0
+Architecture: ppc-amigaos >= 4.0.0
+Distribution: Aminet
+
+SetCmd
+======
+I developed SetCmd primarily to solve a problem I had - switching between different versions of the UAE Emulator on my X5000 while using classic Amiga software. It is also particularly useful for maintaining different versions of development tools, compilers and so on.
+
+Quickstart
+==========
+
+After you have run the installer, create a SETCMD: assign pointing to the installation directory, and run setcmd init from there:
+
+assign SETCMD: Software:Programs/SetCmd
+SETCMD:setcmd init
+
+This installs SetCmd so it's directory of managed commands comes first in your shell search path.
+
+Then you can add a command, and add versions for that command. Here's a quick example using the UAE emulator as the command to be managed:
+
+setcmd add-cmd uae
+setcmd add-version uae system System:Emulation/E-UAE-amigfx/uae
+setcmd add-version uae dev Work:Downloads/E-UAE-git/uae
+
+And switch between them:
+
+setcmd set-version uae system
+
+; uae command now points to the system-provided UAE emulator
+
+setcmd set-version uae dev
+
+; uae command now points to the git checkout in my Downloads directory
+
+Full documentation is provided as an AmigaGuide document, and running "setcmd" on it's own will display an example help screen with usage examples. More information is also available at the GitHub project: https://github.com/markround/setcmd
+
+Changes
+=======
+1.0.0 : Initial public release
+
+Notes
+=====
+SetCmd was also written to accompany my series of blog posts exploring the next-gen AmigaOS. I used it as an experiment to learn how to develop, package and distribute software for AmigaOS, as well as picking up the C language along the way. Excluding variations on "Hello, World!" I studied years ago at University, this tool is my first full C program ever, and my first release for the Amiga in a very long time!
+
+I wanted to make the tool as Amiga-native as possible. This meant things like:
+
+  *  Providing an Installer script to install the software
+  *  Documentation in AmigaGuide format
+  *  Using AmigaOS 4.x SDK functions and standards instead of "portable" C 
+
+So if there are any hardcore Amiga developers out there reading this, bear in mind this is my first attempt at all of this! That said, I'd love any feedback, pull requests, comments etc. that will help my learning and understanding of all these different technologies.
