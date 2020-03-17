@@ -15,10 +15,19 @@ Please select one of the topics below for more information.
 @{"Miscellaneous" Link Misc}
 @EndNode
 
-@Node About "About SetCMD"
-SetCmd is a utility for the AmigaOS 4.x shell that lets you quickly and easily switch between different versions of installed software.
+@Node About "About SetCMD" SetCmd is a utility for the AmigaOS 4.x shell that
+lets you quickly and easily switch between different versions of installed
+software.
 
-I developed SetCmd primarily to solve a problem I had - switching between different versions of the UAE Emulator on my X5000 while using classic Amiga software. It was also written to accompany my series of blog posts exploring the next-gen AmigaOS, written from the perspective of an old ex-Amigan returning to the scene. I used it as an experiment to learn how to develop, package and distribute software for AmigaOS, as well as picking up the C language along the way. Excluding variations on "Hello, World!" I studied years ago at University, this tool is my first full C program ever, and my first release for the Amiga in a very long time!
+I developed SetCmd primarily to solve a problem I had - switching between
+different versions of the UAE Emulator on my X5000 while using classic Amiga
+software. It was also written to accompany my series of blog posts exploring the
+next-gen AmigaOS, written from the perspective of an old ex-Amigan returning to
+the scene. I used it as an experiment to learn how to develop, package and
+distribute software for AmigaOS, as well as picking up the C language along the
+way. Excluding variations on "Hello, World!" I studied years ago at University,
+this tool is my first full C program ever, and my first release for the Amiga in
+a very long time!
 
 I wanted to make the tool as Amiga-native as possible. This meant things like:
 
@@ -26,8 +35,10 @@ I wanted to make the tool as Amiga-native as possible. This meant things like:
   * Documentation in AmigaGuide format
   * Using AmigaOS 4.x SDK functions and standards instead of "portable" C 
 
-So if there are any hardcore Amiga developers out there reading this, bear in mind this is my first attempt at all of this! That said, I'd love any feedback, pull requests, comments etc. that will help my learning and understanding of all these different technologies.
-@EndNode
+So if there are any hardcore Amiga developers out there reading this, bear in
+mind this is my first attempt at all of this! That said, I'd love any feedback,
+pull requests, comments etc. that will help my learning and understanding of all
+these different technologies. @EndNode
 
 
 @Node Installation "Installation guide"
@@ -42,14 +53,25 @@ The below links will guide you through the steps necessary to install and use Se
 @Node Install_SetCmd "Installing the SetCmd package"
 @TOC Installation
 
-SetCmd ships with an Installer script, this is the simplest way of installing the utility. If you run this, you'll be asked where to install the tool (the defaut is "Work:"). Wherever you pick, it'll copy the documentation and binaries, then create the directory structure that maintains the "database" of links and versions. 
+SetCmd ships with an Installer script, this is the simplest way of installing
+the utility. If you run this, you'll be asked where to install the tool (the
+defaut is "Work:"). Wherever you pick, it'll copy the documentation and
+binaries, then create the directory structure that maintains the "database" of
+links and versions. 
 
-Behind the scenes, it also installs itself as a managed command. This means that after you have @{"initialised" Link Init} SetCmd, you can run "setcmd show setcmd" and see all the available versions. 
+Behind the scenes, it also installs itself as a managed command. This means that
+after you have @{"initialised" Link Init} SetCmd, you can run "setcmd show
+setcmd" and see all the available versions. 
 
-This makes it easy to switch back to older versions if you discover a bug, but this does also mean that over time you may want to run "setcmd delete-version setcmd <old-version>" a few times to clean up any releases you no longer want to keep around.
+This makes it easy to switch back to older versions if you discover a bug, but
+this does also mean that over time you may want to run "setcmd delete-version
+setcmd <old-version>" a few times to clean up any releases you no longer want to
+keep around.
 
-After you have installed SetCmd, you need to initialise it each time before you can use it. The @{"Initialising SetCmd" Link Init} page of documentation shows how to do this, and also shows how to set it up automatically through your system startup scripts.
-@EndNode
+After you have installed SetCmd, you need to initialise it each time before you
+can use it. The @{"Initialising SetCmd" Link Init} page of documentation shows
+how to do this, and also shows how to set it up automatically through your
+system startup scripts. @EndNode
 
 
 @Node Init "Initialising SetCmd"
@@ -57,82 +79,119 @@ After you have installed SetCmd, you need to initialise it each time before you 
 
 @{b}@{u}setcmd init@{uu}@{ub}
 
-The simplest way to get started is to let setcmd configure the environment and paths for you. To do this, create a SETCMD: alias pointing to where you installed setcmd, for example:
+The simplest way to get started is to let setcmd configure the environment and
+paths for you. To do this, create a SETCMD: alias pointing to where you
+installed setcmd, for example:
 
 > assign SETCMD: Work:SetCmd
 
-@{i}NOTE: the > character represents a shell prompt, do not type this in. It is used in this document to show the difference between the commands you type in, and the output from programs!@{ui}
+@{i}NOTE: the > character represents a shell prompt, do not type this in. It is
+used in this document to show the difference between the commands you type in,
+and the output from programs!@{ui}
 
-Then, run setcmd with the "init" argument. You should see a success message, followed by the list of commands registered in verbose mode. In a new installation, this will just be setcmd itself:
+Then, run setcmd with the "init" argument. You should see a success message,
+followed by the list of commands registered in verbose mode. In a new
+installation, this will just be setcmd itself:
 
 > SETCMD:setcmd init verbose
 SetCmd 1.0.0 initialised [Work:SetCmd]
 setcmd [1.0.0]
 
-This installs SetCmd so it's directory of managed commands comes first in your shell search path. You can then get started @{"Using" Link Usage} it!
+This installs SetCmd so it's directory of managed commands comes first in your
+shell search path. You can then get started @{"Using" Link Usage} it!
 
 @{b}@{u}shell-startup@{uu}@{ub}
 
-If you want SetCmd to be available in every shell session, you can add the following lines to your s:shell-startup file, changing the assign as appropriate:
+If you want SetCmd to be available in every shell session, you can add the
+following lines to your s:shell-startup file, changing the assign as
+appropriate:
 
 ; BEGIN SetCmd
 assign >NIL: SETCMD: "Work:SetCmd"
 SETCMD:setcmd init verbose
 ; END SetCmd
 
-This will make sure SetCmd is intialised on each new shell session, and will also display some verbose output showing what commands are available.
+This will make sure SetCmd is intialised on each new shell session, and will
+also display some verbose output showing what commands are available.
 
-You can change this to just "setcmd init" if you want to reduce the output, or "setcmd init quiet" for no output at all.
+You can change this to just "setcmd init" if you want to reduce the output, or
+"setcmd init quiet" for no output at all.
 
-Alternatively, if you'd like it to be available system-wide and not just when you start a shell session, you could add the same lines to S:User-Startup. You'll probably want to use setcmd init quiet there, though.
-@EndNode
+Alternatively, if you'd like it to be available system-wide and not just when
+you start a shell session, you could add the same lines to S:User-Startup.
+You'll probably want to use setcmd init quiet there, though. @EndNode
 
 
 @Node Usage "Using SetCmd"
 
-@{b}@{u}Built-in help@{uu}@{ub}
-If you run "setcmd" with no arguments (or incorrect ones), it will display an overview of syntax along with examples. 
+@{b}@{u}Built-in help@{uu}@{ub} 
+If you run "setcmd" with no arguments (or
+incorrect ones), it will display an overview of syntax along with examples. 
 
 @{b}@{u}Quickstart@{uu}@{ub}
-After you have run the installer, create a SETCMD: assign pointing to the installation directory, and run setcmd init from there:
+After you have run the installer, create a SETCMD:
+assign pointing to the installation directory, and run setcmd init from there:
 
 > assign SETCMD: Work:SetCmd
 > SETCMD:setcmd init
 
-@{i}NOTE: the > character represents a shell prompt, do not type this in. It is used in this document to show the difference between the commands you type in, and the output from programs!@{ui}
+@{i}NOTE: the > character represents a shell prompt, do not type this in. It is
+used in this document to show the difference between the commands you type in,
+and the output from programs!@{ui}
 
-Then you can add a command, and add versions for that command. Here's a quick example using the UAE emulator as the command to be managed:
+Then you can add a command, and add versions for that command. Here's a quick
+example using the UAE emulator as the command to be managed:
 
 > setcmd add-cmd uae
 
-This creates a "uae" command and points it to a stub program. If you run "uae" from the shell now, you'll see the output from the stub program. Now, I want to add a couple of versions - in this case, the bundled UAE that comes with OS4, and also a copy of E-UAE built from git sources in my downloads directory:
+This creates a "uae" command and points it to a stub program. If you run "uae"
+from the shell now, you'll see the output from the stub program. Now, I want to
+add a couple of versions - in this case, the bundled UAE that comes with OS4,
+and also a copy of E-UAE built from git sources in my downloads directory:
 
 > setcmd add-version uae system System:Emulation/E-UAE-amigfx/uae
 > setcmd add-version uae dev Work:Downloads/E-UAE-git/uae
 
-If you now run "setcmd show uae" you'll see these two versions are available. Now, I can switch between them:
+If you now run "setcmd show uae" you'll see these two versions are available.
+Now, I can switch between them:
 
 > setcmd set-version uae system
 
-If I run "uae" from the shell now, I'll get the bundled UAE. However, for some games and demos the new version I built from git sources works better, so I run:
+If I run "uae" from the shell now, I'll get the bundled UAE. However, for some
+games and demos the new version I built from git sources works better, so I run:
 
 > setcmd set-version uae dev
 
-And then when I run "uae" from the shell, I'l get the experimental build from my Downloads. 
-@EndNode
+And then when I run "uae" from the shell, I'l get the experimental build from my
+Downloads. @EndNode
 
 
 @Node Developers "Developers Information"
 
-If you'd like to check the source out, it's held in a git repository at https://github.com/markround/setcmd. 
+If you'd like to check the source out, it's held in a git repository at
+https://github.com/markround/setcmd. 
 
-All the C code lives under the src directory. There is a Makefile provided; as long as you have the most recent version of the SDK installed, just running "make all" in this directory on an Amiga running OS4 should provide you with the setcmd and stub binaries. You can also try running "make debug" to build debug versions with a lot more verbose output enabled.
+All the C code lives under the src directory. There is a Makefile provided; as
+long as you have the most recent version of the SDK installed, just running
+"make all" in this directory on an Amiga running OS4 should provide you with the
+setcmd and stub binaries. You can also try running "make debug" to build debug
+versions with a lot more verbose output enabled.
 
-Each sub-command (e.g. init, add-command, set-version etc.) is defined in it's own source file; for example the initialisation code is defined in src/init.c. There is also a utility.c which contains common shared functions, and it's header (src/include/utility.h) also contains commonly used #defines, constants, retun codes and so on.
+Each sub-command (e.g. init, add-command, set-version etc.) is defined in it's
+own source file; for example the initialisation code is defined in src/init.c.
+There is also a utility.c which contains common shared functions, and it's
+header (src/include/utility.h) also contains commonly used #defines, constants,
+retun codes and so on.
 
 Again, bear in mind this is my first C project!
 
-But, as a bonus - As I hadn't learned enough C or figured out how to develop on the Amiga when I started this project, my first iteration of this tool was a proof-of-concept written as an AmigaDOS script. It may prove a useful reference to others, so I included it in the git repository at misc/dos_reference/setcmd/. It also used a ARexx script to generate the necessary PATH statements as I couldn't find a way to do this with basic AmigaDOS commands; this is at misc/dos_reference/support/path.rx.
+But, as a bonus - As I hadn't learned enough C or figured out how to develop on
+the Amiga when I started this project, my first iteration of this tool was a
+proof-of-concept written as an AmigaDOS script. It may prove a useful reference
+to others, so I included it in the git repository at misc/dos_reference/setcmd/.
+It also used a ARexx script to generate the necessary PATH statements as I
+couldn't find a way to do this with basic AmigaDOS commands; this is at
+misc/dos_reference/support/path.rx. 
 @EndNode
 
 
@@ -140,22 +199,38 @@ But, as a bonus - As I hadn't learned enough C or figured out how to develop on 
 
 @{b}@{u}Blog@{uu}@{ub}
 
-I have an Amiga blog at http://markround.com/amiga where I cover all my projects on my Amiga X5000 and original A1200. One article in particular that I'm quite proud of is http://www.markround.com/blog/2019/12/30/back-to-the-floppy which talks a lot about my early days in the Amiga scene. I hope it brings back some good memories for others!
+I have an Amiga blog at http://markround.com/amiga where I cover all my projects
+on my Amiga X5000 and original A1200. One article in particular that I'm quite
+proud of is http://www.markround.com/blog/2019/12/30/back-to-the-floppy which
+talks a lot about my early days in the Amiga scene. I hope it brings back some
+good memories for others!
 
 
 @{b}@{u}Music@{uu}@{ub}
 
-Shameless plug time - I write and record my own tracks. Just another hobby project, but I did also cover an Amiga demo tune you can listen to at https://youtu.be/Z6AA_9pRFTg. Pex ("Mahoney") Tufvesson also included the video in his talk at a demo conference: https://youtu.be/AGN9Hv2xQAc?t=1311. I always wanted to have my work shown at a demo party, I just never imagined it would be like this :)
+Shameless plug time - I write and record my own tracks. Just another hobby
+project, but I did also cover an Amiga demo tune you can listen to at
+https://youtu.be/Z6AA_9pRFTg. Pex ("Mahoney") Tufvesson also included the video
+in his talk at a demo conference: https://youtu.be/AGN9Hv2xQAc?t=1311. I always
+wanted to have my work shown at a demo party, I just never imagined it would be
+like this :)
 
-I also have a SoundCloud account at https://soundcloud.com/mdrukmusic featuring some of my other work. 
+I also have a SoundCloud account at https://soundcloud.com/mdrukmusic featuring
+some of my other work. 
 
 @{b}@{u}Feedback@{uu}@{ub}
 
-I'd love to hear any feedback about this tool, or my Amiga projects in general. You can email me at amiga@markround.com, or if you'd like to open a feature request/file a bug report through GitHub you can use the issues tracker at https://github.com/markround/setcmd/issues.
+I'd love to hear any feedback about this tool, or my Amiga projects in general.
+You can email me at amiga@markround.com, or if you'd like to open a feature
+request/file a bug report through GitHub you can use the issues tracker at
+https://github.com/markround/setcmd/issues.
 
 @{b}@{u}Thanks@{uu}@{ub}
 
-Thanks to every Amigan world-wide (past and present) who made this little computer such an enduring and fun platform. Here's to the next 35 years!
+Thanks to every Amigan world-wide (past and present) who made this little
+computer such an enduring and fun platform. Here's to the next 35 years!
 
-And of course, endless thanks, love and appreciation to my amazing wife and mother of our baby girl. I love you both more than I can ever say and appreciate every moment with you. Even when I'm hacking away on some geeky project or other!
-@EndNode
+And of course, endless thanks, love and appreciation to my amazing wife and
+mother of our baby girl. I love you both more than I can ever say and appreciate
+every moment with you. Even when I'm hacking away on some geeky project or
+other! @EndNode
