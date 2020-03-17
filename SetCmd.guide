@@ -38,7 +38,8 @@ I wanted to make the tool as Amiga-native as possible. This meant things like:
 So if there are any hardcore Amiga developers out there reading this, bear in
 mind this is my first attempt at all of this! That said, I'd love any feedback,
 pull requests, comments etc. that will help my learning and understanding of all
-these different technologies. @EndNode
+these different technologies. 
+@EndNode
 
 
 @Node Installation "Installation guide"
@@ -71,7 +72,8 @@ keep around.
 After you have installed SetCmd, you need to initialise it each time before you
 can use it. The @{"Initialising SetCmd" Link Init} page of documentation shows
 how to do this, and also shows how to set it up automatically through your
-system startup scripts. @EndNode
+system startup scripts. 
+@EndNode
 
 
 @Node Init "Initialising SetCmd"
@@ -119,7 +121,8 @@ You can change this to just "setcmd init" if you want to reduce the output, or
 
 Alternatively, if you'd like it to be available system-wide and not just when
 you start a shell session, you could add the same lines to S:User-Startup.
-You'll probably want to use setcmd init quiet there, though. @EndNode
+You'll probably want to use setcmd init quiet there, though. 
+@EndNode
 
 
 @Node Usage "Using SetCmd"
@@ -163,7 +166,8 @@ games and demos the new version I built from git sources works better, so I run:
 > setcmd set-version uae dev
 
 And then when I run "uae" from the shell, I'l get the experimental build from my
-Downloads. @EndNode
+Downloads. 
+@EndNode
 
 
 @Node Developers "Developers Information"
@@ -233,4 +237,5 @@ computer such an enduring and fun platform. Here's to the next 35 years!
 And of course, endless thanks, love and appreciation to my amazing wife and
 mother of our baby girl. I love you both more than I can ever say and appreciate
 every moment with you. Even when I'm hacking away on some geeky project or
-other! @EndNode
+other! 
+@EndNode
