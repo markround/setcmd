@@ -19,7 +19,7 @@
 #define ITALIC_ON   "\x1b[3m"
 #define ITALIC_OFF  "\x1b[23m"
 #define SELECTED    BG_BLUE FG_WHITE
-#define NORMAL      BG_DEFAULT FG_BLACK 
+#define NORMAL      BG_DEFAULT FG_BLACK BOLD_OFF ITALIC_OFF
 
 // Constants
 #ifndef DEBUG
@@ -34,6 +34,8 @@
 #define SETCMD_ERROR  0             // Internal return value of functions that fail
 #define SETCMD_OK     1             // Internal return value of functions that succeed
 
+#define SETCMD_NOFORMAT_VAR "SETCMD_NOFORMAT" // Env var that controls formatting
+
 // Used for option parsing flags
 #define OPT_NONE    0
 #define OPT_VERBOSE 1
@@ -45,5 +47,6 @@ void dump_path_node(struct PathNode *node);
 int current_version(const char *cmd, char *version);
 int get_target(const char *cmd, const char *version, char *target);
 BOOL can_lock(const char *path); 
+char *fmt(const char *fmt_string);
 
 #endif

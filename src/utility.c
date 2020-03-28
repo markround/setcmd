@@ -176,3 +176,17 @@ BOOL can_lock(const char *path)
 
 }
 
+char *fmt(const char *fmt_string)
+{
+  int32 len;
+  char buf[MAX_PATH_BUF];
+
+  len = IDOS->GetVar(SETCMD_NOFORMAT_VAR, buf, MAX_PATH_BUF,  LV_VAR);
+  if (len == -1) {
+    // NO_FORMAT not set so we just return what was passed
+    return fmt_string;
+  } else {
+    // The env var was set, so return nothing
+    return "";
+  }
+}

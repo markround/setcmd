@@ -45,7 +45,7 @@ int main (int argc, char const *argv[])
   // TODO : Check we are run from the CLI (count argc)
   rd = IDOS->ReadArgs(template, args, NULL);
   if (rd == NULL) {
-    // No args could be passed, bomb out
+    // No args could be passed, bomb out`
     IDOS->PrintFault(IDOS->IoErr(), NULL);
     return RETURN_FAIL;
   } else {
