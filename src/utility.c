@@ -176,7 +176,7 @@ BOOL can_lock(const char *path)
 
 }
 
-char *fmt(const char *fmt_string)
+char *fmt(char *fmt_string)
 {
   int32 len;
   char buf[MAX_PATH_BUF];
