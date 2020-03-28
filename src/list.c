@@ -21,7 +21,7 @@ int list(int opt)
   path_lock = IDOS->Lock(SETCMD_PATH, ACCESS_READ);
 
   if (!path_lock) {
-    IDOS->Printf(FG_RED "ERROR" NORMAL ": Failed to lock the " SETCMD_PATH " directory\n");
+    IDOS->Printf("%s ERROR %s: Failed to lock the " SETCMD_PATH " directory\n", fmt(FG_RED), fmt(NORMAL));
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     return RETURN_FAIL;
@@ -45,7 +45,7 @@ int list(int opt)
         IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);
         cmd_lock = IDOS->Lock(cmd_dir, ACCESS_READ);
         if (!cmd_lock) {
-          IDOS->Printf(FG_RED "ERROR" NORMAL ": Failed to lock the %s directory\n", cmd_dir);
+          IDOS->Printf("%s ERROR %s: Failed to lock the %s directory\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
           IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
           IDOS->Printf("For more information see the SetCmd manual.\n");
           return RETURN_FAIL;
@@ -56,7 +56,7 @@ int list(int opt)
           strcpy(version, cmd_data->Name);
           rc = get_target(cmd, version, target);
           if (rc == SETCMD_ERROR) {
-            IDOS->Printf(FG_RED "ERROR" NORMAL ": Could not read link for %s/%s.\n", cmd, version);
+            IDOS->Printf("%s ERROR %s: Could not read link for %s/%s.\n", fmt(FG_RED), fmt(NORMAL), cmd, version);
             return RETURN_FAIL;
           }
           IDOS->Printf("  " FG_BLUE "%s" NORMAL " (%s)\n", version, target);

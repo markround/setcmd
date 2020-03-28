@@ -17,7 +17,7 @@ int delete_version(const char *cmd, const char *version)
   strcpy(cmd_dir, SETCMD_CMDS);
   IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);
   if (!can_lock(cmd_dir)) {
-    IDOS->Printf(FG_RED "ERROR" NORMAL ": Command %s does not exist.\n", cmd);
+    IDOS->Printf("%s ERROR %s: Command %s does not exist.\n", fmt(FG_RED), fmt(NORMAL), cmd);
     dos_debug();  
     return RETURN_FAIL;
   }
@@ -26,7 +26,7 @@ int delete_version(const char *cmd, const char *version)
   strcpy(path, cmd_dir);
   IDOS->AddPart(path, version, MAX_PATH_BUF);
   if (!can_lock(path)) {
-    IDOS->Printf(FG_RED "ERROR" NORMAL ": version %s does not exist for command %s.\n", version, cmd);
+    IDOS->Printf("%s ERROR %s: version %s does not exist for command %s.\n", fmt(FG_RED), fmt(NORMAL), version, cmd);
     dos_debug();
     return RETURN_FAIL;  
   }
@@ -34,7 +34,7 @@ int delete_version(const char *cmd, const char *version)
   // Delete the link
   rc = IDOS->Delete((char *)path);
   if (!rc) {
-    IDOS->Printf(FG_RED "ERROR" NORMAL ": unexpected error deleting %s.\n", path);  
+    IDOS->Printf("%s ERROR %s: unexpected error deleting %s.\n", fmt(FG_RED), fmt(NORMAL), path);  
     dos_debug();
   }
 

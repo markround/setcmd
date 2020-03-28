@@ -20,7 +20,7 @@ int set_version(const char *cmd, const char *version)
   IDOS->AddPart(path, cmd, MAX_PATH_BUF);  
   IDOS->AddPart(path, version, MAX_PATH_BUF);
   if (!can_lock(path)) {
-    IDOS->Printf(FG_RED "ERROR" NORMAL ": version %s does not exist for command %s.\n", version, cmd);
+    IDOS->Printf("%s ERROR %s: version %s does not exist for command %s.\n", fmt(FG_RED), fmt(NORMAL), version, cmd);
     dos_debug();
     return RETURN_FAIL;  
   }
@@ -32,7 +32,7 @@ int set_version(const char *cmd, const char *version)
   IDOS->AddPart(path, cmd, MAX_PATH_BUF);
   rc = IDOS->Delete((char *)path);
   if (!rc) {
-    IDOS->Printf(FG_RED "ERROR" NORMAL ": unexpected error deleting path link %s.\n", path);  
+    IDOS->Printf("%s ERROR %s: unexpected error deleting path link %s.\n", fmt(FG_RED), fmt(NORMAL), path);  
     dos_debug();
     return RETURN_FAIL;
   }
@@ -40,7 +40,7 @@ int set_version(const char *cmd, const char *version)
   // Make the new link
   rc = IDOS->MakeLink((char *)path, (char *)target, LINK_SOFT);
   if (!rc) {
-    IDOS->Printf(FG_RED "ERROR" NORMAL ": unexpected error creating link %s => %s.\n", path, target);  
+    IDOS->Printf("%s ERROR %s: unexpected error creating link %s => %s.\n", fmt(FG_RED), fmt(NORMAL), path, target);  
     dos_debug();
   }
 

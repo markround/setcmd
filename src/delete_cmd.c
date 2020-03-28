@@ -17,7 +17,7 @@ int delete_cmd(const char *cmd)
 
   // Sanity check, make sure we can access the SETCMD:cmds directory
   if (!can_lock(SETCMD_PATH)) {
-    IDOS->Printf(FG_RED "ERROR" NORMAL ": Failed to lock the %s directory\n", cmd_dir);
+    IDOS->Printf("%s ERROR %s: Failed to lock the %s directory\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     return SETCMD_ERROR;
@@ -28,7 +28,7 @@ int delete_cmd(const char *cmd)
   IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);
   lock = IDOS->Lock(cmd_dir, ACCESS_READ);
   if (!lock) {
-    IDOS->Printf(FG_RED "ERROR" NORMAL ": The command %s does not exist.\n", cmd);
+    IDOS->Printf("%s ERROR %s: The command %s does not exist.\n", fmt(FG_RED), fmt(NORMAL), cmd);
     return RETURN_FAIL;
   } 
 
@@ -39,7 +39,7 @@ int delete_cmd(const char *cmd)
     IDOS->AddPart(path, cmd, MAX_PATH_BUF);
     IDOS->AddPart(path, path_data->Name, MAX_PATH_BUF);
     if (!IDOS->Delete(path)) {
-      IDOS->Printf(FG_RED "ERROR" NORMAL ": Unexpected error when deleting %s.\n", path);
+      IDOS->Printf("%s ERROR %s: Unexpected error when deleting %s.\n", fmt(FG_RED), fmt(NORMAL), path);
       dos_debug();
       IDOS->ReleaseDirContext(path_context);
       IDOS->UnLock(lock);
@@ -52,7 +52,7 @@ int delete_cmd(const char *cmd)
 
   // Now delete the cmd directory itself
   if (!IDOS->Delete(cmd_dir)) {
-    IDOS->Printf(FG_RED "ERROR" NORMAL ": Unexpected error when deleting %s.\n", cmd_dir);
+    IDOS->Printf("%s ERROR %s: Unexpected error when deleting %s.\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
     dos_debug();
     return RETURN_FAIL;
   }
@@ -61,7 +61,7 @@ int delete_cmd(const char *cmd)
   strcpy(path_dir, SETCMD_PATH);
   IDOS->AddPart(path_dir, cmd, MAX_PATH_BUF);
   if (!IDOS->Delete(path_dir)) {
-    IDOS->Printf(FG_RED "ERROR" NORMAL ": Unexpected error when deleting %s.\n", cmd_dir);
+    IDOS->Printf("%s ERROR %s: Unexpected error when deleting %s.\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
     dos_debug();
     return RETURN_FAIL;
   }
