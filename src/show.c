@@ -24,7 +24,7 @@ int show(const char *cmd)
   // If we're just pointing at the stub, don't bother retrieving a link target
   if (strcmp(version, "stub") == 0) {
     IDOS->Printf("Command:         %s\n", cmd);
-    IDOS->Printf("Current version: " SELECTED "%s" NORMAL " (%s)\n", version, SETCMD_STUB);
+    IDOS->Printf("Current version: %s%s%s (%s)\n", fmt(SELECTED), version, fmt(NORMAL), SETCMD_STUB);
   } else {
     // It's pointing at a proper command, so get the current version
     rc = get_target(cmd, version, target);
@@ -34,7 +34,7 @@ int show(const char *cmd)
     }
 
     IDOS->Printf("Command:         %s\n", cmd);
-    IDOS->Printf("Current version: " SELECTED "%s" NORMAL " (%s)\n", version, target);
+    IDOS->Printf("Current version: %s%s%s (%s)\n", fmt(SELECTED), version, fmt(NORMAL), target);
   }
 
   strcpy(cmd_dir, SETCMD_CMDS);
@@ -62,7 +62,7 @@ int show(const char *cmd)
       return RETURN_FAIL;
     }
 
-    IDOS->Printf(FG_BLUE "%s" FG_BLACK " (%s)\n", version, target);
+    IDOS->Printf("%s%s%s (%s)\n", fmt(FG_BLUE), version, fmt(NORMAL), target);
   }
 
   IDOS->ReleaseDirContext(cmd_context);

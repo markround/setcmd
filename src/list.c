@@ -35,7 +35,7 @@ int list(int opt)
     strcpy (current_version, IDOS->FilePart(link));
     // If the file is not a link, we just ignore it as it's not a valid command
     if (strlen(link) > 0) {
-      IDOS->Printf("%s [" SELECTED "%s" NORMAL "]\n", cmd, current_version);
+      IDOS->Printf("%s [%s%s%s]\n", cmd, fmt(SELECTED), current_version, fmt(NORMAL));
       if (opt == OPT_VERBOSE) {
         /* Verbose mode - for every link, get a list of the versions under the
          * relevant "cmd" directory, and highlight it if it's also the currently
@@ -59,7 +59,7 @@ int list(int opt)
             IDOS->Printf("%sERROR %s: Could not read link for %s/%s.\n", fmt(FG_RED), fmt(NORMAL), cmd, version);
             return RETURN_FAIL;
           }
-          IDOS->Printf("  " FG_BLUE "%s" NORMAL " (%s)\n", version, target);
+          IDOS->Printf("  %s%s%s (%s)\n", fmt(FG_BLUE), version, fmt(NORMAL), target);
         }
         IDOS->ReleaseDirContext(cmd_context);
 
