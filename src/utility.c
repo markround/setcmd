@@ -37,7 +37,7 @@ int get_target(const char *cmd, const char *version, char *target)
   IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);
   if (!can_lock(cmd_dir)) {
     if (DEBUG) {
-      IDOS->Printf("%s ERROR %s: Failed to lock the %s directory\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
+      IDOS->Printf("%sERROR %s: Failed to lock the %s directory\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
       IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
       IDOS->Printf("For more information see the SetCmd manual.\n");
     }
@@ -50,7 +50,7 @@ int get_target(const char *cmd, const char *version, char *target)
   lock = IDOS->Lock(cmd_version, ACCESS_READ);
   if (!lock) {
     if (DEBUG) {
-      IDOS->Printf("%s ERROR %s: Failed to lock the %s version\n", fmt(FG_RED), fmt(NORMAL), cmd_version);
+      IDOS->Printf("%sERROR %s: Failed to lock the %s version\n", fmt(FG_RED), fmt(NORMAL), cmd_version);
       IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
       IDOS->Printf("For more information see the SetCmd manual.\n");
     }
@@ -59,7 +59,7 @@ int get_target(const char *cmd, const char *version, char *target)
 
   rc = IDOS->NameFromLock(lock, target, MAX_PATH_BUF);
   if (!rc) {
-    IDOS->Printf("%s ERROR %s: Failed to read the link from %s\n", fmt(FG_RED), fmt(NORMAL), cmd_version);
+    IDOS->Printf("%sERROR %s: Failed to read the link from %s\n", fmt(FG_RED), fmt(NORMAL), cmd_version);
     dos_debug();
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
@@ -93,7 +93,7 @@ int current_version(const char *cmd, char *version)
   lock = IDOS->Lock(path, ACCESS_READ);
   if (!lock) {
     if (DEBUG) {
-      IDOS->Printf("%s ERROR %s: Failed to lock the %s path\n", fmt(FG_RED), fmt(NORMAL),  path);
+      IDOS->Printf("%sERROR %s: Failed to lock the %s path\n", fmt(FG_RED), fmt(NORMAL),  path);
       IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
       IDOS->Printf("For more information see the SetCmd manual.\n");
     }
@@ -104,7 +104,7 @@ int current_version(const char *cmd, char *version)
   rc = IDOS->NameFromLock(lock, target, MAX_PATH_BUF);
   if (!rc) {
     if (DEBUG) {
-      IDOS->Printf("%s ERROR %s: Failed to read the link from %s\n", fmt(FG_RED), fmt(NORMAL), path);
+      IDOS->Printf("%sERROR %s: Failed to read the link from %s\n", fmt(FG_RED), fmt(NORMAL), path);
       IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
       IDOS->Printf("For more information see the SetCmd manual.\n");
     }
@@ -130,7 +130,7 @@ int current_version(const char *cmd, char *version)
   lock = IDOS->Lock(SETCMD_PATH, ACCESS_READ);
   if (!lock) {
     if (DEBUG) {
-      IDOS->Printf("%s ERROR %s: Failed to lock the " SETCMD_PATH " directory\n", fmt(FG_RED), fmt(NORMAL));
+      IDOS->Printf("%sERROR %s: Failed to lock the " SETCMD_PATH " directory\n", fmt(FG_RED), fmt(NORMAL));
       IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
       IDOS->Printf("For more information see the SetCmd manual.\n");
     }

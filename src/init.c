@@ -20,7 +20,7 @@ int init(int opt)
   lock = IDOS->Lock(SETCMD_ASSIGN, SHARED_LOCK);
   if (!lock)
   {
-    IDOS->Printf("%s ERROR %s: Failed to lock the " SETCMD_ASSIGN " directory\n", fmt(FG_RED), fmt(NORMAL));
+    IDOS->Printf("%sERROR %s: Failed to lock the " SETCMD_ASSIGN " directory\n", fmt(FG_RED), fmt(NORMAL));
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     return RETURN_FAIL;
@@ -42,7 +42,7 @@ int init(int opt)
 
   lock = IDOS->Lock(SETCMD_PATH, SHARED_LOCK);
   if (!lock) {
-    IDOS->Printf("%s ERROR %s: Failed to lock the " SETCMD_PATH " directory\n", fmt(FG_RED), fmt(NORMAL));
+    IDOS->Printf("%sERROR %s: Failed to lock the " SETCMD_PATH " directory\n", fmt(FG_RED), fmt(NORMAL));
     IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
     IDOS->Printf("For more information see the SetCmd manual.\n");
     return RETURN_FAIL;
@@ -85,7 +85,7 @@ int init(int opt)
 
     if (!IDOS->SetCurrentCmdPathList(new_path)) {
       // This shouldn't fail!
-      IDOS->Printf("%s ERROR %s: Failed to set the new command path!\n", fmt(FG_RED), fmt(NORMAL));
+      IDOS->Printf("%sERROR %s: Failed to set the new command path!\n", fmt(FG_RED), fmt(NORMAL));
       IDOS->Printf("This should never happen :(\n");
       IDOS->UnLock(lock);
       dos_debug();

@@ -17,7 +17,7 @@ int add_version(const char *cmd, const char *version, const char *target)
   strcpy(cmd_dir, SETCMD_CMDS);
   IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);
   if (!can_lock(cmd_dir)) {
-    IDOS->Printf("%s ERROR %s: Command %s does not exist.\n", fmt(FG_RED), fmt(NORMAL), cmd);
+    IDOS->Printf("%sERROR %s: Command %s does not exist.\n", fmt(FG_RED), fmt(NORMAL), cmd);
     dos_debug();  
     return RETURN_FAIL;
   }
@@ -26,7 +26,7 @@ int add_version(const char *cmd, const char *version, const char *target)
   strcpy(path, cmd_dir);
   IDOS->AddPart(path, version, MAX_PATH_BUF);
   if (can_lock(path)) {
-    IDOS->Printf("%s ERROR %s: version %s already exists for command %s.\n", fmt(FG_RED), fmt(NORMAL), version, cmd);
+    IDOS->Printf("%sERROR %s: version %s already exists for command %s.\n", fmt(FG_RED), fmt(NORMAL), version, cmd);
     dos_debug();
     return RETURN_FAIL;  
   }
@@ -34,7 +34,7 @@ int add_version(const char *cmd, const char *version, const char *target)
   // Create the link
   rc = IDOS->MakeLink((char *)path, (char *)target, LINK_SOFT);
   if (!rc) {
-    IDOS->Printf("%s ERROR %s: unexpected error creating link %s => %s.\n", fmt(FG_RED), fmt(NORMAL), path, target);  
+    IDOS->Printf("%sERROR %s: unexpected error creating link %s => %s.\n", fmt(FG_RED), fmt(NORMAL), path, target);  
     dos_debug();
   }
 
