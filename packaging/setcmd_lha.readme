@@ -47,12 +47,18 @@ setcmd set-version uae dev
 ; uae command now points to the git checkout in my Downloads directory
 
 Full documentation is provided as an AmigaGuide document, and running "setcmd"
-on it's own will display an example help screen with usage examples. More
-information is also available at the GitHub project:
+on it's own will display an example help screen with usage examples. 
+There is also an expanded README.txt included which has additional information.
+
+More information is also available at the GitHub project:
 https://github.com/markround/setcmd
+
+And at my Amiga blog: http://markround.com/amiga
 
 Changes
 =======
+1.1.0 : Added SETCMD_NOFORMAT env var option to control formatting
+
 1.0.0 : Initial public release
 
 Notes

@@ -165,8 +165,18 @@ games and demos the new version I built from git sources works better, so I run:
 
 > setcmd set-version uae dev
 
-And then when I run "uae" from the shell, I'l get the experimental build from my
+And then when I run "uae" from the shell, I'll get the experimental build from my
 Downloads. 
+
+@{b}@{u}Formatting@{uu}@{ub}
+If you would prefer SetCmd output displayed without formatting (no bold text,
+highlighting etc.) then you can set the local environment variable 
+SETCMD_NOFORMAT. 
+
+For example:
+
+> set SETCMD_NOFORMAT true
+> setcmd list verbose 
 @EndNode
 
 
