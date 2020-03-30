@@ -15,9 +15,10 @@ Please select one of the topics below for more information.
 @{"Miscellaneous" Link Misc}
 @EndNode
 
-@Node About "About SetCMD" SetCmd is a utility for the AmigaOS 4.x shell that
-lets you quickly and easily switch between different versions of installed
-software.
+@Node About "About SetCMD" 
+
+SetCmd is a utility for the AmigaOS 4.x shell that lets you quickly and easily 
+switch between different versions of installed software.
 
 I developed SetCmd primarily to solve a problem I had - switching between
 different versions of the UAE Emulator on my X5000 while using classic Amiga
@@ -246,6 +247,5 @@ computer such an enduring and fun platform. Here's to the next 35 years!
 
 And of course, endless thanks, love and appreciation to my amazing wife and
 mother of our baby girl. I love you both more than I can ever say and appreciate
-every moment with you. Even when I'm hacking away on some geeky project or
-other! 
+every moment with you. 
 @EndNode
