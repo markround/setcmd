@@ -88,8 +88,8 @@ There is also a full manual provided in AmigaGuide format that is installed
 along with the tool.
 
 To read about the background of the development of this tool (and for my
-adventures with the Amiga in general), browse my Blog archives:
-http://www.markround.com/blog/categories/amiga
+adventures with the Amiga in general), browse my Amiga blog:
+http://www.markround.com/amiga
 
 
 Background
@@ -120,4 +120,5 @@ these different technologies.
 
 Changes
 =======
+1.1.0 : Added SETCMD_NOFORMAT env var option to control formatting
 1.0.0 : Initial public release

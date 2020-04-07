@@ -68,13 +68,19 @@ You can change this to just `setcmd init` if you want to reduce the output, or `
 
 Alternatively, if you'd like it to be available system-wide and not just when you start a shell session, you could add the same lines to `S:User-Startup`. You'll probably want to use `setcmd init quiet` there, though.
 
+## Fomatting
+If you would prefer SetCmd output displayed without formatting (no bold text, highlighting etc.) then you can set the local environment variable `SETCMD_NOFORMAT`. For example:
+
+```
+set SETCMD_NOFORMAT true
+``
 
 # Documentation and Links
 Running `setcmd` with no arguments displays the the usage screen shown at the top of this document, this provides quick examples for each function.
 
-There is also a full [manual](SetCmd.guide) provided in AmigaGuide format that is installed along with the tool.
+There is also a full [manual](SetCmd.guide) provided in AmigaGuide format that is installed along with the tool, along with an extended [README.txt](README.txt).
 
-To read about the background of the development of this tool (and for my adventures with the Amiga in general), browse my Blog archives: [markround.com/blog/categories/amiga/](http://www.markround.com/blog/categories/amiga/).
+To read about the background of the development of this tool (and for my adventures with the Amiga in general), browse my Blog archives: [markround.com/amiga/](http://www.markround.com/amiga/).
 
 # Requirements
 

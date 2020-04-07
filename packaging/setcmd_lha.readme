@@ -6,6 +6,7 @@ submitter:Mark Dastmalchi-Round
 email:amiga@markround.com
 url:https://github.com/markround/setcmd
 category:utility/shell
+replaces:utility/shell/setcmd.lha
 license:BSD
 distribute:yes
 minosversion:4.1
@@ -48,7 +49,8 @@ setcmd set-version uae dev
 
 Full documentation is provided as an AmigaGuide document, and running "setcmd"
 on it's own will display an example help screen with usage examples. 
-There is also an expanded README.txt included which has additional information.
+
+There is also an extended README.txt included which has additional information.
 
 More information is also available at the GitHub project:
 https://github.com/markround/setcmd
