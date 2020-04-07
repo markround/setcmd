@@ -2,7 +2,7 @@ Short:        Switch between versions of software
 Author:       amiga@markround.com (Mark Dastmalchi-Round)
 Uploader:     amiga markround com (Mark Dastmalchi-Round)
 Type:         util/shell
-Version:      1.0.0
+Version:      1.1.0
 Architecture: ppc-amigaos >= 4.0.0
 Distribution: Aminet
 
