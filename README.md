@@ -68,12 +68,12 @@ You can change this to just `setcmd init` if you want to reduce the output, or `
 
 Alternatively, if you'd like it to be available system-wide and not just when you start a shell session, you could add the same lines to `S:User-Startup`. You'll probably want to use `setcmd init quiet` there, though.
 
-## Fomatting
+## Formatting
 If you would prefer SetCmd output displayed without formatting (no bold text, highlighting etc.) then you can set the local environment variable `SETCMD_NOFORMAT`. For example:
 
 ```
 set SETCMD_NOFORMAT true
-``
+```
 
 # Documentation and Links
 Running `setcmd` with no arguments displays the the usage screen shown at the top of this document, this provides quick examples for each function.
