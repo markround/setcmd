@@ -69,8 +69,8 @@ Alternatively, if you'd like it to be available system-wide and not just when
 you start a shell session, you could add the same lines to S:User-Startup.
 You'll probably want to use "setcmd init quiet" there, though.
 
-Fomatting
----------
+Formatting
+----------
 If you would prefer SetCmd output displayed without formatting (no bold text,
 highlighting etc.) then you can set the local environment variable 
 SETCMD_NOFORMAT. For example:
