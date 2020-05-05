@@ -12,6 +12,7 @@
 #include "add_version.h"
 #include "delete_version.h"
 #include "set_version.h"
+#include "snapshot.h"
 
 // Used by the version DOS command
 const char __ver[40] =  "$VER: SetCmd " SETCMD_VERSION;
@@ -144,6 +145,19 @@ int main (int argc, char const *argv[])
           usage();
         }
       }
+
+      
+      // snapshot
+      else if (strcmp(cmd, "snapshot") == 0) {
+        if (arg1) {
+          rc = snapshot(arg1);
+        } else {
+          usage();
+        }
+      }
+
+
+      // Fallback
       else {
         usage();
       }
