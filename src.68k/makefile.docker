@@ -1,0 +1,11 @@
+CC=vc
+CFLAGS="+aos68k"
+
+all: test
+
+test: test.o 
+  $(CC) $(CFLAGS) -o test test.o 
+
+clean:
+  -rm *.o test
+
