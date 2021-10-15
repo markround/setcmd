@@ -22,7 +22,6 @@ int main()
   PathEntryPtr cur = NULL;
   struct CommandLineInterface *cli;
   BPTR lock;
-  BOOL is_dir;
 
   printf("Hello, world from stdio.h land!\n");
   printf("Version: %s\n", SETCMD_VERSION);
@@ -48,9 +47,7 @@ int main()
       return RETURN_FAIL;
     }
 
-    is_dir = is_directory(lock, DOSBase);
-
-    if (is_dir) {
+    if (is_directory(lock, DOSBase)) {
       PutStr("  [I] Is a directory\n");
     }
     else {
@@ -66,9 +63,7 @@ int main()
       return RETURN_FAIL;
     }
 
-    is_dir = is_directory(lock, DOSBase);
-
-    if (is_dir) {
+    if (is_directory(lock, DOSBase)) {
       PutStr("  [I] Is a directory\n");
     }
     else {
@@ -87,6 +82,56 @@ int main()
     }
 
     PutStr("[+] Attempting to modify path\n");
+    PutStr("  [-] Getting current PathEntry head\n");
+    PathEntryPtr pe = (PathEntryPtr)&cli->cli_CommandDir;
+
+    PutStr("  [-] Allocating memory for new PathEntry\n");
+    PathEntryPtr new = AllocVec(sizeof(PathEntry), MEMF_ANY);
+    if (!new) {
+      PutStr("  [!] Failed to allocate memory\n");
+      return RETURN_FAIL;
+    }
+
+    PutStr("  [-] Getting lock on RAM:\n");
+    lock = Lock("RAM:", SHARED_LOCK);
+    if (!lock) {
+      PutStr("  [!] Failed to get lock\n");
+      return RETURN_FAIL;
+    }
+
+    NameFromLock(lock, buffer, sizeof(buffer));
+    printf("    [D] Name from lock is: %s\n", buffer);
+
+    if (is_directory(lock, DOSBase) {
+      PutStr("  [I] Setting path now...\n");
+      new->lock = lock;
+    
+      PutStr("    [D] New PathEntryPtr chain follows\n");
+       for (cur = PE(new); cur; cur = PE(cur->next))
+        {
+          NameFromLock(cur->lock, buffer, sizeof(buffer));
+          printf("    [D] %s\n", buffer);
+        }
+
+
+    }
+
+    UnLock(lock);
+
+    PutStr("  [-] Freeing memory for new PathEntry\n");
+    if (new != NULL) {
+      FreeVec(new);
+    }
+
+
+    PutStr("[+] Dumping new path\n");
+    // Show current path
+    for (cur = PE(cli->cli_CommandDir); cur; cur = PE(cur->next))
+    {
+    	NameFromLock(cur->lock, buffer, sizeof(buffer));
+    	PutStr(buffer);
+    	PutStr("\n");
+    }
 
 
   }
