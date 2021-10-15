@@ -1,11 +1,5 @@
 CC=vc
-CFLAGS="+aos68k"
+CFLAGS=-lamiga -lauto +aos68k -I/opt/sdk/NDK_3.9/Include/include_h
 
-all: test
-
-test: test.o 
-  $(CC) $(CFLAGS) -o test test.o 
-
-clean:
-  -rm *.o test
-
+test: test.c
+	$(CC) test.c -o test $(CFLAGS) 
