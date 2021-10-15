@@ -59,8 +59,8 @@ int main()
 
     UnLock(lock);
 
-    PutStr("  [-] Getting lock on RAM:Disk.info\n");
-    lock = Lock("RAM:Disk.info", SHARED_LOCK);
+    PutStr("  [-] Getting lock on S:User-Startup\n");
+    lock = Lock("S:User-Startup", SHARED_LOCK);
     if (!lock) {
       PutStr("  [!] Failed to get lock\n");
       return RETURN_FAIL;
@@ -76,14 +76,8 @@ int main()
     }
 
     UnLock(lock);
-
-
-
-
-    // Loop through path 
     
-    
-
+    PutStr("[+] Dumping current path\n");
     // Show current path
     for (cur = PE(cli->cli_CommandDir); cur; cur = PE(cur->next))
     {
@@ -91,6 +85,8 @@ int main()
     	PutStr(buffer);
     	PutStr("\n");
     }
+
+    PutStr("[+] Attempting to modify path\n");
 
 
   }
