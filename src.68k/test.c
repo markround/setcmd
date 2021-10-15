@@ -105,15 +105,12 @@ int main()
     if (is_directory(lock, DOSBase) {
       PutStr("  [I] Setting path now...\n");
       new->lock = lock;
-    
+
+      NameFromLock(new->lock, buffer, sizeof(buffer));
+      printf("    [D] New Lock name is %s\n", buffer);
+   
       PutStr("    [D] New PathEntryPtr chain follows\n");
-       for (cur = PE(new); cur; cur = PE(cur->next))
-        {
-          NameFromLock(cur->lock, buffer, sizeof(buffer));
-          printf("    [D] %s\n", buffer);
-        }
-
-
+     
     }
 
     UnLock(lock);
