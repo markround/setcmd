@@ -108,17 +108,15 @@ int main()
 
       NameFromLock(new->lock, buffer, sizeof(buffer));
       printf("    [D] New Lock name is %s\n", buffer);
-   
-      PutStr("    [D] New PathEntryPtr chain follows\n");
-     
+        
+    } else {
+      PutStr("  [-] Freeing memory for new PathEntry\n");
+      if (new != NULL) {
+        FreeVec(new);
+      }
     }
 
     UnLock(lock);
-
-    PutStr("  [-] Freeing memory for new PathEntry\n");
-    if (new != NULL) {
-      FreeVec(new);
-    }
 
 
     PutStr("[+] Dumping new path\n");
