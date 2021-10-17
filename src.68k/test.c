@@ -5,22 +5,21 @@
 #include <dos/dosextens.h>
 #include "utility.h"
 
-typedef struct
-{
+/*---------------------------------------------------------------------------*/
+/* The PathNode structure is not documented anywhere I could find, but I     */
+/* have had occasion to access it in the past.  Obviously, it works!  Q.E.D. */
+/*---------------------------------------------------------------------------*/
+struct PathNode {
   BPTR next;
   BPTR lock;
-} PathEntry, *PathEntryPtr;
-
-
-#define PE(x) ((PathEntry* )(BADDR(x)))
+};
 
 int main()
 {
   struct DOSBase *DOSBase;
-
   int buffer[2048];
-  PathEntryPtr cur = NULL;
   struct CommandLineInterface *cli;
+  struct PathNode *pathNode, *nextNode, *tempNode;
   BPTR lock;
 
   printf("Hello, world from stdio.h land!\n");
@@ -30,102 +29,38 @@ int main()
   DOSBase = (struct DOSBase *)OpenLibrary("dos.library", 0);
   
   if (DOSBase) {
-    PutStr("In AmigaDOS land!\n");
+    printf("In AmigaDOS land!\n");
     
-    PutStr("[+] Getting CLI struct\n")
+    printf("[+] Getting CLI struct\n")
     cli = Cli();
-    PathEntryPtr cur = NULL;
+    pathNode = NULL;
 
-    PutStr("[+] Getting PathList struct pointer\n");
-    PathEntryPtr insertAfter = (PathEntryPtr)&cli->cli_CommandDir;
-
-    PutStr("[+] Testing is_directory function\n");
-    PutStr("  [-] Getting lock on C:\n");
-    lock = Lock("C:", SHARED_LOCK);
-    if (!lock) {
-      PutStr("  [!] Failed to get lock\n");
-      return RETURN_FAIL;
-    }
-
-    if (is_directory(lock, DOSBase)) {
-      PutStr("  [I] Is a directory\n");
-    }
-    else {
-      PutStr("  [I] Is not a directory\n");  
-    }
-
-    UnLock(lock);
-
-    PutStr("  [-] Getting lock on S:User-Startup\n");
-    lock = Lock("S:User-Startup", SHARED_LOCK);
-    if (!lock) {
-      PutStr("  [!] Failed to get lock\n");
-      return RETURN_FAIL;
-    }
-
-    if (is_directory(lock, DOSBase)) {
-      PutStr("  [I] Is a directory\n");
-    }
-    else {
-      PutStr("  [I] Is not a directory\n");  
-    }
-
-    UnLock(lock);
+     // get the pointer to the head of the PathNode list from the CLI struct
+    pathNode = (struct PathNode *)BADDR(cli->cli_CommandDir);
+    // TODO: Check this isn't NULL
     
-    PutStr("[+] Dumping current path\n");
+    printf("[+] Dumping current path\n");
+    while (pathNode) {
+      NameFromLock(pathNode->lock, buffer, sizeof(buffer));
+    	printf("-> %s\n", buffer);
+      nextNode = (struct PathNode *)BADDR(pathNode->next);
+      pathNode = nextNode;
+    }
+
+    printf("[+] Attempting to modify path\n");
+   
+    
+
+    printf("[+] Dumping new path\n");
     // Show current path
-    for (cur = PE(cli->cli_CommandDir); cur; cur = PE(cur->next))
-    {
-    	NameFromLock(cur->lock, buffer, sizeof(buffer));
-    	PutStr(buffer);
-    	PutStr("\n");
-    }
-
-    PutStr("[+] Attempting to modify path\n");
-    PutStr("  [-] Getting current PathEntry head\n");
-    PathEntryPtr pe = (PathEntryPtr)&cli->cli_CommandDir;
-
-    PutStr("  [-] Allocating memory for new PathEntry\n");
-    PathEntryPtr new = AllocVec(sizeof(PathEntry), MEMF_ANY);
-    if (!new) {
-      PutStr("  [!] Failed to allocate memory\n");
-      return RETURN_FAIL;
-    }
-
-    PutStr("  [-] Getting lock on RAM:\n");
-    lock = Lock("RAM:", SHARED_LOCK);
-    if (!lock) {
-      PutStr("  [!] Failed to get lock\n");
-      return RETURN_FAIL;
-    }
-
-    NameFromLock(lock, buffer, sizeof(buffer));
-    printf("    [D] Name from lock is: %s\n", buffer);
-
-    if (is_directory(lock, DOSBase) {
-      PutStr("  [I] Setting path now...\n");
-      new->lock = lock;
-
-      NameFromLock(new->lock, buffer, sizeof(buffer));
-      printf("    [D] New Lock name is %s\n", buffer);
-        
-    } else {
-      PutStr("  [-] Freeing memory for new PathEntry\n");
-      if (new != NULL) {
-        FreeVec(new);
-      }
-    }
-
-    UnLock(lock);
-
-
-    PutStr("[+] Dumping new path\n");
-    // Show current path
-    for (cur = PE(cli->cli_CommandDir); cur; cur = PE(cur->next))
-    {
-    	NameFromLock(cur->lock, buffer, sizeof(buffer));
-    	PutStr(buffer);
-    	PutStr("\n");
+    // get the pointer to the head of the PathNode list from the CLI struct
+    pathNode = (struct PathNode *)BADDR(cli->cli_CommandDir);
+    // TODO: Check this isn't NULL
+     while (pathNode) {
+      NameFromLock(pathNode->lock, buffer, sizeof(buffer));
+    	printf("-> %s\n", buffer);
+      nextNode = (struct PathNode *)BADDR(pathNode->next);
+      pathNode = nextNode;
     }
 
 
