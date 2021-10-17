@@ -1,5 +1,5 @@
 CC=vc
-CFLAGS=-lamiga -lauto +aos68k -ISoftware:NDK_3.9/Include/include_h -Iinclude -c99
+CFLAGS=-lamiga -lauto +aos68k -I/opt/sdk/NDK_3.9/Include/include_h -Iinclude
 
 all: test
 
