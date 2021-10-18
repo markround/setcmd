@@ -10,33 +10,33 @@ void utility_test()
 
 BOOL is_directory(BPTR lock, APTR DOSBase)
 {
-  BOOL isDirectory = FALSE;
+  BOOL is_directory = FALSE;
     
   struct FileInfoBlock* fib = AllocDosObject(DOS_FIB, NULL);
     
   if (Examine(lock, fib)) {
-    LONG entryType = fib->fib_EntryType;
+    LONG entry_type = fib->fib_EntryType;
 
-    if (entryType >= ST_ROOT && entryType <= ST_LINKDIR) {
-      if (entryType != ST_SOFTLINK) {
-          isDirectory = TRUE;
+    if (entry_type >= ST_ROOT && entry_type <= ST_LINKDIR) {
+      if (entry_type != ST_SOFTLINK) {
+        is_directory = TRUE;
       }
       else {
-        BPTR dupLock = DupLock(lock);    
-        if (dupLock) {
-          BPTR file = OpenFromLock(dupLock);          
+        BPTR lock_copy = DupLock(lock);    
+        if (lock_copy) {
+          BPTR file = OpenFromLock(lock_copy);          
           if (file) {
-            /* lock was on a file. dupLock is relinquished by OpenFromLock */
-            Close(file);
-                       
-            isDirectory = FALSE;
+            // lock was on a file, it's now been
+            // relinquished when we opened it with OpenFromLock
+            Close(file);                       
+            is_directory = FALSE;
           }
           else {
-            UnLock(dupLock);
+            UnLock(lock_copy);
           }
         }
         else {
-          isDirectory = FALSE;
+          is_directory = FALSE;
         }
       }
     }
@@ -44,5 +44,5 @@ BOOL is_directory(BPTR lock, APTR DOSBase)
     FreeDosObject(DOS_FIB, fib);
   }  
 
-  return(isDirectory);
+  return(is_directory);
 }

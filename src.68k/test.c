@@ -5,11 +5,10 @@
 #include <dos/dosextens.h>
 #include "utility.h"
 
-/*---------------------------------------------------------------------------*/
-/* The PathNode structure is not documented anywhere I could find, but I     */
-/* have had occasion to access it in the past.  Obviously, it works!  Q.E.D. */
-/*---------------------------------------------------------------------------*/
-struct PathNode {
+/* Couldn't find this documented anywhere but there are several references to
+   it from various sources, e.g. AROS
+*/
+struct path_node {
   BPTR next;
   BPTR lock;
 };
@@ -19,8 +18,10 @@ int main()
   struct DOSBase *DOSBase;
   int buffer[2048];
   struct CommandLineInterface *cli;
-  struct PathNode *pathNode, *nextNode, *tempNode;
+  struct path_node *path_node, *next_node, *temp_node;
   BPTR lock;
+  struct FileInfoBlock fi;
+  BOOL rc;
 
   printf("Hello, world from stdio.h land!\n");
   printf("Version: %s\n", SETCMD_VERSION);
@@ -33,34 +34,57 @@ int main()
     
     printf("[+] Getting CLI struct\n")
     cli = Cli();
-    pathNode = NULL;
+    path_node = NULL;
 
-     // get the pointer to the head of the PathNode list from the CLI struct
-    pathNode = (struct PathNode *)BADDR(cli->cli_CommandDir);
+     // get the pointer to the head of the path_node list from the CLI struct
+    path_node = (struct path_node *)BADDR(cli->cli_CommandDir);
     // TODO: Check this isn't NULL
     
     printf("[+] Dumping current path\n");
-    while (pathNode) {
-      NameFromLock(pathNode->lock, buffer, sizeof(buffer));
+    while (path_node) {
+      NameFromLock(path_node->lock, buffer, sizeof(buffer));
     	printf("-> %s\n", buffer);
-      nextNode = (struct PathNode *)BADDR(pathNode->next);
-      pathNode = nextNode;
+      next_node = (struct path_node *)BADDR(path_node->next);
+      path_node = next_node;
     }
 
     printf("[+] Attempting to modify path\n");
+
+    // Here we go!
+    printf("  [-] resetting pointer to the head of the path_node list\n");
+    path_node = (struct path_node *)BADDR(cli->cli_CommandDir);
+
+    printf("  [-] Allocating memory for temp node\n");
+    temp_node = NULL;
+    if ((temp_node = AllocVec(sizeof(struct path_node),MEMF_PUBLIC|MEMF_CLEAR)) == NULL) {
+      PrintFault(IoErr(),"Failed, bro.\n");
+      goto cleanup;
+    }
    
+    printf("  [-] Locking RAM:\n")
+    temp_node->lock = Lock("RAM:", ACCESS_READ);
+    if (!temp_node) {
+      PrintFault(IoErr(),"Failed, bro.\n");
+      goto cleanup;
+    }
     
+    printf("  [-] Examining RAM:\n")
+    rc = Examine(temp_node->lock, &fi)
+    if (!rc) {
+      PrintFault(IoErr(),"Failed, bro.\n");
+      goto cleanup;
+    }
 
     printf("[+] Dumping new path\n");
     // Show current path
-    // get the pointer to the head of the PathNode list from the CLI struct
-    pathNode = (struct PathNode *)BADDR(cli->cli_CommandDir);
+    // get the pointer to the head of the path_node list from the CLI struct
+    path_node = (struct path_node *)BADDR(cli->cli_CommandDir);
     // TODO: Check this isn't NULL
-     while (pathNode) {
-      NameFromLock(pathNode->lock, buffer, sizeof(buffer));
+     while (path_node) {
+      NameFromLock(path_node->lock, buffer, sizeof(buffer));
     	printf("-> %s\n", buffer);
-      nextNode = (struct PathNode *)BADDR(pathNode->next);
-      pathNode = nextNode;
+      next_node = (struct path_node *)BADDR(path_node->next);
+      path_node = next_node;
     }
 
 
@@ -70,6 +94,16 @@ int main()
     exit(5);
   }
   
+
+cleanup:
+  // clean up temp_node struct
+  if (temp_node) {
+    if (temp_node->lock) {
+      UnLock(temp_node->lock);
+    }
+    FreeVec(temp_node);
+  }
+
   if (DOSBase) CloseLibrary( (struct DOSBase *)DOSBase);
   printf("Returned from AmigaDOS land.\n");
   
