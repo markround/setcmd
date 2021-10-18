@@ -99,7 +99,8 @@ int main()
     printf("-> Lock name is %s\n", lock_name);
 
     printf( "  [-] Setting next pointer to the current path\n");
-    new_node->next = MKBADDR(cli->cli_CommandDir);
+    // Is this right ?
+    //new_node->next = MKBADDR(cli->cli_CommandDir);
 
     // Convert the new node to a BPTR, this goes bang
     //new_node_bptr = MKBADDR(new_node);
