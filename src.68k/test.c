@@ -100,13 +100,13 @@ int main()
 
     printf( "  [-] Setting next pointer to the current path\n");
     // Is this right ?
-    //new_node->next = MKBADDR(cli->cli_CommandDir);
+    new_node->next = cli->cli_CommandDir;
 
     // Convert the new node to a BPTR, this goes bang
-    //new_node_bptr = MKBADDR(new_node);
+    new_node_bptr = MKBADDR(new_node);
 
-    //printf( "  [-] Setting the new path!\n");
-    //cli->cli_CommandDir = new_node_bptr;
+    printf( "  [-] Setting the new path!\n");
+    cli->cli_CommandDir = new_node_bptr;
 
     printf("[+] Dumping new path\n");
     // Show current path
