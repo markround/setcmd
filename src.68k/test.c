@@ -8,7 +8,7 @@
 /* Couldn't find this documented anywhere but there are several references to
    it from various sources, e.g. AROS
 */
-struct path_node {
+struct PathNode {
   BPTR next;
   BPTR lock;
 };
@@ -16,10 +16,10 @@ struct path_node {
 int main()
 {
   struct DOSBase *DOSBase;
-  int buffer[2048];
+  char buffer[2048], lock_name[2048];
   struct CommandLineInterface *cli;
-  struct path_node *path_node, *next_node, *temp_node;
-  BPTR lock;
+  struct PathNode *path_node, *next_node, *new_node, *temp_node;
+  BPTR lock, new_node_bptr, test_lock;
   struct FileInfoBlock fi;
   BOOL rc;
 
@@ -36,15 +36,18 @@ int main()
     cli = Cli();
     path_node = NULL;
 
-     // get the pointer to the head of the path_node list from the CLI struct
-    path_node = (struct path_node *)BADDR(cli->cli_CommandDir);
+    /* get the pointer to the head of the path_node list (as a BPTR)
+       and cast it to a regular struct pointer defined above,
+       using a helper function 
+    */
+    path_node = (struct PathNode *)BADDR(cli->cli_CommandDir);
     // TODO: Check this isn't NULL
     
     printf("[+] Dumping current path\n");
     while (path_node) {
       NameFromLock(path_node->lock, buffer, sizeof(buffer));
     	printf("-> %s\n", buffer);
-      next_node = (struct path_node *)BADDR(path_node->next);
+      next_node = (struct PathNode *)BADDR(path_node->next);
       path_node = next_node;
     }
 
@@ -52,38 +55,67 @@ int main()
 
     // Here we go!
     printf("  [-] resetting pointer to the head of the path_node list\n");
-    path_node = (struct path_node *)BADDR(cli->cli_CommandDir);
+    path_node = (struct PathNode *)BADDR(cli->cli_CommandDir);
 
     printf("  [-] Allocating memory for temp node\n");
-    temp_node = NULL;
-    if ((temp_node = AllocVec(sizeof(struct path_node),MEMF_PUBLIC|MEMF_CLEAR)) == NULL) {
-      PrintFault(IoErr(),"Failed, bro.\n");
+    new_node = NULL;
+    if ((new_node = AllocVec(sizeof(struct PathNode),MEMF_PUBLIC|MEMF_CLEAR)) == NULL) {
+      printf("Failed, bro.\n");
       goto cleanup;
     }
    
     printf("  [-] Locking RAM:\n")
-    temp_node->lock = Lock("RAM:", ACCESS_READ);
-    if (!temp_node) {
-      PrintFault(IoErr(),"Failed, bro.\n");
+    new_node->lock = Lock("RAM:", ACCESS_READ);
+    if (!new_node) {
+      printf("Failed, bro.\n");
       goto cleanup;
     }
     
     printf("  [-] Examining RAM:\n")
-    rc = Examine(temp_node->lock, &fi)
+    rc = Examine(new_node->lock, &fi)
     if (!rc) {
-      PrintFault(IoErr(),"Failed, bro.\n");
+      printf("Failed, bro.\n");
       goto cleanup;
     }
+
+    printf("  [-] Making sure RAM: is a directory\n")
+    rc = is_directory(new_node->lock, DOSBase)
+    if (!rc) {
+      printf("Failed, bro.\n");
+      goto cleanup;
+    }
+
+  /* Debugging time here. 
+     Is seems as the the path_node we get is still just pointing to SYS:
+     At least, that's what it looks like as we crash right after showing the new
+     PATH to be RAM:, SYS: and then boom. 
+     
+     Then it dies if we run it again so I guess that might be the whole duplicates thing.
+     So, first let's check what we've currently got...
+  */
+
+    test_lock = path_node->lock;
+    NameFromLock(test_lock, lock_name, sizeof(lock_name));
+    printf("-> Lock name is %s\n", lock_name);
+
+    printf( "  [-] Setting next pointer to the current path\n");
+    new_node->next = MKBADDR(cli->cli_CommandDir);
+
+    // Convert the new node to a BPTR, this goes bang
+    //new_node_bptr = MKBADDR(new_node);
+
+    //printf( "  [-] Setting the new path!\n");
+    //cli->cli_CommandDir = new_node_bptr;
 
     printf("[+] Dumping new path\n");
     // Show current path
     // get the pointer to the head of the path_node list from the CLI struct
-    path_node = (struct path_node *)BADDR(cli->cli_CommandDir);
+    path_node = (struct PathNode *)BADDR(cli->cli_CommandDir);
     // TODO: Check this isn't NULL
      while (path_node) {
       NameFromLock(path_node->lock, buffer, sizeof(buffer));
     	printf("-> %s\n", buffer);
-      next_node = (struct path_node *)BADDR(path_node->next);
+      next_node = (struct PathNode *)BADDR(path_node->next);
       path_node = next_node;
     }
 
@@ -96,12 +128,12 @@ int main()
   
 
 cleanup:
-  // clean up temp_node struct
-  if (temp_node) {
-    if (temp_node->lock) {
-      UnLock(temp_node->lock);
+  // clean up new_node struct
+  if (new_node) {
+    if (new_node->lock) {
+      UnLock(new_node->lock);
     }
-    FreeVec(temp_node);
+    FreeVec(new_node);
   }
 
   if (DOSBase) CloseLibrary( (struct DOSBase *)DOSBase);
