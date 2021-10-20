@@ -29,11 +29,6 @@ int main()
     cli = Cli();
     path_node = NULL;
 
-    /* get the pointer to the head of the path_node list (as a BPTR)
-       and cast it to a regular struct pointer defined above,
-       using a helper function 
-    */
-
     dump_current_path(DOSBase);
 
     printf("[+] Attempting to modify path\n");
@@ -86,17 +81,16 @@ int main()
     cli->cli_CommandDir = new_node_bptr;
 
     dump_current_path(DOSBase);
-    
+
   }
   else {
     printf("Failed to open DOS library.\n");
     exit(5);
   }
   
-
 cleanup:
   // clean up new_node struct if failed somewhere above
-  if (new_node_error) {
+  if (new_node && new_node_error) {
     if (new_node->lock) {
       UnLock(new_node->lock);
     }
