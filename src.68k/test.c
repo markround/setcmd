@@ -16,13 +16,13 @@ struct PathNode {
 int main()
 {
   struct DOSBase *DOSBase;
-  char buffer[2048], lock_name[2048];
+  char buffer[MAX_PATH_BUF], lock_name[MAX_PATH_BUF];
   struct CommandLineInterface *cli;
   struct PathNode *path_node, *next_node, *new_node, *temp_node;
   BPTR lock, new_node_bptr, test_lock;
   struct FileInfoBlock fi;
   BOOL rc;
-  BOOL new_node_allocated = FALSE;
+  BOOL new_node_error = FALSE;
 
   printf("Hello, world from stdio.h land!\n");
   printf("Version: %s\n", SETCMD_VERSION);
@@ -66,13 +66,12 @@ int main()
       printf("Failed\n");
       goto cleanup;
     }
-
-    new_node_allocated = TRUE;
    
     // Get a lock on the specified path
     new_node->lock = Lock("RAM:", ACCESS_READ);
     if (!new_node) {
       printf("Failed\n");
+      new_node_error = TRUE;
       goto cleanup;
     }
     
@@ -80,7 +79,15 @@ int main()
     rc = is_directory(new_node->lock, DOSBase)
     if (!rc) {
       printf("Failed\n");
+      new_node_error = TRUE;
       goto cleanup;
+    }
+
+    // Check for duplicate entry at head
+    if (SameLock(new_node->lock, path_node->lock) == LOCK_SAME) {
+      printf("Already set, skipping...\n");
+      new_node_error = TRUE;
+      goto cleanup;  
     }
 
     // Set next pointer to the current path
@@ -112,7 +119,7 @@ int main()
 
 cleanup:
   // clean up new_node struct if failed somewhere above
-  if (new_node_allocated) {
+  if (new_node_error) {
     if (new_node->lock) {
       UnLock(new_node->lock);
     }
