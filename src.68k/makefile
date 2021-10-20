@@ -10,7 +10,7 @@ test: test.o utility.o
 	$(CC) -c -o $@ $< $(CFLAGS) 
 
 clean:
-	-rm *.o test
+	rm *.o test
 
 debug: CFLAGS += -DDEBUG
 debug: test

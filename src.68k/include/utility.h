@@ -18,7 +18,7 @@ struct PathNode {
 
 // SetCmd version string
 #define SETCMD_VERSION  "1.2.0-dev"
-#define SETCMD_BANNER   "(c) 2020 Mark Dastmalchi-Round [http://markround.com/amiga]"
+#define SETCMD_BANNER   "(c) Mark Dastmalchi-Round [http://markround.com/amiga]"
 
 // Text formatting
 #define FG_BLACK    "\x1b[31m"
