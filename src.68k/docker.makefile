@@ -11,3 +11,6 @@ test: test.o utility.o
 
 clean:
 	-rm *.o test
+
+debug: CFLAGS += -DDEBUG
+debug: test

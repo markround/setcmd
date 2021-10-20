@@ -16,7 +16,7 @@ void dump_current_path(APTR DOSBase)
   struct PathNode *path_node, *next_node;
 
   if (DOSBase) {
-    printf("[+] Dumping current path from utility.c\n");
+    printf("[+] Dumping current path\n");
     cli = Cli();
     path_node = (struct PathNode *)BADDR(cli->cli_CommandDir);    
     while (path_node) {

@@ -29,7 +29,9 @@ int main()
     cli = Cli();
     path_node = NULL;
 
-    dump_current_path(DOSBase);
+    if (DEBUG) {
+      dump_current_path(DOSBase);
+    }
 
     printf("[+] Attempting to modify path\n");
 
@@ -80,7 +82,9 @@ int main()
     // Set the new path!
     cli->cli_CommandDir = new_node_bptr;
 
-    dump_current_path(DOSBase);
+    if (DEBUG) {
+      dump_current_path(DOSBase);
+    }
 
   }
   else {
