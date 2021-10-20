@@ -2,13 +2,19 @@
 #include <stdio.h>
 #include <proto/dos.h>
 #include <dos/dos.h>
+#include <dos/dosextens.h>
 
 void utility_test()
 {
   printf("Utilities loaded\n");
 }
 
-BOOL is_directory(BPTR lock, APTR DOSBase)
+void dump_current_path()
+{
+}
+
+
+BOOL is_directory(BPTR lock)
 {
   BOOL is_directory = FALSE;
     

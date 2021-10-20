@@ -5,14 +5,6 @@
 #include <dos/dosextens.h>
 #include "utility.h"
 
-/* Couldn't find this documented anywhere but there are several references to
-   it from various sources, e.g. AROS
-*/
-struct PathNode {
-  BPTR next;
-  BPTR lock;
-};
-
 int main()
 {
   struct DOSBase *DOSBase;
@@ -76,7 +68,7 @@ int main()
     }
     
     // Make sure specififed path is a directory
-    rc = is_directory(new_node->lock, DOSBase)
+    rc = is_directory(new_node->lock)
     if (!rc) {
       printf("Failed\n");
       new_node_error = TRUE;

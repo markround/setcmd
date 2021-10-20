@@ -2,6 +2,19 @@
 #define _UTILITY_H_
 
 #include <proto/exec.h>
+#include <proto/dos.h>
+#include <dos/dos.h>
+#include <dos/dosextens.h>
+
+// struct definitions
+
+/* Couldn't find this documented anywhere but there are several references to
+   it from various sources, e.g. AROS
+*/
+struct PathNode {
+  BPTR next;
+  BPTR lock;
+};
 
 // SetCmd version string
 #define SETCMD_VERSION  "1.2.0-dev"
@@ -51,6 +64,7 @@
 // char *fmt(char *fmt_string);
 
 void utility_test();
-BOOL is_directory(BPTR lock, APTR DOSBase);
+void dump_current_path();
+BOOL is_directory(BPTR lock);
 
 #endif
