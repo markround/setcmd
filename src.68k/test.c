@@ -33,14 +33,8 @@ int main()
        and cast it to a regular struct pointer defined above,
        using a helper function 
     */
-    path_node = (struct PathNode *)BADDR(cli->cli_CommandDir);    
-    printf("[+] Dumping current path\n");
-    while (path_node) {
-      NameFromLock(path_node->lock, buffer, sizeof(buffer));
-    	printf("-> %s\n", buffer);
-      next_node = (struct PathNode *)BADDR(path_node->next);
-      path_node = next_node;
-    }
+
+    dump_current_path(DOSBase);
 
     printf("[+] Attempting to modify path\n");
 
@@ -91,17 +85,8 @@ int main()
     // Set the new path!
     cli->cli_CommandDir = new_node_bptr;
 
-    printf("[+] Dumping new path\n");
-    // Show current path
-    // get the pointer to the head of the path_node list from the CLI struct
-    path_node = (struct PathNode *)BADDR(cli->cli_CommandDir);
-     while (path_node) {
-      NameFromLock(path_node->lock, buffer, sizeof(buffer));
-    	printf("-> %s\n", buffer);
-      next_node = (struct PathNode *)BADDR(path_node->next);
-      path_node = next_node;
-    }
-
+    dump_current_path(DOSBase);
+    
   }
   else {
     printf("Failed to open DOS library.\n");

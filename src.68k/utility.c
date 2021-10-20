@@ -9,8 +9,23 @@ void utility_test()
   printf("Utilities loaded\n");
 }
 
-void dump_current_path()
+void dump_current_path(APTR DOSBase)
 {
+  struct CommandLineInterface *cli;
+  char buffer[MAX_PATH_BUF];
+  struct PathNode *path_node, *next_node;
+
+  if (DOSBase) {
+    printf("[+] Dumping current path from utility.c\n");
+    cli = Cli();
+    path_node = (struct PathNode *)BADDR(cli->cli_CommandDir);    
+    while (path_node) {
+      NameFromLock(path_node->lock, buffer, MAX_PATH_BUF);
+    	printf("-> %s\n", buffer);
+      next_node = (struct PathNode *)BADDR(path_node->next);
+      path_node = next_node;
+    }
+  }
 }
 
 

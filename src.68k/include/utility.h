@@ -64,7 +64,7 @@ struct PathNode {
 // char *fmt(char *fmt_string);
 
 void utility_test();
-void dump_current_path();
+void dump_current_path(APTR DOSBase);
 BOOL is_directory(BPTR lock);
 
 #endif
