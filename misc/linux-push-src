@@ -1,0 +1,3 @@
+#!/bin/bash
+
+pushd ~/git/personal && rsync -av --cvs-exclude --delete ./setcmd ~/SynologyDrive/Projects && popd
