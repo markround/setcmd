@@ -1,0 +1,3 @@
+#!/bin/bash
+
+pushd ~/git/personal && rsync -av --no-perms --no-owner --no-group --stats ~/SynologyDrive/Projects/setcmd ./ && popd

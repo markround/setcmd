@@ -57,23 +57,24 @@ The below links will guide you through the steps necessary to install and use Se
 
 SetCmd ships with an Installer script, this is the simplest way of installing
 the utility. If you run this, you'll be asked where to install the tool (the
-defaut is "Work:"). Wherever you pick, it'll copy the documentation and
+default is "Work:"). Wherever you pick, it'll copy the documentation and
 binaries, then create the directory structure that maintains the "database" of
 links and versions. 
 
+After you have installed SetCmd, you need to initialise it each time before you
+can use it. The @{"Initialising SetCmd" Link Init} page of documentation shows
+how to do this, and also shows how to set it up automatically through your
+system startup scripts. 
+
 Behind the scenes, it also installs itself as a managed command. This means that
-after you have @{"initialised" Link Init} SetCmd, you can run "setcmd show
-setcmd" and see all the available versions. 
+after you have initialised SetCmd, you can run "setcmd show setcmd" and see all 
+the available versions. 
 
 This makes it easy to switch back to older versions if you discover a bug, but
 this does also mean that over time you may want to run "setcmd delete-version
 setcmd <old-version>" a few times to clean up any releases you no longer want to
 keep around.
 
-After you have installed SetCmd, you need to initialise it each time before you
-can use it. The @{"Initialising SetCmd" Link Init} page of documentation shows
-how to do this, and also shows how to set it up automatically through your
-system startup scripts. 
 @EndNode
 
 
@@ -100,7 +101,7 @@ installation, this will just be setcmd itself:
 SetCmd 1.0.0 initialised [Work:SetCmd]
 setcmd [1.0.0]
 
-This installs SetCmd so it's directory of managed commands comes first in your
+This installs SetCmd so its directory of managed commands comes first in your
 shell search path. You can then get started @{"Using" Link Usage} it!
 
 @{b}@{u}shell-startup@{uu}@{ub}
@@ -129,12 +130,12 @@ You'll probably want to use setcmd init quiet there, though.
 @Node Usage "Using SetCmd"
 
 @{b}@{u}Built-in help@{uu}@{ub} 
-If you run "setcmd" with no arguments (or
-incorrect ones), it will display an overview of syntax along with examples. 
+If you run "setcmd" with no arguments (or incorrect ones), it will display an 
+overview of syntax along with examples. 
 
 @{b}@{u}Quickstart@{uu}@{ub}
-After you have run the installer, create a SETCMD:
-assign pointing to the installation directory, and run setcmd init from there:
+After you have run the installer, create a SETCMD: assign pointing to the 
+installation directory, and run setcmd init from there:
 
 > assign SETCMD: Work:SetCmd
 > SETCMD:setcmd init
