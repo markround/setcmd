@@ -2,10 +2,13 @@ CC=vc
 CFLAGS=-lamiga -lauto +aos68k -ISoftware:NDK_3.9/Include/include_h -Iinclude -c99
 OBJS=main.o utility.o
 
-all: setcmd test
+all: setcmd test stub
 
 setcmd: $(OBJS)
 	$(CC) -o setcmd $(OBJS) $(CFLAGS)
+
+stub: stub.o utility.o
+	$(CC) -o stub stub.o utility.o $(CFLAGS)
 
 test: test.o utility.o
 	$(CC) -o test test.o utility.o $(CFLAGS)
@@ -19,3 +22,4 @@ clean:
 debug: CFLAGS += -DDEBUG
 debug: test
 debug: setcmd
+debug: stub
