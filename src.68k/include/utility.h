@@ -17,7 +17,7 @@ struct PathNode {
 };
 
 // SetCmd version string
-#define SETCMD_VERSION  "1.2.0-dev"
+#define SETCMD_VERSION  "1.2.0-68k-dev"
 #define SETCMD_BANNER   "(c) Mark Dastmalchi-Round [http://markround.com/amiga]"
 
 // Text formatting
@@ -61,10 +61,10 @@ struct PathNode {
 // int current_version(const char *cmd, char *version);
 // int get_target(const char *cmd, const char *version, char *target);
 // BOOL can_lock(const char *path); 
-// char *fmt(char *fmt_string);
 
 void utility_test();
 void dump_current_path(APTR DOSBase);
 BOOL is_directory(BPTR lock);
+char *fmt(char *fmt_string);
 
 #endif

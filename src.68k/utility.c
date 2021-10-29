@@ -67,3 +67,19 @@ BOOL is_directory(BPTR lock)
 
   return(is_directory);
 }
+
+
+char *fmt(char *fmt_string)
+{
+  int len;
+  char buf[MAX_PATH_BUF];
+
+  len = GetVar(SETCMD_NOFORMAT_VAR, buf, MAX_PATH_BUF,  LV_VAR);
+  if (len == -1) {
+    // NO_FORMAT not set so we just return what was passed
+    return fmt_string;
+  } else {
+    // The env var was set, so return nothing
+    return "";
+  }
+}
