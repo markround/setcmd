@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <proto/dos.h>
 #include "usage.h"
 #include "utility.h"

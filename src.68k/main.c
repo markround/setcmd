@@ -4,6 +4,7 @@
 #include <string.h>
 #include "utility.h"
 #include "usage.h"
+#include "list.h"
 
 // Used by the version DOS command
 const char __ver[40] =  "$VER: SetCmd " SETCMD_VERSION;
@@ -53,6 +54,10 @@ int main (int argc, char const *argv[])
       if (strcmp(cmd, "version") == 0) {
         printf("%s\n", SETCMD_VERSION);
         rc = RETURN_OK;
+      }
+      // list
+      else if (strcmp(cmd, "list") == 0) {
+        rc = list(OPT_VERBOSE);
       }
     } else {
       // No command given, just display usage
