@@ -81,6 +81,8 @@ int list(int opt)
       printf("Command %s is not a symlink\n", cmd); 
     }
 
+    UnLock(cmd_lock);
+
   }
 
 cleanup:
