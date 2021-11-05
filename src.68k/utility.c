@@ -83,3 +83,16 @@ char *fmt(char *fmt_string)
     return "";
   }
 }
+
+
+BOOL can_lock(const char *path)
+{
+  BPTR lock;
+  lock = Lock(path, ACCESS_READ);
+  if (lock) {
+    UnLock(lock);
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}

@@ -55,10 +55,20 @@ int main (int argc, char const *argv[])
         printf("%s\n", SETCMD_VERSION);
         rc = RETURN_OK;
       }
+      
       // list
       else if (strcmp(cmd, "list") == 0) {
-        rc = list(OPT_VERBOSE);
+        if (arg1) {
+          if (strstr(arg1, "verbose")) {
+            rc = list(OPT_VERBOSE);
+          } else {
+            usage();
+          }
+        } else {
+          rc = list(OPT_NONE);
+        }
       }
+
     } else {
       // No command given, just display usage
       usage();
