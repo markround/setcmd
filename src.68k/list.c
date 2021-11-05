@@ -73,7 +73,7 @@ int list(int opt)
     }
   
     // Only process if it is a symlink
-    if (ReadLink(proc->dvp_Port, cmd_lock, cmd_path, link, MAX_PATH_BUF)) {
+    if (ReadLink(proc->dvp_Port, path_lock, cmd, link, MAX_PATH_BUF)) {
       if (DEBUG) {
         printf("Following symlink for %s to %s\n", cmd_path, link);
       }
@@ -81,7 +81,7 @@ int list(int opt)
       printf("Command %s is not a symlink\n", cmd); 
     }
 
-    UnLock(cmd_lock);
+    if (cmd_lock) { UnLock(cmd_lock); }
 
   }
 
