@@ -58,13 +58,12 @@ struct PathNode {
 
 // void dump_path_node(struct PathNode *node);
 // int current_version(const char *cmd, char *version);
-// int get_target(const char *cmd, const char *version, char *target);
 
 void utility_test();
 void dump_current_path(APTR DOSBase);
 BOOL is_directory(BPTR lock);
 char *fmt(char *fmt_string);
 BOOL can_lock(const char *path); 
-
+int get_target(const char *cmd, const char *version, char *target);
 
 #endif

@@ -96,3 +96,55 @@ BOOL can_lock(const char *path)
     return FALSE;
   }
 }
+
+
+int get_target(const char *cmd, const char *version, char *target)
+{
+  char cmd_dir[MAX_PATH_BUF];
+  char cmd_version[MAX_PATH_BUF];
+  char path[MAX_PATH_BUF];
+  BPTR lock;
+  int rc;
+ 
+  // Check the command directory exists
+  strcpy(cmd_dir, SETCMD_CMDS);
+  AddPart(cmd_dir, cmd, MAX_PATH_BUF);
+  if (!can_lock(cmd_dir)) {
+    if (DEBUG) {
+      printf("%sERROR %s: Failed to lock the %s directory\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
+      printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+      printf("For more information see the SetCmd manual.\n");
+    }
+    return SETCMD_ERROR;
+  }
+
+  // Now get a lock on the specified version
+  strcpy(cmd_version, cmd_dir);
+  AddPart(cmd_version, version, MAX_PATH_BUF);
+  lock = Lock(cmd_version, ACCESS_READ);
+  if (!lock) {
+    if (DEBUG) {
+      printf("%sERROR %s: Failed to lock the %s version\n", fmt(FG_RED), fmt(NORMAL), cmd_version);
+      printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+      printf("For more information see the SetCmd manual.\n");
+    }
+    return SETCMD_ERROR;
+  }
+
+  rc = NameFromLock(lock, target, MAX_PATH_BUF);
+  if (!rc) {
+    printf("%sERROR %s: Failed to read the link from %s\n", fmt(FG_RED), fmt(NORMAL), cmd_version);
+    printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+    printf("For more information see the SetCmd manual.\n");
+    if (lock) {
+      UnLock(lock);
+    }
+    return SETCMD_ERROR;
+  }
+
+  if (lock) {
+    UnLock(lock);
+  }
+  
+  return SETCMD_OK;
+}

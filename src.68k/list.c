@@ -95,6 +95,14 @@ int list(int opt)
           }
 
           while (ExNext(cmd_lock, &cmd_data)) {
+            // Extract the version name from cmd_data struct
+            strcpy (version, cmd_data.fib_FileName);
+            rc = get_target(cmd, version, target);
+            if (rc == SETCMD_ERROR) {
+              printf("%sERROR %s: Could not read link for %s/%s.\n", fmt(FG_RED), fmt(NORMAL), cmd, version);
+              return RETURN_FAIL;
+            }
+            printf("  %s%s%s (%s)\n", fmt(FG_BLUE), version, fmt(NORMAL), target);
             
           } // End of looping over available versions
 
