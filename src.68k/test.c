@@ -8,7 +8,8 @@
 int main()
 {
  
-  char foo[MAX_PATH_BUF];
+  char foo[MAX_PATH_BUF]="Hello world";
+  
 
   printf("1: %s\n", foo);
   printf("2: %s\n", SETCMD_STUB);

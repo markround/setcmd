@@ -70,6 +70,16 @@ int main (int argc, char const *argv[])
         }
       }
 
+
+      // add-cmd
+      else if (strcmp(cmd, "add-cmd") == 0) {
+        if (arg1) {
+          rc = add_cmd(arg1);
+        } else {
+          usage();
+        }
+      }
+
     } else {
       // No command given, just display usage
       usage();
