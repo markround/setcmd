@@ -40,6 +40,7 @@ int list(int opt)
   printf("In Listing module\n");
 
   // Iterate over all the cmds. First get the data for the path dir
+  // TODO: Test it is a dir first
   rc = Examine(path_lock, &path_data);
   if (!rc) {
     printf("Failed to examine\n");
