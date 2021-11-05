@@ -76,9 +76,14 @@ int list(int opt)
     if (ReadLink(proc->dvp_Port, path_lock, cmd, link, MAX_PATH_BUF)) {
       if (DEBUG) {
         printf("Following symlink for %s to %s\n", cmd_path, link);
+        strcpy (current_version, FilePart(link));
+        // skip if for whatever reason we don't have a link 
+        if (strlen(link) > 0) {
+          printf("%s [%s%s%s]\n", cmd, fmt(SELECTED), current_version, fmt(NORMAL));
+        }
       }
     } else if (DEBUG) {
-      printf("Command %s is not a symlink\n", cmd); 
+      printf("ReadLink for command %s failed\n", cmd); 
     }
 
     if (cmd_lock) { UnLock(cmd_lock); }
