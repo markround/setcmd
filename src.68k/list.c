@@ -103,10 +103,10 @@ int list(int opt)
               return RETURN_FAIL;
             }
             if (strcmp(version,current_version) == 0) {
-              printf(" CURRENT %s%s%s (%s)\n", fmt(FG_BLUE), version, fmt(NORMAL), target);
+              printf("  %s%s%s (%s)\n", fmt(FG_BLUE), version, fmt(NORMAL), target);
             }
             else {
-              printf("  %s%s%s (%s)\n", fmt(FG_BLUE), version, fmt(NORMAL), target);
+              printf("  %s%s%s (%s)\n", fmt(NORMAL), version, fmt(NORMAL), target);
             }
             
           } // End of looping over available versions
