@@ -87,7 +87,6 @@ int list(int opt)
 
 cleanup:
   if (path_lock)  { UnLock(path_lock); }
-  if (cmd_lock)   { UnLock(cmd_lock); }
   if (proc)       { FreeDeviceProc(proc); }
   
   return cmd_rc;
