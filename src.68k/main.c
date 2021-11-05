@@ -5,6 +5,7 @@
 #include "utility.h"
 #include "usage.h"
 #include "list.h"
+#include "add_cmd.h"
 
 // Used by the version DOS command
 const char __ver[40] =  "$VER: SetCmd " SETCMD_VERSION;

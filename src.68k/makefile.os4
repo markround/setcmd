@@ -1,6 +1,6 @@
 CC=vc
 CFLAGS=-lamiga -lauto +aos68k -INDK:Include/include_h -Iinclude -c99 -IVBCC:targets/m68k-amigaos/include
-OBJS=main.o utility.o usage.o list.o
+OBJS=main.o utility.o usage.o list.o add_cmd.o
 
 all: setcmd test stub
 
