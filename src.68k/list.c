@@ -55,14 +55,14 @@ int list(int opt)
     strcpy(cmd_path, SETCMD_CMDS);
     AddPart(cmd_path, cmd, MAX_PATH_BUF);
       
-    // Only process if it is a symlink
+    // Follow symlink
     if (ReadLink(proc->dvp_Port, path_lock, cmd, link, MAX_PATH_BUF)) {
       if (DEBUG) {
         printf("Following symlink for %s to %s\n", cmd_path, link);
       }
       
       strcpy (current_version, FilePart(link));
-      // skip if for whatever reason we don't have a link 
+      // skip if for whatever reason we don't have a link, e.g. it's not a valid command
       if (strlen(link) > 0) {
         // Basic listing
         printf("%s [%s%s%s]\n", cmd, fmt(SELECTED), current_version, fmt(NORMAL));
@@ -102,7 +102,12 @@ int list(int opt)
               printf("%sERROR %s: Could not read link for %s/%s.\n", fmt(FG_RED), fmt(NORMAL), cmd, version);
               return RETURN_FAIL;
             }
-            printf("  %s%s%s (%s)\n", fmt(FG_BLUE), version, fmt(NORMAL), target);
+            if (strcmp(version,current_version) == 0) {
+              printf(" CURRENT %s%s%s (%s)\n", fmt(FG_BLUE), version, fmt(NORMAL), target);
+            }
+            else {
+              printf("  %s%s%s (%s)\n", fmt(FG_BLUE), version, fmt(NORMAL), target);
+            }
             
           } // End of looping over available versions
 
