@@ -2,6 +2,7 @@
 #include <proto/utility.h>
 #include <proto/exec.h>
 #include <dos/dosextens.h>
+#include <stdio.h>
 #include <string.h>
 #include "utility.h"
 
@@ -11,7 +12,7 @@ int list(int opt)
   char link[MAX_PATH_BUF];
   char version[MAX_PATH_BUF];
   char current_version[MAX_PATH_BUF];
-  char cmd_dir[MAX_PATH_BUF];
+  char cmd_path[MAX_PATH_BUF];
   char target[MAX_PATH_BUF];
   struct FileInfoBlock path_data;
   struct DevProc *proc;
@@ -59,19 +60,33 @@ int list(int opt)
       printf("Examining command %s\n", cmd);
     }
 
-     // proc-> dvp_Port for readlink
+    // Lock the command
+    strcpy(cmd_path, SETCMD_CMDS);
+    AddPart(cmd_path, cmd, MAX_PATH_BUF);
+    cmd_lock = Lock(cmd_path, ACCESS_READ);
+    if (!cmd_lock) {
+      printf("%sERROR %s: Failed to lock the %s command\n", fmt(FG_RED), fmt(NORMAL), cmd_path);
+      printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+      printf("For more information see the SetCmd manual.\n");
+      cmd_rc = RETURN_FAIL;
+      goto cleanup;
+    }
+  
+    // Only process if it is a symlink
+    if (ReadLink(proc->dvp_Port, cmd_lock, cmd_path, link, MAX_PATH_BUF)) {
+      if (DEBUG) {
+        printf("Following symlink for %s to %s\n", cmd_path, link);
+      }
+    } else if (DEBUG) {
+      printf("Command %s is not a symlink\n", cmd); 
+    }
 
-    
   }
 
 cleanup:
-  if (path_lock) {
-    UnLock(path_lock);
-  }
-  if (proc) {
-    FreeDeviceProc(proc)
-  }
+  if (path_lock)  { UnLock(path_lock); }
+  if (cmd_lock)   { UnLock(cmd_lock); }
+  if (proc)       { FreeDeviceProc(proc); }
   
-
   return cmd_rc;
 }
