@@ -80,6 +80,15 @@ int main (int argc, char const *argv[])
         }
       }
 
+      // add-version
+      else if (strcmp(cmd, "add-version") == 0) {
+        if (arg3) {
+          rc = add_version(arg1, arg2, arg3);
+        } else {
+          usage();
+        }
+      }
+
     } else {
       // No command given, just display usage
       usage();
