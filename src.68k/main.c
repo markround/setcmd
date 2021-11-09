@@ -6,6 +6,8 @@
 #include "usage.h"
 #include "list.h"
 #include "add_cmd.h"
+#include "add_version.h"
+#include "delete_version.h"
 
 // Used by the version DOS command
 const char __ver[40] =  "$VER: SetCmd " SETCMD_VERSION;
@@ -84,6 +86,15 @@ int main (int argc, char const *argv[])
       else if (strcmp(cmd, "add-version") == 0) {
         if (arg3) {
           rc = add_version(arg1, arg2, arg3);
+        } else {
+          usage();
+        }
+      }
+
+      // delete-version
+      else if (strcmp(cmd, "delete-version") == 0) {
+        if (arg2) {
+          rc = delete_version(arg1, arg2);
         } else {
           usage();
         }
