@@ -4,6 +4,7 @@
 #include <string.h>
 #include "utility.h"
 #include "usage.h"
+#include "init.h"
 #include "list.h"
 #include "add_cmd.h"
 #include "add_version.h"
@@ -58,6 +59,21 @@ int main (int argc, char const *argv[])
       if (strcmp(cmd, "version") == 0) {
         printf("%s\n", SETCMD_VERSION);
         rc = RETURN_OK;
+      }
+
+      // init
+      else if (strcmp(cmd, "init") == 0) {
+        if (arg1) {
+          if (strstr(arg1, "verbose")) {
+            rc = init(OPT_VERBOSE);
+          } else if (strstr(arg1, "quiet")) {
+            rc = init(OPT_QUIET);
+          } else {
+            usage();
+          }
+        } else {
+          rc = init(OPT_NONE);
+        }
       }
       
       // list

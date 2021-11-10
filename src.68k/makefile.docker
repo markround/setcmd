@@ -1,6 +1,6 @@
 CC=vc
 CFLAGS=-lamiga -lauto +aos68k -I/opt/sdk/NDK_3.9/Include/include_h -Iinclude
-OBJS=main.o utility.o usage.o list.o add_cmd.o add_version.o delete_version.o set_version.o
+OBJS=main.o utility.o usage.o init.o list.o add_cmd.o add_version.o delete_version.o set_version.o
 
 all: setcmd test stub
 
