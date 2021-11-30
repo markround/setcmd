@@ -9,7 +9,7 @@
 
 int delete_cmd(const char *cmd) 
 {
-  BPTR lock;
+  BPTR lock, test_lock;
   char cmd_dir[MAX_PATH_BUF];
   char path_entry[MAX_PATH_BUF];
   char path[MAX_PATH_BUF];
@@ -49,10 +49,16 @@ int delete_cmd(const char *cmd)
   // Iterate over all the installed versions and delete them
 
   // First get the data for the cmd dir
-  // TODO: Test it is a dir first
+  // Test it is a dir first
+  if (!is_directory(lock)) {
+    printf("%sERROR %s: cmd dir %s does not appear to be a directory\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
+    cmd_rc = RETURN_FAIL;
+    goto cleanup;  
+  }
+
   rc = Examine(lock, &path_data);
   if (!rc) {
-    printf("Failed to examine\n");
+    printf("%sERROR %s: Unexpected error when examining cmd dir %s.\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
     cmd_rc = RETURN_FAIL;
     goto cleanup;
   }
@@ -75,6 +81,16 @@ int delete_cmd(const char *cmd)
     }
 
     // Delete the version link
+    // TODO: Move this to a function to utility.c
+    test_lock = Lock(version_path, ACCESS_READ);
+    if (is_directory(test_lock)) {
+      printf("%sERROR %s: %s is a directory.\n", fmt(FG_RED), fmt(NORMAL), version_path);
+      cmd_rc = RETURN_FAIL;
+      goto cleanup;
+    }
+    UnLock (test_lock);
+    test_lock = (BPTR)NULL;
+
     rc = DeleteFile((char *)version_path);
     if (!rc) {
       printf("%sERROR %s: unexpected error deleting link %s.\n", fmt(FG_RED), fmt(NORMAL), version_path);  
@@ -104,6 +120,17 @@ int delete_cmd(const char *cmd)
   if (DEBUG) {
     printf("Deleting %s\n", path_entry);
   }
+
+  // Test it's not a directory, TODO: move to utility.c
+  test_lock = Lock(path_entry, ACCESS_READ);
+  if (is_directory(test_lock)) {
+    printf("%sERROR %s: %s is a directory.\n", fmt(FG_RED), fmt(NORMAL), path_entry);
+    cmd_rc = RETURN_FAIL;
+    goto cleanup;
+  }
+  UnLock (test_lock);
+  test_lock = (BPTR)NULL;
+
   rc = DeleteFile((char *) path_entry);
   if (!rc) {
      printf("%sERROR %s: Unexpected error when deleting path link %s.\n", fmt(FG_RED), fmt(NORMAL), path_entry);
@@ -115,10 +142,8 @@ int delete_cmd(const char *cmd)
   }
 
 cleanup:
-  if (lock)  { 
-    printf("Unlocking\n");
-    UnLock(lock);
-  }
+  if (lock)  { UnLock(lock); }
+  if (test_lock)  { UnLock(test_lock); }
 
   return cmd_rc;
 }
