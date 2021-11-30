@@ -110,11 +110,9 @@ int delete_cmd(const char *cmd)
      return RETURN_FAIL;
   }
 
-
   if (DEBUG) {
     printf("Finished deleting files\n");
   }
-
 
 cleanup:
   if (lock)  { 

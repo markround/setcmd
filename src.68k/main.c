@@ -136,6 +136,11 @@ int main (int argc, char const *argv[])
         }
       }
 
+      // Unknown command
+      else {
+        usage();
+      }
+
     } else {
       // No command given, just display usage
       usage();
