@@ -9,6 +9,7 @@
 #include "add_cmd.h"
 #include "add_version.h"
 #include "delete_version.h"
+#include "delete_cmd.h"
 #include "set_version.h"
 
 // Used by the version DOS command
@@ -94,6 +95,15 @@ int main (int argc, char const *argv[])
       else if (strcmp(cmd, "add-cmd") == 0) {
         if (arg1) {
           rc = add_cmd(arg1);
+        } else {
+          usage();
+        }
+      }
+
+      // delete-cmd
+      else if (strcmp(cmd, "delete-cmd") == 0) {
+        if (arg1) {
+          rc = delete_cmd(arg1);
         } else {
           usage();
         }

@@ -33,8 +33,8 @@ int list(int opt)
   // Now we need to get our proc struct with MsgPort so we can use ReadLink later
   proc = NULL;
   proc = GetDeviceProc(SETCMD_PATH, proc);
-  // Todo: Error handling
-  if (proc != NULL) {
+  // TODO: Error handling
+  if (!proc) {
   }
 
   // Iterate over all the cmds. First get the data for the path dir
@@ -56,6 +56,8 @@ int list(int opt)
     strcpy(cmd_path, SETCMD_CMDS);
     AddPart(cmd_path, cmd, MAX_PATH_BUF);
       
+    // TODO: Sanity check, skip if a directory
+
     // Follow symlink
     if (ReadLink(proc->dvp_Port, path_lock, cmd, link, MAX_PATH_BUF)) {
       if (DEBUG) {
