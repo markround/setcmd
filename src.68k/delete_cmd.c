@@ -9,7 +9,7 @@
 
 int delete_cmd(const char *cmd) 
 {
-  BPTR lock, test_lock;
+  BPTR lock;
   char cmd_dir[MAX_PATH_BUF];
   char path_entry[MAX_PATH_BUF];
   char path[MAX_PATH_BUF];
@@ -81,15 +81,11 @@ int delete_cmd(const char *cmd)
     }
 
     // Delete the version link
-    // TODO: Move this to a function to utility.c
-    test_lock = Lock(version_path, ACCESS_READ);
-    if (is_directory(test_lock)) {
+    if (path_is_directory(version_path)) {
       printf("%sERROR %s: %s is a directory.\n", fmt(FG_RED), fmt(NORMAL), version_path);
       cmd_rc = RETURN_FAIL;
       goto cleanup;
     }
-    UnLock (test_lock);
-    test_lock = (BPTR)NULL;
 
     rc = DeleteFile((char *)version_path);
     if (!rc) {
@@ -121,15 +117,12 @@ int delete_cmd(const char *cmd)
     printf("Deleting %s\n", path_entry);
   }
 
-  // Test it's not a directory, TODO: move to utility.c
-  test_lock = Lock(path_entry, ACCESS_READ);
-  if (is_directory(test_lock)) {
+  // Test it's not a directory
+  if (path_is_directory(path_entry)) {
     printf("%sERROR %s: %s is a directory.\n", fmt(FG_RED), fmt(NORMAL), path_entry);
     cmd_rc = RETURN_FAIL;
     goto cleanup;
   }
-  UnLock (test_lock);
-  test_lock = (BPTR)NULL;
 
   rc = DeleteFile((char *) path_entry);
   if (!rc) {
@@ -143,7 +136,6 @@ int delete_cmd(const char *cmd)
 
 cleanup:
   if (lock)  { UnLock(lock); }
-  if (test_lock)  { UnLock(test_lock); }
 
   return cmd_rc;
 }
