@@ -1,0 +1,7 @@
+set bu Software:Programs/Backup/Backup
+failat 11
+
+dir FTP:home/Drive/SynologyDrive/Projects/setcmd
+
+$bu SOURCE Work:Projects/setcmd TARGET FTP:home/Drive/SynologyDrive/Projects/setcmd BACKUP AUTOQUIT TARGETISFAT LOGSTAT LOGCON VERBOSELOG
+
