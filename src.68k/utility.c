@@ -1,5 +1,6 @@
 #include "utility.h"
 #include <stdio.h>
+#include <string.h>
 #include <proto/dos.h>
 #include <dos/dos.h>
 #include <dos/dosextens.h>
@@ -31,7 +32,7 @@ void dump_current_path(APTR DOSBase)
 
 BOOL is_directory(BPTR lock)
 {
-  BOOL is_directory = FALSE;
+  BOOL is_dir = FALSE;
     
   struct FileInfoBlock* fib = AllocDosObject(DOS_FIB, NULL);
     
@@ -40,7 +41,7 @@ BOOL is_directory(BPTR lock)
 
     if (entry_type >= ST_ROOT && entry_type <= ST_LINKDIR) {
       if (entry_type != ST_SOFTLINK) {
-        is_directory = TRUE;
+        is_dir = TRUE;
       }
       else {
         BPTR lock_copy = DupLock(lock);    
@@ -50,14 +51,14 @@ BOOL is_directory(BPTR lock)
             // lock was on a file, it's now been
             // relinquished when we opened it with OpenFromLock
             Close(file);                       
-            is_directory = FALSE;
+            is_dir = FALSE;
           }
           else {
             UnLock(lock_copy);
           }
         }
         else {
-          is_directory = FALSE;
+          is_dir = FALSE;
         }
       }
     }
@@ -65,7 +66,22 @@ BOOL is_directory(BPTR lock)
     FreeDosObject(DOS_FIB, fib);
   }  
 
-  return(is_directory);
+  return(is_dir);
+}
+
+BOOL path_is_directory(char *path)
+{
+  BPTR test_lock;
+  BOOL is_dir = FALSE;
+
+  test_lock = Lock(path, ACCESS_READ);
+  if (test_lock) {
+    is_dir = is_directory(test_lock);
+    UnLock(test_lock);
+    test_lock = (BPTR)NULL;
+  }
+
+  return is_dir;
 }
 
 
