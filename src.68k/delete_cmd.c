@@ -20,10 +20,6 @@ int delete_cmd(const char *cmd)
   int rc = 0;
   int cmd_rc = RETURN_OK;
 
-  if (DEBUG) {
-    printf("Going in...\n");
-  }
-
   // Sanity check, make sure we can access the SETCMD:cmds directory
   if (!can_lock(SETCMD_PATH)) {
     printf("%sERROR %s: Failed to lock the %s directory\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
