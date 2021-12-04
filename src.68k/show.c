@@ -3,6 +3,7 @@
 #include <proto/exec.h>
 #include <dos/dosextens.h>
 #include <string.h>
+#include <stdio.h>
 #include "utility.h"
 
 int show(const char *cmd) 
@@ -17,15 +18,15 @@ int show(const char *cmd)
 
   printf("Start of show cmd\n");
 
-  // rc = current_version(cmd, version); 
-  // if (rc == SETCMD_ERROR) {
-  //   printf("%sERROR %s: Command %s does not have a version set or does not exist.\n", fmt(FG_RED), fmt(NORMAL), cmd);
-  //   return RETURN_FAIL;
-  // }
+  rc = current_version(cmd, version); 
+  if (rc == SETCMD_ERROR) {
+    printf("%sERROR %s: Command %s does not have a version set or does not exist.\n", fmt(FG_RED), fmt(NORMAL), cmd);
+    return RETURN_FAIL;
+  }
 
-  // if (DEBUG) {
-  //   printf("Current version: %s\n", version);
-  // }
+  if (DEBUG) {
+    printf("Current version: %s\n", version);
+  }
 
   // // If we're just pointing at the stub, don't bother retrieving a link target
   // if (strcmp(version, "stub") == 0) {

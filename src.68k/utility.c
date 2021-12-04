@@ -164,3 +164,51 @@ int get_target(const char *cmd, const char *version, char *target)
   
   return SETCMD_OK;
 }
+
+
+int current_version(const char *cmd, char *version) {
+  char current_version[MAX_PATH_BUF];
+  char path[MAX_PATH_BUF];
+  char target[MAX_PATH_BUF];
+  BPTR lock;
+  int rc;
+
+  strcpy(current_version,"Testing...");
+
+  strcpy(path, SETCMD_PATH);
+  AddPart(path, cmd, MAX_PATH_BUF);
+  lock = Lock(path, ACCESS_READ);
+  if (!lock) {
+    if (DEBUG) {
+      printf("%sERROR %s: Failed to lock the %s path\n", fmt(FG_RED), fmt(NORMAL),  path);
+    }
+    return SETCMD_ERROR;
+  }
+
+  rc = NameFromLock(lock, target, MAX_PATH_BUF);
+  if (!rc) {
+    if (DEBUG) {
+      printf("%sERROR %s: Failed to read the link from %s\n", fmt(FG_RED), fmt(NORMAL), path);
+    }
+    if (lock) {
+      UnLock(lock);
+    }
+    return SETCMD_ERROR;
+  }
+
+  // check if we are just pointing at the stub, if so then return "stub"
+  if (strcmp(FilePart(target), "stub") == 0) {
+    strcpy(version, "stub");
+    if (lock) {
+      UnLock(lock);
+    }
+    return SETCMD_OK;
+  }
+  
+  // OK, so we're not pointing at the stub. Let's move on.
+  UnLock(lock);
+
+  strcpy(version, current_version); 
+
+  return SETCMD_OK;
+}
