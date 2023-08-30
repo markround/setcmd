@@ -25,7 +25,17 @@ steps:
   - name: code
     path: /opt/code
   commands:
+  - cd /opt/code
   - make -f makefile.docker
+
+- name: create release artifact
+  image: busybox
+  volumes:
+  - name: code
+    path: /opt/code
+  commands:
+  - cd /opt/code
+  - ls -al
 
 volumes:
 - name: code
