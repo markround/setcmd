@@ -1,0 +1,32 @@
+---
+kind: pipeline
+name: build dev base
+type: kubernetes
+
+trigger:
+  branch:
+  - 68k
+  event:
+  - custom
+  - push
+
+steps:
+- name: copy files
+  image: busybox:latest
+  volumes:
+  - name: code
+    path: /opt/code
+  commands:
+  - ls -al
+
+# - name: build binary
+#   image: walkero/docker4amigavbcc:latest-m68k-amd64
+#   volumes:
+#   - name: code
+#     path: /opt/code
+#   commands:
+#   - make -f makefile.docker
+
+volumes:
+- name: code
+  temp: {}
