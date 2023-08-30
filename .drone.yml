@@ -1,6 +1,6 @@
 ---
 kind: pipeline
-name: build dev base
+name: build setcmd 68k
 type: kubernetes
 
 trigger:
