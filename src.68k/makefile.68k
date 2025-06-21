@@ -14,9 +14,8 @@ stub: stub.o utility.o
 	$(CC) -c -o $@ $< $(CFLAGS) 
 
 clean:
-	rm *.o test setcmd stub
+	rm *.o setcmd stub
 
 debug: CFLAGS += -DDEBUG
-debug: test
 debug: setcmd
 debug: stub
