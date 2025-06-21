@@ -170,10 +170,13 @@ int current_version(const char *cmd, char *version) {
   char current_version[MAX_PATH_BUF];
   char path[MAX_PATH_BUF];
   char target[MAX_PATH_BUF];
-  BPTR lock;
+  char cmd_dir[MAX_PATH_BUF];
+  char link[MAX_PATH_BUF];
+  BPTR lock, cmd_lock, path_lock;
+  struct FileInfoBlock cmd_data;
+  struct DevProc *proc;
   int rc;
-
-  strcpy(current_version,"Testing...");
+  int cmd_rc = SETCMD_OK;
 
   strcpy(path, SETCMD_PATH);
   AddPart(path, cmd, MAX_PATH_BUF);
@@ -206,9 +209,34 @@ int current_version(const char *cmd, char *version) {
   }
   
   // OK, so we're not pointing at the stub. Let's move on.
-  UnLock(lock);
+  // Need to lock ther SETCMD_PATH
+  path_lock = Lock(SETCMD_PATH, ACCESS_READ);
 
-  strcpy(version, current_version); 
+  if (!path_lock) {
+    printf("%sERROR %s: Failed to lock the " SETCMD_PATH " directory\n", fmt(FG_RED), fmt(NORMAL));
+    printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+    printf("For more information see the SetCmd manual.\n");
+    cmd_rc = SETCMD_ERROR;
+    goto cleanup;
+  }
 
-  return SETCMD_OK;
+  // Now we need to get our proc struct with MsgPort so we can use ReadLink later
+  proc = NULL;
+  proc = GetDeviceProc(SETCMD_PATH, proc);
+  if (!proc) {
+    cmd_rc = SETCMD_ERROR;
+    goto cleanup;
+  }
+
+  if (ReadLink(proc->dvp_Port, path_lock, cmd, link, MAX_PATH_BUF)) {
+    strcpy(version, FilePart(link));
+  }
+
+  
+cleanup:
+  if (path_lock)  { UnLock(path_lock); }
+  if (lock)       { UnLock(lock); }
+  if (proc)       { FreeDeviceProc(proc); }
+  return cmd_rc;    
+  
 }
