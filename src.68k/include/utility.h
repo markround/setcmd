@@ -8,6 +8,7 @@
 
 // struct definitions
 
+#if !defined(__amigaos4__)
 /* Couldn't find this documented anywhere but there are several references to
    it from various sources, e.g. AROS
 */
@@ -15,6 +16,7 @@ struct PathNode {
   BPTR next;
   BPTR lock;
 };
+#endif
 
 // SetCmd version string
 #define SETCMD_VERSION  "1.2.0-68k-dev"

@@ -22,7 +22,7 @@ int show(const char *cmd)
   }
 
   if (DEBUG) {
-    printf("Current version: %s\n", version);
+    IDOS->Printf("Current version: %s\n", version);
   }
 
   // If we're just pointing at the stub, don't bother retrieving a link target
