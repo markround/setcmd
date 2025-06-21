@@ -228,9 +228,15 @@ int current_version(const char *cmd, char *version) {
     goto cleanup;
   }
 
+#if defined(__amigaos4__)
+  if (ReadSoftLink(proc->dvp_Port, path_lock, cmd, link, MAX_PATH_BUF)) {
+    strcpy(version, FilePart(link));
+  }
+#else
   if (ReadLink(proc->dvp_Port, path_lock, cmd, link, MAX_PATH_BUF)) {
     strcpy(version, FilePart(link));
   }
+#endif
 
   
 cleanup:
