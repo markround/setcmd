@@ -109,7 +109,7 @@ static const struct command_entry commands[] = {
 
 // Parameter template
 static const char template[] =
-    "COMMAND/A,"
+    "COMMAND,"
     "ARG1,"
     "ARG2,"
     "ARG3,"
