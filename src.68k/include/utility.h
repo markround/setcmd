@@ -66,7 +66,9 @@ struct PathNode {
 // Helper function definitions
 
 void utility_test();
+#if !defined(__amigaos4__)
 BOOL is_directory(BPTR lock);
+#endif
 BOOL path_is_directory(char *path);
 char *fmt(char *fmt_string);
 BOOL can_lock(const char *path); 
