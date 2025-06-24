@@ -7,6 +7,9 @@ all: setcmd stub
 setcmd: $(OBJS)
 	$(CC) -o setcmd $(OBJS) $(CFLAGS)
 
+init.o: init_os3.c
+	$(CC) -c -o $@ $< $(CFLAGS) 
+
 stub: stub.o utility.o
 	$(CC) -o stub stub.o utility.o $(CFLAGS)
 
