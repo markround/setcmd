@@ -73,6 +73,6 @@ BOOL path_is_directory(char *path);
 char *fmt(char *fmt_string);
 BOOL can_lock(const char *path); 
 int get_target(const char *cmd, const char *version, char *target);
-int current_version(const char *cmd, char *version);
+int get_current_command_version(const char *cmd, char *version);
 
 #endif

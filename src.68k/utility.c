@@ -162,8 +162,8 @@ int get_target(const char *cmd, const char *version, char *target)
 }
 
 
-int current_version(const char *cmd, char *version) {
-  char current_version[MAX_PATH_BUF];
+int get_current_command_version(const char *cmd, char *version) {
+  char get_current_command_version[MAX_PATH_BUF];
   char path[MAX_PATH_BUF];
   char target[MAX_PATH_BUF];
   char cmd_dir[MAX_PATH_BUF];

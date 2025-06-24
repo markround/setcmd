@@ -12,7 +12,7 @@ int list(int opt)
   char cmd_dir[MAX_PATH_BUF];
   char link[MAX_PATH_BUF];
   char version[MAX_PATH_BUF];
-  char current_version[MAX_PATH_BUF];
+  char get_current_command_version[MAX_PATH_BUF];
   char cmd_path[MAX_PATH_BUF];
   char target[MAX_PATH_BUF];
   struct FileInfoBlock path_data, cmd_data;
@@ -64,11 +64,11 @@ int list(int opt)
         printf("Following symlink for %s to %s\n", cmd_path, link);
       }
       
-      strcpy (current_version, FilePart(link));
+      strcpy (get_current_command_version, FilePart(link));
       // skip if for whatever reason we don't have a link, e.g. it's not a valid command
       if (strlen(link) > 0) {
         // Basic listing
-        printf("%s [%s%s%s]\n", cmd, fmt(SELECTED), current_version, fmt(NORMAL));
+        printf("%s [%s%s%s]\n", cmd, fmt(SELECTED), get_current_command_version, fmt(NORMAL));
 
         if (opt == OPT_VERBOSE) {
           /* Verbose mode - for every link, get a list of the versions under the
@@ -105,7 +105,7 @@ int list(int opt)
               printf("%sERROR %s: Could not read link for %s/%s.\n", fmt(FG_RED), fmt(NORMAL), cmd, version);
               return RETURN_FAIL;
             }
-            if (strcmp(version,current_version) == 0) {
+            if (strcmp(version,get_current_command_version) == 0) {
               printf("  %s%s%s (%s)\n", fmt(FG_BLUE), version, fmt(NORMAL), target);
             }
             else {

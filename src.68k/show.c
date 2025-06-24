@@ -18,7 +18,7 @@ int show(const char *cmd)
   int rc;
   int cmd_rc = RETURN_OK;
 
-  rc = current_version(cmd, version); 
+  rc = get_current_command_version(cmd, version); 
   if (rc == SETCMD_ERROR) {
     printf("%sERROR %s: Command %s does not have a version set or does not exist.\n", fmt(FG_RED), fmt(NORMAL), cmd);
     return RETURN_FAIL;
