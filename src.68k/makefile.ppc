@@ -9,6 +9,9 @@ setcmd: $(OBJS)
 	$(CC) $(CFLAGS) -o setcmd $(OBJS) -Iinclude -lauto
 	copy setcmd /
 
+test: test.o utility.o
+	$(CC) $(CFLAGS) -o test test.o utility.o -Iinclude
+
 stub: stub.o utility.o
 	$(CC) $(CFLAGS) -o stub stub.o utility.o -Iinclude
 	copy stub /

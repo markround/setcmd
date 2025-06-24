@@ -42,10 +42,6 @@ int init(int opt)
     cli = Cli();
     path_node = NULL;
 
-    if (DEBUG) {
-      dump_current_path(DOSBase);
-    }
-
     // Reset pointer to the head of the path_node list
     path_node = NULL;
     path_node = (struct PathNode *)BADDR(cli->cli_CommandDir);
@@ -95,10 +91,6 @@ int init(int opt)
 
     // Set the new path!
     cli->cli_CommandDir = new_node_bptr;
-
-    if (DEBUG) {
-      dump_current_path(DOSBase);
-    }
 
   }
   else {

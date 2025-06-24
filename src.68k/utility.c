@@ -10,26 +10,8 @@ void utility_test()
   printf("Utilities loaded\n");
 }
 
-void dump_current_path(APTR DOSBase)
-{
-  struct CommandLineInterface *cli;
-  char buffer[MAX_PATH_BUF];
-  struct PathNode *path_node, *next_node;
-
-  if (DOSBase) {
-    printf("[+] Dumping current path\n");
-    cli = Cli();
-    path_node = (struct PathNode *)BADDR(cli->cli_CommandDir);    
-    while (path_node) {
-      NameFromLock(path_node->lock, buffer, MAX_PATH_BUF);
-    	printf("-> %s\n", buffer);
-      next_node = (struct PathNode *)BADDR(path_node->next);
-      path_node = next_node;
-    }
-  }
-}
-
-
+// Don't need this on AmigaOS4 as we have ExamineObject
+#if !defined(__amigaos4__)
 BOOL is_directory(BPTR lock)
 {
   BOOL is_dir = FALSE;
@@ -68,18 +50,32 @@ BOOL is_directory(BPTR lock)
 
   return(is_dir);
 }
+#endif
 
 BOOL path_is_directory(char *path)
 {
-  BPTR test_lock;
   BOOL is_dir = FALSE;
 
+// AmigaOS 4 has ExamineData
+#if defined(__amigaos4__)
+  struct ExamineData *dat;
+  dat = ExamineObjectTags(EX_StringNameInput, path, TAG_END);
+	if (dat) {
+    is_dir = EXD_IS_DIRECTORY(dat);
+	  FreeDosObject(DOS_EXAMINEDATA,dat);
+	} else {
+	  PrintFault(IoErr(),NULL);
+	}
+// Fall back to our own test function
+#else
+  BPTR test_lock;
   test_lock = Lock(path, ACCESS_READ);
   if (test_lock) {
     is_dir = is_directory(test_lock);
     UnLock(test_lock);
     test_lock = (BPTR)NULL;
   }
+#endif
 
   return is_dir;
 }

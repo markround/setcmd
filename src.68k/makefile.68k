@@ -10,6 +10,9 @@ setcmd: $(OBJS)
 stub: stub.o utility.o
 	$(CC) -o stub stub.o utility.o $(CFLAGS)
 
+test: test.o utility.o
+	$(CC) -o test test.o utility.o $(CFLAGS)
+
 %.o : %.c
 	$(CC) -c -o $@ $< $(CFLAGS) 
 

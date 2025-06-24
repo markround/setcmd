@@ -19,8 +19,15 @@ struct PathNode {
 #endif
 
 // SetCmd version string
-#define SETCMD_VERSION  "1.2.0-68k-dev"
-#define SETCMD_BANNER   "(c) Mark Dastmalchi-Round [http://markround.com/amiga]"
+#if defined(__amigaos4__)
+  #define ARCH_TAG "-amigaos4-ppc"
+#else
+  #define ARCH_TAG "-amigaos3-68k"
+#endif
+#define SETCMD_SEMVER  "2.0.0"
+#define SETCMD_VERSION SETCMD_SEMVER ARCH_TAG
+
+#define SETCMD_BANNER   "(c) Mark Dastmalchi-Round [markround.com/amiga]"
 
 // Text formatting
 #define FG_BLACK    "\x1b[31m"
@@ -58,10 +65,7 @@ struct PathNode {
 
 // Helper function definitions
 
-// void dump_path_node(struct PathNode *node);
-
 void utility_test();
-void dump_current_path(APTR DOSBase);
 BOOL is_directory(BPTR lock);
 BOOL path_is_directory(char *path);
 char *fmt(char *fmt_string);
