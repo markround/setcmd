@@ -7,14 +7,15 @@ all: setcmd stub
 
 setcmd: $(OBJS)
 	$(CC) $(CFLAGS) -o setcmd $(OBJS) -Iinclude -lauto
-	copy setcmd /
+
+init.o: init_os4.c
+	$(CC) -c -o $@ $< $(CFLAGS) 
 
 test: test.o utility.o
 	$(CC) $(CFLAGS) -o test test.o utility.o -Iinclude
 
 stub: stub.o utility.o
 	$(CC) $(CFLAGS) -o stub stub.o utility.o -Iinclude
-	copy stub /
 
 .c.o:
 	$(CC) $(CFLAGS) -c -g $< -Iinclude
