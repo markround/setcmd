@@ -15,12 +15,13 @@ int delete_cmd(const char *cmd)
   char path[MAX_PATH_BUF];
   char version[MAX_PATH_BUF];
   char version_path[MAX_PATH_BUF];
-  struct FileInfoBlock path_data;
   int rc = 0;
   int cmd_rc = RETURN_OK;
 #if defined(__amigaos4__)
   APTR path_context;
   struct ExamineData *path_data;
+#else
+    struct FileInfoBlock path_data;
 #endif
 
   // Sanity check, make sure we can access the SETCMD:cmds directory

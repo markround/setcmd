@@ -53,7 +53,12 @@ int add_cmd(const char *cmd)
     return RETURN_FAIL;
   } 
 
+#if defined(__amigaos4__)
+  rc = MakeLink(path, SETCMD_STUB, LINK_SOFT);
+#else
   rc = MakeLink((STRPTR)path, (LONG)SETCMD_STUB, LINK_SOFT);
+#endif
+
   if (!rc) {
     printf("%sERROR %s:  Unexpected error when creating soft link  %s => %s.\n", fmt(FG_RED), fmt(NORMAL), path, SETCMD_STUB);
     return RETURN_FAIL;

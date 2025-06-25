@@ -44,7 +44,12 @@ int set_version(const char *cmd, const char *version)
   }
 
   // Make the new link
+#if defined (__amigaos4__)
+  rc = MakeLink((char *)path, (char *)target, LINK_SOFT);
+#else
   rc = MakeLink((STRPTR)(char *)path, (LONG)(char *)target, LINK_SOFT);
+#endif
+
   if (!rc) {
     printf("%sERROR %s: unexpected error creating link %s => %s.\n", fmt(FG_RED), fmt(NORMAL), path, target);  
   }
