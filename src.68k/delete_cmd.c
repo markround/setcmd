@@ -15,10 +15,13 @@ int delete_cmd(const char *cmd)
   char path[MAX_PATH_BUF];
   char version[MAX_PATH_BUF];
   char version_path[MAX_PATH_BUF];
-  APTR path_context;
   struct FileInfoBlock path_data;
   int rc = 0;
   int cmd_rc = RETURN_OK;
+#if defined(__amigaos4__)
+  APTR path_context;
+  struct ExamineData *path_data;
+#endif
 
   // Sanity check, make sure we can access the SETCMD:cmds directory
   if (!can_lock(SETCMD_PATH)) {
@@ -36,14 +39,6 @@ int delete_cmd(const char *cmd)
     printf("Locking %s\n", cmd_dir);
   }
 
-  lock = Lock(cmd_dir, ACCESS_READ);
-  if (!lock) {
-    printf("%sERROR %s: The command %s does not exist.\n", fmt(FG_RED), fmt(NORMAL), cmd);
-    return RETURN_FAIL;
-  } 
-
-  // Iterate over all the installed versions and delete them
-
   // First get the data for the cmd dir
   // Test it is a dir first
   if (!path_is_directory(cmd_dir)) {
@@ -52,6 +47,32 @@ int delete_cmd(const char *cmd)
     goto cleanup;  
   }
 
+  lock = Lock(cmd_dir, ACCESS_READ);
+  if (!lock) {
+    printf("%sERROR %s: The command %s does not exist.\n", fmt(FG_RED), fmt(NORMAL), cmd);
+    return RETURN_FAIL;
+  } 
+
+  // Iterate over all the installed versions and delete them
+
+  // AmigaOS4-style iteration
+#if defined(__amigaos4__)
+  path_context = ObtainDirContextTags(EX_LockInput, lock, TAG_END);
+  while (path_data = ExamineDir(path_context)) {
+    strcpy(path, SETCMD_CMDS);
+    AddPart(path, cmd, MAX_PATH_BUF);
+    AddPart(path, path_data->Name, MAX_PATH_BUF);
+    if (!Delete(path)) {
+      printf("%sERROR %s: Unexpected error when deleting %s.\n", fmt(FG_RED), fmt(NORMAL), path);
+      ReleaseDirContext(path_context);
+      UnLock(lock);
+      return RETURN_FAIL;
+    }
+  }
+  ReleaseDirContext(path_context);
+
+  // AmigaOS3-style iteration
+#else
   rc = Examine(lock, &path_data);
   if (!rc) {
     printf("%sERROR %s: Unexpected error when examining cmd dir %s.\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
@@ -60,9 +81,6 @@ int delete_cmd(const char *cmd)
   }
 
   // Now loop over all directory entries
-  if (DEBUG) {
-    printf("Starting to iterate over versions\n");
-  }
   while (ExNext(lock, &path_data)) {
     // Extract the cmd name from path_data struct
     strcpy (version, path_data.fib_FileName);
@@ -83,16 +101,12 @@ int delete_cmd(const char *cmd)
       goto cleanup;
     }
 
-#if defined(__amigaos4__)
-    rc = Delete((char *)version_path);
-#else
     rc = DeleteFile((char *)version_path);
-#endif
-
     if (!rc) {
       printf("%sERROR %s: unexpected error deleting link %s.\n", fmt(FG_RED), fmt(NORMAL), version_path);  
     }
   }
+#endif
 
   UnLock(lock);
   lock = (BPTR)NULL;
