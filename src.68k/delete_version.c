@@ -30,7 +30,12 @@ int delete_version(const char *cmd, const char *version)
   }
 
   // Delete the link
+#if defined(__amigaos4__)
+  rc = Delete((char *)path);
+#else
   rc = DeleteFile((char *)path);
+#endif
+
   if (!rc) {
     printf("%sERROR %s: unexpected error deleting %s.\n", fmt(FG_RED), fmt(NORMAL), path);  
   }

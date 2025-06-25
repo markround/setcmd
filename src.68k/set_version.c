@@ -31,7 +31,13 @@ int set_version(const char *cmd, const char *version)
   // Delete the link under the path directory
   strcpy(path, SETCMD_PATH);
   AddPart(path, cmd, MAX_PATH_BUF);
+
+#if defined (__amigaos4__)
+  rc = Delete((char *)path);
+#else
   rc = DeleteFile((char *)path);
+#endif
+
   if (!rc) {
     printf("%sERROR %s: unexpected error deleting path link %s.\n", fmt(FG_RED), fmt(NORMAL), path);  
     return RETURN_FAIL;
