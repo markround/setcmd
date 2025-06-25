@@ -3,6 +3,7 @@
 #include <proto/exec.h>
 #include <dos/dosextens.h>
 #include <string.h>
+#include <stdio.h>
 #include "utility.h"
 #include "list.h"
 

@@ -1,15 +1,11 @@
 CC=gcc
 CFLAGS=-D__USE_INLINE__
-OBJS=main.o utility.o usage.o init.o list.o show.o add_cmd.o delete_cmd.o add_version.o delete_version.o set_version.o snapshot.o
-
+OBJS=main.o utility.o usage.o init_os4.o list_os4.o show_os4.o add_cmd.o delete_cmd.o add_version.o delete_version.o set_version.o
 
 all: setcmd stub
 
 setcmd: $(OBJS)
 	$(CC) $(CFLAGS) -o setcmd $(OBJS) -Iinclude -lauto
-
-init.o: init_os4.c
-	$(CC) -c -o $@ $< $(CFLAGS) 
 
 test: test.o utility.o
 	$(CC) $(CFLAGS) -o test test.o utility.o -Iinclude

@@ -1,14 +1,11 @@
 CC=vc
 CFLAGS=-lamiga -lauto +aos68k -INDK:Include/include_h -Iinclude -c99 -IVBCC:targets/m68k-amigaos/include
-OBJS=main.o utility.o usage.o init.o list.o add_cmd.o add_version.o delete_version.o delete_cmd.o set_version.o show.o
+OBJS=main.o utility.o usage.o init_os3.o list_os3.o add_cmd.o add_version.o delete_version.o delete_cmd.o set_version.o show_os3.o
 
 all: setcmd stub
 
 setcmd: $(OBJS)
 	$(CC) -o setcmd $(OBJS) $(CFLAGS)
-
-init.o: init_os3.c
-	$(CC) -c -o $@ $< $(CFLAGS) 
 
 stub: stub.o utility.o
 	$(CC) -o stub stub.o utility.o $(CFLAGS)

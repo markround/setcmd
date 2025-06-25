@@ -46,7 +46,7 @@ int delete_cmd(const char *cmd)
 
   // First get the data for the cmd dir
   // Test it is a dir first
-  if (!is_directory(lock)) {
+  if (!path_is_directory(cmd_dir)) {
     printf("%sERROR %s: cmd dir %s does not appear to be a directory\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
     cmd_rc = RETURN_FAIL;
     goto cleanup;  
@@ -83,7 +83,12 @@ int delete_cmd(const char *cmd)
       goto cleanup;
     }
 
+#if defined(__amigaos4__)
+    rc = Delete((char *)version_path);
+#else
     rc = DeleteFile((char *)version_path);
+#endif
+
     if (!rc) {
       printf("%sERROR %s: unexpected error deleting link %s.\n", fmt(FG_RED), fmt(NORMAL), version_path);  
     }
@@ -100,7 +105,13 @@ int delete_cmd(const char *cmd)
   if (DEBUG) {
     printf("Deleting %s\n", cmd_dir);
   }
+  
+#if defined(__amigaos4__)
+  rc = Delete((char *) cmd_dir);
+#else
   rc = DeleteFile((char *) cmd_dir);
+#endif
+
   if (!rc) {
      printf("%sERROR %s: Unexpected error when deleting cmd dir %s.\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
      return RETURN_FAIL;
@@ -120,7 +131,12 @@ int delete_cmd(const char *cmd)
     goto cleanup;
   }
 
+#if defined(__amigaos4__)
+  rc = Delete((char *) path_entry);
+#else
   rc = DeleteFile((char *) path_entry);
+#endif
+
   if (!rc) {
      printf("%sERROR %s: Unexpected error when deleting path link %s.\n", fmt(FG_RED), fmt(NORMAL), path_entry);
      return RETURN_FAIL;
