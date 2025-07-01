@@ -14,7 +14,8 @@ void usage()
   printf("  example: setcmd init verbose\n");
 
   printf("%slist%s %sverbose%s\n", fmt(BOLD_ON), fmt(BOLD_OFF), fmt(FG_WHITE), fmt(NORMAL));
-  printf("  List all commands managed by setcmd. The optional %sverbose%s argument shows additional detail.\n", fmt(FG_WHITE), fmt(NORMAL));
+  printf("  List all commands managed by setcmd.\n");
+  printf("  The optional %sverbose%s argument shows additional detail.\n", fmt(FG_WHITE), fmt(NORMAL));
   printf("  example: setcmd list\n");
 
   printf("%sshow%s %scmd%s\n", fmt(BOLD_ON), fmt(BOLD_OFF), fmt(FG_BLUE), fmt(NORMAL));
