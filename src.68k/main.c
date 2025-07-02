@@ -30,10 +30,22 @@ struct command_entry {
 
 // Handler functions
 static int handle_version(const char **args, int argc) {
-  (void)args; (void)argc; // Suppress unused warnings
-  printf("%s\n", SETCMD_VERSION);
+  if (argc > 0 && args[0]) {
+    if (strcmp(args[0], "semver") == 0) {
+      printf("%s\n", SETCMD_SEMVER);
+    } else if (strcmp(args[0], "arch") == 0) {
+      printf("%s\n", ARCH_TAG + 1);
+    } else {
+      printf("Invalid option for version: %s\n", args[0]);
+      usage();
+      return RETURN_FAIL;
+    }
+  } else {
+    printf("%s\n", SETCMD_VERSION);
+  }
   return RETURN_OK;
 }
+
 
 static int handle_init(const char **args, int argc) {
   int opt = OPT_NONE;
@@ -96,7 +108,7 @@ static int handle_show(const char **args, int argc) {
 // Command lookup table
 // command , min args , max args , handler, help hint
 static const struct command_entry commands[] = {
-  {"version",         0, 0, handle_version,    ""},
+  {"version",         0, 1, handle_version,    "[semver|arch]"},
   {"init",            0, 1, handle_init,     "[quiet|verbose]"},
   {"list",            0, 1, handle_list,     "[verbose]"},
   {"add-cmd",         1, 1, handle_add_cmd,    "<cmd>"},
