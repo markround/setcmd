@@ -1,0 +1,42 @@
+; vim: set syntax=amiga ts=2 expandtab:
+
+; Variables and paths
+set src_dir="setcmdsrc:"
+set build_dir="ram:setcmd_build"
+set pkg_dir="${build_dir}/SetCmd"
+
+; Create the build directory structure
+delete "${build_dir}" all
+makedir "${build_dir}"
+makedir "${pkg_dir}"
+
+; Common files
+copy "${src_dir}/Install_SetCmd" "${pkg_dir}"
+copy "${src_dir}/SetCmd.guide" "${pkg_dir}"
+copy "${src_dir}/README.txt" "${pkg_dir}"
+
+;
+; 68k OS3
+;
+; TODO Run the makefile to build the 68k version
+set setcmd_version=`${src_dir}/src/setcmd version semver`
+set setcmd_arch=`${src_dir}/src/setcmd version arch`
+copy "${src_dir}/src/setcmd" "${pkg_dir}/setcmd-${setcmd_version}-${setcmd_arch}"
+copy "${src_dir}/src/stub" "${pkg_dir}/stub-${setcmd_version}-${setcmd_arch}"
+
+; OS3 icons
+copy "${src_dir}/packaging/icons/os3/Drawer.info" "${pkg_dir}.info"
+copy "${src_dir}/packaging/icons/os3/Install.info" "${pkg_dir}/Install_SetCmd.info"
+copy "${src_dir}/packaging/icons/os3/Guide.info" "${pkg_dir}/SetCmd.guide.info"
+
+; OS3 installer
+copy "${src_dir}/packaging/os3/installer" "${pkg_dir}"
+
+
+;
+; PPC OS4 (TODO)
+;
+
+
+
+
