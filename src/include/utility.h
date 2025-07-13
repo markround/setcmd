@@ -2,10 +2,32 @@
 #define _UTILITY_H_
 
 #include <proto/exec.h>
+#include <proto/dos.h>
+#include <dos/dos.h>
+#include <dos/dosextens.h>
+
+// struct definitions
+
+#if !defined(__amigaos4__)
+/* Couldn't find this documented anywhere but there are several references to
+   it from various sources, e.g. AROS
+*/
+struct PathNode {
+  BPTR next;
+  BPTR lock;
+};
+#endif
 
 // SetCmd version string
-#define SETCMD_VERSION  "1.2.0-os4-dev"
-#define SETCMD_BANNER   "(c) Mark Dastmalchi-Round [ markround.com/amiga ]"
+#if defined(__amigaos4__)
+  #define ARCH_TAG "-amigaos4-ppc"
+#else
+  #define ARCH_TAG "-amigaos3-68k"
+#endif
+#define SETCMD_SEMVER  "2.0.0"
+#define SETCMD_VERSION SETCMD_SEMVER ARCH_TAG
+
+#define SETCMD_BANNER   "(c) Mark Dastmalchi-Round [markround.com/amiga]"
 
 // Text formatting
 #define FG_BLACK    "\x1b[31m"
@@ -26,7 +48,7 @@
 #define DEBUG         FALSE         // Set to TRUE for Debug builds
 #endif
 
-#define MAX_PATH_BUF  1024          // Max length of an AmigaDOS path
+#define MAX_PATH_BUF  2048          // Max length of an AmigaDOS path
 #define SETCMD_ASSIGN "SETCMD:"     // Location of main assign
 #define SETCMD_PATH   "SETCMD:path" // Location of cmd symlinks
 #define SETCMD_CMDS   "SETCMD:cmds" // Location of cmd versions
@@ -42,11 +64,15 @@
 #define OPT_QUIET   2
 
 // Helper function definitions
-void dos_debug();
-void dump_path_node(struct PathNode *node);
-int current_version(const char *cmd, char *version);
-int get_target(const char *cmd, const char *version, char *target);
-BOOL can_lock(const char *path); 
+
+void utility_test();
+#if !defined(__amigaos4__)
+BOOL is_directory(BPTR lock);
+#endif
+BOOL path_is_directory(char *path);
 char *fmt(char *fmt_string);
+BOOL can_lock(const char *path); 
+int get_target(const char *cmd, const char *version, char *target);
+int get_current_command_version(const char *cmd, char *version);
 
 #endif

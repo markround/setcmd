@@ -1,187 +1,92 @@
-#include <proto/dos.h>
-#include <proto/utility.h>
-#include <proto/exec.h>
-#include <proto/dos.h>
-#include <string.h>
 #include "utility.h"
+#include <stdio.h>
+#include <string.h>
+#include <proto/dos.h>
+#include <dos/dos.h>
+#include <dos/dosextens.h>
 
-void dos_debug()
+void utility_test()
 {
-  if (DEBUG) {
-      // %m and %n magic modifiers only available in kickstart 51.59+
-      IDOS->Printf("DOS error message = %m, error code = %n\n",0);
-    }  
+  printf("Utilities loaded\n");
 }
 
-void dump_path_node(struct PathNode *node)
+// Don't need this on AmigaOS4 as we have ExamineObject
+#if !defined(__amigaos4__)
+BOOL is_directory(BPTR lock)
 {
-  while (node->pn_Next) {
-    char path[MAX_PATH_BUF];
-    if(IDOS->NameFromLock(node->pn_Lock, path, MAX_PATH_BUF)) {
-      IDOS->Printf("  %s\n", path);
+  BOOL is_dir = FALSE;
+    
+  struct FileInfoBlock* fib = AllocDosObject(DOS_FIB, NULL);
+    
+  if (Examine(lock, fib)) {
+    LONG entry_type = fib->fib_EntryType;
+
+    if (entry_type >= ST_ROOT && entry_type <= ST_LINKDIR) {
+      if (entry_type != ST_SOFTLINK) {
+        is_dir = TRUE;
+      }
+      else {
+        BPTR lock_copy = DupLock(lock);    
+        if (lock_copy) {
+          BPTR file = OpenFromLock(lock_copy);          
+          if (file) {
+            // lock was on a file, it's now been
+            // relinquished when we opened it with OpenFromLock
+            Close(file);                       
+            is_dir = FALSE;
+          }
+          else {
+            UnLock(lock_copy);
+          }
+        }
+        else {
+          is_dir = FALSE;
+        }
+      }
     }
-    node = BADDR(node->pn_Next);
+
+    FreeDosObject(DOS_FIB, fib);
+  }  
+
+  return(is_dir);
+}
+#endif
+
+BOOL path_is_directory(char *path)
+{
+  BOOL is_dir = FALSE;
+
+// AmigaOS 4 has ExamineData
+#if defined(__amigaos4__)
+  struct ExamineData *dat;
+  dat = ExamineObjectTags(EX_StringNameInput, path, TAG_END);
+	if (dat) {
+    is_dir = EXD_IS_DIRECTORY(dat);
+	  FreeDosObject(DOS_EXAMINEDATA,dat);
+	} else {
+	  PrintFault(IoErr(),NULL);
+	}
+// Fall back to our own test function
+#else
+  BPTR test_lock;
+  test_lock = Lock(path, ACCESS_READ);
+  if (test_lock) {
+    is_dir = is_directory(test_lock);
+    UnLock(test_lock);
+    test_lock = (BPTR)NULL;
   }
+#endif
+
+  return is_dir;
 }
 
-int get_target(const char *cmd, const char *version, char *target)
-{
-  char cmd_dir[MAX_PATH_BUF];
-  char cmd_version[MAX_PATH_BUF];
-  char path[MAX_PATH_BUF];
-  BPTR lock;
-  int32 rc;
- 
-  // Check the command directory exists
-  strcpy(cmd_dir, SETCMD_CMDS);
-  IDOS->AddPart(cmd_dir, cmd, MAX_PATH_BUF);
-  if (!can_lock(cmd_dir)) {
-    if (DEBUG) {
-      IDOS->Printf("%sERROR %s: Failed to lock the %s directory\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
-      IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
-      IDOS->Printf("For more information see the SetCmd manual.\n");
-    }
-    return SETCMD_ERROR;
-  }
-
-  // Now get a lock on the specified version
-  strcpy(cmd_version, cmd_dir);
-  IDOS->AddPart(cmd_version, version, MAX_PATH_BUF);
-  lock = IDOS->Lock(cmd_version, ACCESS_READ);
-  if (!lock) {
-    if (DEBUG) {
-      IDOS->Printf("%sERROR %s: Failed to lock the %s version\n", fmt(FG_RED), fmt(NORMAL), cmd_version);
-      IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
-      IDOS->Printf("For more information see the SetCmd manual.\n");
-    }
-    return SETCMD_ERROR;
-  }
-
-  rc = IDOS->NameFromLock(lock, target, MAX_PATH_BUF);
-  if (!rc) {
-    IDOS->Printf("%sERROR %s: Failed to read the link from %s\n", fmt(FG_RED), fmt(NORMAL), cmd_version);
-    dos_debug();
-    IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
-    IDOS->Printf("For more information see the SetCmd manual.\n");
-    if (lock) {
-      IDOS->UnLock(lock);
-    }
-    return SETCMD_ERROR;
-  }
-
-  if (lock) {
-    IDOS->UnLock(lock);
-  }
-  
-  return SETCMD_OK;
-}
-
-int current_version(const char *cmd, char *version)
-{
-  char link[MAX_PATH_BUF];
-  char current_version[MAX_PATH_BUF];
-  char path[MAX_PATH_BUF];
-  char target[MAX_PATH_BUF];
-  struct ExamineData *data;
-  APTR context;
-  BPTR lock;
-  BOOL found = FALSE;
-  int32 rc;
-
-  strcpy(path, SETCMD_PATH);
-  IDOS->AddPart(path, cmd, MAX_PATH_BUF);
-  lock = IDOS->Lock(path, ACCESS_READ);
-  if (!lock) {
-    if (DEBUG) {
-      IDOS->Printf("%sERROR %s: Failed to lock the %s path\n", fmt(FG_RED), fmt(NORMAL),  path);
-      IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
-      IDOS->Printf("For more information see the SetCmd manual.\n");
-    }
-    dos_debug();
-    return SETCMD_ERROR;
-  }
-
-  rc = IDOS->NameFromLock(lock, target, MAX_PATH_BUF);
-  if (!rc) {
-    if (DEBUG) {
-      IDOS->Printf("%sERROR %s: Failed to read the link from %s\n", fmt(FG_RED), fmt(NORMAL), path);
-      IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
-      IDOS->Printf("For more information see the SetCmd manual.\n");
-    }
-    dos_debug();
-    if (lock) {
-      IDOS->UnLock(lock);
-    }
-    return SETCMD_ERROR;
-  }
-
-  // check if we are just pointing at the stub, if so then return "stub"
-  if (strcmp(IDOS->FilePart(target), "stub") == 0) {
-    strcpy(version, "stub");
-    if (lock) {
-      IDOS->UnLock(lock);
-    }
-    return SETCMD_OK;
-  }
-  
-  // OK, so we're not pointing at the stub. Let's move on.
-  IDOS->UnLock(lock);
-
-  lock = IDOS->Lock(SETCMD_PATH, ACCESS_READ);
-  if (!lock) {
-    if (DEBUG) {
-      IDOS->Printf("%sERROR %s: Failed to lock the " SETCMD_PATH " directory\n", fmt(FG_RED), fmt(NORMAL));
-      IDOS->Printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
-      IDOS->Printf("For more information see the SetCmd manual.\n");
-    }
-    return SETCMD_ERROR;
-  }
-
-  context = IDOS->ObtainDirContextTags(EX_LockInput, lock, TAG_END);
-
-  while (data = IDOS->ExamineDir(context)) {
-    strcpy (link, data->Link);
-    // If the file is not a link, we just ignore it as it's not a valid command
-    if (strlen(link) > 0 && strcmp(data->Name, cmd) == 0) {
-      strcpy(current_version, IDOS->FilePart(link));
-      found = TRUE;
-      break;
-    }
-  }
-
-  if (lock) {
-    IDOS->UnLock(lock);
-  }
-
-  IDOS->ReleaseDirContext(context);
-
-  if (!found) {
-    return SETCMD_ERROR;  
-  } 
-
-  strcpy(version, current_version);
-  return SETCMD_OK;
-}
-
-BOOL can_lock(const char *path)
-{
-  BPTR lock;
-  lock = IDOS->Lock(path, ACCESS_READ);
-  if (lock) {
-    IDOS->UnLock(lock);
-        return TRUE;
-  } else {
-    return FALSE;
-  }
-
-}
 
 char *fmt(char *fmt_string)
 {
-  int32 len;
+  int len;
   char buf[MAX_PATH_BUF];
 
-  len = IDOS->GetVar(SETCMD_NOFORMAT_VAR, buf, MAX_PATH_BUF,  LV_VAR);
+  len = GetVar(SETCMD_NOFORMAT_VAR, buf, MAX_PATH_BUF,  LV_VAR);
   if (len == -1) {
     // NO_FORMAT not set so we just return what was passed
     return fmt_string;
@@ -189,4 +94,151 @@ char *fmt(char *fmt_string)
     // The env var was set, so return nothing
     return "";
   }
+}
+
+
+BOOL can_lock(const char *path)
+{
+  BPTR lock;
+  lock = Lock(path, ACCESS_READ);
+  if (lock) {
+    UnLock(lock);
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
+
+
+int get_target(const char *cmd, const char *version, char *target)
+{
+  char cmd_dir[MAX_PATH_BUF];
+  char cmd_version[MAX_PATH_BUF];
+  char path[MAX_PATH_BUF];
+  BPTR lock;
+  int rc;
+ 
+  // Check the command directory exists
+  strcpy(cmd_dir, SETCMD_CMDS);
+  AddPart(cmd_dir, cmd, MAX_PATH_BUF);
+  if (!can_lock(cmd_dir)) {
+    if (DEBUG) {
+      printf("%sERROR %s: Failed to lock the %s directory\n", fmt(FG_RED), fmt(NORMAL), cmd_dir);
+      printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+      printf("For more information see the SetCmd manual.\n");
+    }
+    return SETCMD_ERROR;
+  }
+
+  // Now get a lock on the specified version
+  strcpy(cmd_version, cmd_dir);
+  AddPart(cmd_version, version, MAX_PATH_BUF);
+  lock = Lock(cmd_version, ACCESS_READ);
+  if (!lock) {
+    if (DEBUG) {
+      printf("%sERROR %s: Failed to lock the %s version\n", fmt(FG_RED), fmt(NORMAL), cmd_version);
+      printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+      printf("For more information see the SetCmd manual.\n");
+    }
+    return SETCMD_ERROR;
+  }
+
+  rc = NameFromLock(lock, target, MAX_PATH_BUF);
+  if (!rc) {
+    printf("%sERROR %s: Failed to read the link from %s\n", fmt(FG_RED), fmt(NORMAL), cmd_version);
+    printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+    printf("For more information see the SetCmd manual.\n");
+    if (lock) {
+      UnLock(lock);
+    }
+    return SETCMD_ERROR;
+  }
+
+  if (lock) {
+    UnLock(lock);
+  }
+  
+  return SETCMD_OK;
+}
+
+
+int get_current_command_version(const char *cmd, char *version) {
+  char get_current_command_version[MAX_PATH_BUF];
+  char path[MAX_PATH_BUF];
+  char target[MAX_PATH_BUF];
+  char cmd_dir[MAX_PATH_BUF];
+  char link[MAX_PATH_BUF];
+  BPTR lock, cmd_lock, path_lock;
+  struct FileInfoBlock cmd_data;
+  struct DevProc *proc;
+  int rc;
+  int cmd_rc = SETCMD_OK;
+
+  strcpy(path, SETCMD_PATH);
+  AddPart(path, cmd, MAX_PATH_BUF);
+  lock = Lock(path, ACCESS_READ);
+  if (!lock) {
+    if (DEBUG) {
+      printf("%sERROR %s: Failed to lock the %s path\n", fmt(FG_RED), fmt(NORMAL),  path);
+    }
+    return SETCMD_ERROR;
+  }
+
+  rc = NameFromLock(lock, target, MAX_PATH_BUF);
+  if (!rc) {
+    if (DEBUG) {
+      printf("%sERROR %s: Failed to read the link from %s\n", fmt(FG_RED), fmt(NORMAL), path);
+    }
+    if (lock) {
+      UnLock(lock);
+    }
+    return SETCMD_ERROR;
+  }
+
+  // check if we are just pointing at the stub, if so then return "stub"
+  if (strcmp(FilePart(target), "stub") == 0) {
+    strcpy(version, "stub");
+    if (lock) {
+      UnLock(lock);
+    }
+    return SETCMD_OK;
+  }
+  
+  // OK, so we're not pointing at the stub. Let's move on.
+  // Need to lock ther SETCMD_PATH
+  path_lock = Lock(SETCMD_PATH, ACCESS_READ);
+
+  if (!path_lock) {
+    printf("%sERROR %s: Failed to lock the " SETCMD_PATH " directory\n", fmt(FG_RED), fmt(NORMAL));
+    printf("Check your installation and make sure the SETCMD: assign is correctly setup.\n");
+    printf("For more information see the SetCmd manual.\n");
+    cmd_rc = SETCMD_ERROR;
+    goto cleanup;
+  }
+
+  // Now we need to get our proc struct with MsgPort so we can use ReadLink later
+  proc = NULL;
+  proc = GetDeviceProc(SETCMD_PATH, proc);
+  if (!proc) {
+    cmd_rc = SETCMD_ERROR;
+    goto cleanup;
+  }
+
+#if defined(__amigaos4__)
+  if (ReadSoftLink(proc->dvp_Port, path_lock, cmd, link, MAX_PATH_BUF)) {
+    strcpy(version, FilePart(link));
+  }
+#else
+  if (ReadLink(proc->dvp_Port, path_lock, cmd, link, MAX_PATH_BUF)) {
+    strcpy(version, FilePart(link));
+  }
+#endif
+
+  
+cleanup:
+  if (path_lock)  { UnLock(path_lock); }
+  if (lock)       { UnLock(lock); }
+  if (proc)       { FreeDeviceProc(proc); }
+  return cmd_rc;    
+  
 }

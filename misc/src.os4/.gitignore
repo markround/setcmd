@@ -1,5 +1,5 @@
 *.o
 setcmd
-test
+sdktest
 stub
 *.swp
