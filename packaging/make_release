@@ -29,10 +29,6 @@ copy "${src_dir}/packaging/icons/os3/Drawer.info" "${pkg_dir}.info"
 copy "${src_dir}/packaging/icons/os3/Install.info" "${pkg_dir}/Install_SetCmd.info"
 copy "${src_dir}/packaging/icons/os3/Guide.info" "${pkg_dir}/SetCmd.guide.info"
 
-; OS3 installer
-copy "${src_dir}/packaging/os3/installer" "${pkg_dir}"
-
-
 ;
 ; PPC OS4 (TODO)
 ;

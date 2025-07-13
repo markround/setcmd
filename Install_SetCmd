@@ -2,14 +2,24 @@
 ; vim: set syntax=lisp ts=2 expandtab:
 
 (set @app-name "SetCmd")
-(set #setcmd-version "1.1.0")
+(set #setcmd-version "2.0.0")
 
-; I have only currently tested this on a few OS 4 systems.
-; There will be an update at some point that will support classic AmigaOS, but until then this
-; check needs to stay. For versions, I used https://wiki.amigaos.net/wiki/AmigaOS_Versions .
-(if (< (/ (getversion) 65536) 52)
+;  Version checks
+(if (< (/ (getversion) 65536) 46)
   (
-    (abort "SetCmd has only been tested on OS 4.x (v52+), so not installing on this OS!")
+    (abort "SetCmd has only been tested on OS 3.1.4 and up, so not installing on this OS!")
+  )
+)
+; OS 3
+(if (and (>= (/ (getversion) 65536) 40) (< (/ (getversion) 65536) 50))
+  (
+    (set #os-desc "amigaos3-68k")
+  )
+)
+; OS 4
+(if (>= (/ (getversion) 65536) 50)
+  (
+    (set #os-desc "amigaos4-ppc")
   )
 )
 
@@ -55,49 +65,61 @@
 (set #path-dir (tackon #dname "path"))
 (set #cmd-dir (tackon #dname "cmds"))
 (set #setcmd-cmd-dir (tackon #cmd-dir "setcmd"))
-(set #setcmd-full-path (tackon #setcmd-cmd-dir #setcmd-version))
+(set #setcmd-full-path (tackon #setcmd-cmd-dir (cat #setcmd-version "-" #os-desc)))
 
 ; Set up the link database directory structure
 (makedir #path-dir)
 (makedir #cmd-dir)
 (makedir #setcmd-cmd-dir)
 
+; Binary full names
+(set #amigaos3 "-amigaos3-68k")
+(set #amigaos4 "-amigaos4-ppc")
+(set #setcmd-amigaos3-binary (cat "setcmd-" #setcmd-version #amigaos3))
+(set #stub-amigaos3-binary (cat "stub-" #setcmd-version #amigaos3))
+(set #setcmd-amigaos4-binary (cat "setcmd-" #setcmd-version #amigaos4))
+(set #stub-amigaos4-binary (cat "stub-" #setcmd-version #amigaos4))
+(set #stub-native (cat "stub-" #setcmd-version "-" #os-desc))
+
+; Copy AmigaOS 3 binary for all platforms
 (copyfiles
-  (source "setcmd")
+  (source #setcmd-amigaos3-binary)
   (dest #setcmd-cmd-dir)
-  (newname #setcmd-version)
-  (prompt ("Copy SetCmd program file?"))
+  (newname (cat #setcmd-version #amigaos3))
+  (prompt ("Copy SetCmd AmigaOS 3.x program file?"))
   (confirm "expert")
   (all)
   (help @copyfiles-help)
 )
 
+; Only copy the relevant stub 
 (copyfiles
-  (source "stub")
+  (source #stub-native)
   (dest #dname)
+  (newname "stub")
   (prompt ("Copy SetCmd stub file?"))
   (confirm "expert")
   (all)
   (help @copyfiles-help)
 )
 
-(copyfiles
-  (source "")
-  (pattern "README.txt#?")
-  (dest #dname)
-  (prompt ("Copy SetCmd README.txt documentation?"))
-  (confirm "expert")
-  (help @copyfiles-help)
-)
-
-(copyfiles
-  (source "")
-  (pattern "SetCmd.guide#?")
-  (dest #dname)
-  (prompt ("Copy SetCmd AmigaGuide documentation?"))
-  (confirm "expert")
-  (help @copyfiles-help)
-)
+;(copyfiles
+;  (source "")
+;  (pattern "README.txt#?")
+;  (dest #dname)
+;  (prompt ("Copy SetCmd README.txt documentation?"))
+;  (confirm "expert")
+;  (help @copyfiles-help)
+;)
+;
+;(copyfiles
+;  (source "")
+;  (pattern "SetCmd.guide#?")
+;  (dest #dname)
+;  (prompt ("Copy SetCmd AmigaGuide documentation?"))
+;  (confirm "expert")
+;  (help @copyfiles-help)
+;)
 
 ; delete the old version links if they exist
 (if (exists (tackon #path-dir "setcmd") (noreq))
@@ -112,5 +134,7 @@
 )
 
 ; Set up the links pointing setcmd to our installed version
+; Requires MakeLink SOFT which seems to only be present in Hyperion versions of AmigaOS
+; Need to check this though...
 (run (cat "C:MakeLink FROM \"" (tackon #path-dir "setcmd") "\" TO \"" #setcmd-full-path "\" SOFT"))
 (run (cat "C:MakeLink FROM \"" (tackon #dname "setcmd") "\" TO \"" (tackon #path-dir "setcmd") "\" SOFT"))
